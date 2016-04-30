@@ -13,3 +13,7 @@ app.secret_key = 'e6855dcf9df593bd7d53209a95d44dd9'
 app.config['SECURITY_REGISTERABLE'] = True
 # Disable sending emails
 app.config['SECURITY_SEND_REGISTER_EMAIL'] = False
+# Redirect logged in/registered users to the '/me' page
+app.config['SECURITY_POST_LOGIN_VIEW'] = '/me'
+app.config['SECURITY_POST_REGISTER_VIEW'] = '/me'
+
