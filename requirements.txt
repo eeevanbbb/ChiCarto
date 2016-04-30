@@ -10,6 +10,7 @@ itsdangerous==0.24
 Jinja2==2.8
 MarkupSafe==0.23
 passlib==1.6.5
+requests==2.10.0
 SQLAlchemy==1.0.12
 Werkzeug==0.11.9
 WTForms==2.1
