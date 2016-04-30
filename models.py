@@ -18,3 +18,31 @@ class User(db.Model, UserMixin):
     created_at = db.Column(db.DateTime())
     roles = db.relationship('Role', secondary=roles_users,
                             backref=db.backref('users', lazy='dynamic'))
+
+
+search_data_sources = db.Table('search_data_sources',
+        db.Column('search_id', db.Integer(), db.ForeignKey('search.id')),
+        db.Column('data_source_id', db.Integer(), db.ForeignKey('data_source.id')))
+
+class Search(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    data_sources = db.relationship('DataSource',secondary=search_data_sources,
+                                    backref=db.backref('searches',lazy='dynamic'))
+    latitude = db.Column(db.Float())
+    longitude = db.Column(db.Float())
+    radius = db.Column(db.Float())
+
+data_source_filters = db.Table('data_source_filters',
+        db.Column('data_source_id', db.Integer(), db.ForeignKey('data_source.id')),
+        db.Column('filter_id', db.Integer(), db.ForeignKey('filter.id')))
+
+class DataSource(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255))
+    url = db.Column(db.String(255))
+    filters = db.relationship('Filter', secondary=data_source_filters,
+                                backref=db.backref('data_sources', lazy='dynamic'))
+
+class Filter(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255))
