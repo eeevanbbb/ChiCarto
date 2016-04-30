@@ -4,7 +4,7 @@ from flask.ext.security import Security, SQLAlchemyUserDatastore
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
-db = SQLAlchemy(app)
+db = SQLAlchemy()
 
 # DO NOT DO THIS IN PRODUCTION
 app.secret_key = 'e6855dcf9df593bd7d53209a95d44dd9'

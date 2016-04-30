@@ -11,6 +11,7 @@ security = Security(app, user_datastore)
 
 # Run the app
 if __name__ == "__main__":
+    db.init_app(app)
     try:
         open('/tmp/test.db')
     except IOError:
