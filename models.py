@@ -49,10 +49,11 @@ class Search(db.Model):
                 name += ", "
         return name
 
-    def execute():
+    def execute(self):
         for data_source in self.data_sources:
-            (status,text) = data_source.make_request()
+            (status,text) = data_source.make_request() #TODO: Pass in the location parameters
             #TODO: Do something with this information
+            return (status,text) #FIXME: Temporary
 
 data_source_filters = db.Table('data_source_filters',
         db.Column('data_source_id', db.Integer(), db.ForeignKey('data_source.id')),
@@ -74,7 +75,7 @@ class DataSource(db.Model):
         return self.name
 
     #Make a request for the URL with the applicable filters
-    def make_request():
+    def make_request(self):
         full_url = self.url
         if len(self.filters) > 0:
             full_url += "?"
