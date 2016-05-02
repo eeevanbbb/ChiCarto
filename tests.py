@@ -84,5 +84,28 @@ class SearchTestCase(ChiCartoTestCase):
             assert status3 == 200
             assert status4 == 200
 
+    def test_add_search_to_user(self):
+        with main.app.test_request_context():
+            # Create a search
+            search = Search([],0,0,0)
+            # Create a user
+            user = main.user_datastore.create_user(email="b@example.com", password="password2")
+
+            # Add the search to the user
+            user.add_search(search)
+            # Make sure the search was added
+            assert len(user.searches) == 1
+
+            # Remove the search from the user
+            success = user.remove_search(search)
+            # Make sure the search was removed
+            assert success == True
+            assert len(user.searches) == 0
+
+            # Try to remove a non-existent search
+            success = user.remove_search(search)
+            # Make sure this results in failure
+            assert success == False
+
 if __name__ == '__main__':
     unittest.main()

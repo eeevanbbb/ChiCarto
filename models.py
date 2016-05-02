@@ -1,12 +1,17 @@
 from flask.ext.security import UserMixin, RoleMixin
 from app import db
 import requests
+from sqlalchemy import DateTime
 
 COC_app_token = "k9JXTWBskVprntg9lMA3ahfoD"
 
 roles_users = db.Table('roles_users',
         db.Column('user_id', db.Integer(), db.ForeignKey('user.id')),
         db.Column('role_id', db.Integer(), db.ForeignKey('role.id')))
+
+user_searches = db.Table('user_searches',
+        db.Column('user_id', db.Integer(), db.ForeignKey('user.id')),
+        db.Column('search_id', db.Integer(), db.ForeignKey('search.id')))
 
 class Role(db.Model, RoleMixin):
     id = db.Column(db.Integer(), primary_key=True)
@@ -21,6 +26,22 @@ class User(db.Model, UserMixin):
     created_at = db.Column(db.DateTime())
     roles = db.relationship('Role', secondary=roles_users,
                             backref=db.backref('users', lazy='dynamic'))
+    searches = db.relationship('Search', secondary=user_searches,
+                                backref=db.backref('users', lazy='dynamic'))
+
+
+    # Add a given search to the list of searches
+    def add_search(self,search):
+        self.searches.append(search)
+
+    # Remove a given search from the list of searches
+    # Return False if the search is not in this user's searches, True otherwise
+    def remove_search(self,search):
+        if search in self.searches:
+            self.searches.remove(search)
+            return True
+        else:
+            return False
 
 
 search_data_sources = db.Table('search_data_sources',
@@ -49,6 +70,7 @@ class Search(db.Model):
                 name += ", "
         return name
 
+    # Execute the search
     def execute(self):
         for data_source in self.data_sources:
             (status,text) = data_source.make_request() #TODO: Pass in the location parameters
