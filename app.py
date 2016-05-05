@@ -16,3 +16,5 @@ app.config['SECURITY_SEND_REGISTER_EMAIL'] = False
 # Redirect logged in/registered users to the '/me' page
 app.config['SECURITY_POST_LOGIN_VIEW'] = '/me'
 app.config['SECURITY_POST_REGISTER_VIEW'] = '/me'
+# Turn off annoying warning that slows testing
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] =  False

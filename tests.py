@@ -1,4 +1,5 @@
 import os
+import json
 import main
 import unittest
 import tempfile
@@ -17,8 +18,6 @@ class ChiCartoTestCase(unittest.TestCase):
             main.db.create_all()
         self.db = main.db
         self.app = main.app.test_client()
-
-        print("SETUP")
 
     def tearDown(self):
         main.app.config['TESTING'] = False
@@ -56,6 +55,19 @@ class UserAuthTestCase(ChiCartoTestCase):
             assert b'Remember Me' in rv.data
 
 class SearchTestCase(ChiCartoTestCase):
+    def add_sample_search(self):
+        uchicago_lat = 41.7886
+        uchicago_long = 87.5987
+        radius = 1000
+        url = "https://data.cityofchicago.org/resource/energy-usage-2010.json"
+        data_source1 = DataSource("Energy Usage 2010",url,[])
+        filter1 = Filter("building_type","Residential")
+        data_source2 = DataSource("Energy Usage 2010",url,[filter1])
+        search = Search([data_source1,data_source2],uchicago_lat,uchicago_long,radius)
+        main.db.session.add(search)
+        main.db.session.flush()
+        return search.id
+    
     def test_receive_search_data(self):
         with main.app.test_request_context():
             # Create objects
@@ -106,6 +118,24 @@ class SearchTestCase(ChiCartoTestCase):
             success = user.remove_search(search)
             # Make sure this results in failure
             assert success == False
+            
+    def test_get_search(self):
+        with main.app.test_request_context():
+            sid = self.add_sample_search()
+            rv = self.app.get("/search/{0}".format(sid))
+            d = json.loads(rv.data.decode("utf-8"))
+            assert d["id"] == sid
+            assert len(d["data_sources"]) == 2
+
+    def test_get_search(self):
+        with main.app.test_request_context():
+            sid = self.add_sample_search()
+            sid2 = self.add_sample_search()
+            rv = self.app.get("/search")
+            print(rv.data)
+            d = json.loads(rv.data.decode("utf-8"))
+            assert len(d['searches']) == 2
+            assert len(d['searches'][1]["data_sources"]) == 2 
 
 if __name__ == '__main__':
     unittest.main()
