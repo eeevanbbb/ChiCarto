@@ -5,5 +5,9 @@
    <body>
       <h1>Welcome!</h1>
       <p>You are logged in as {{ user.email }}</p>
+      <h2>Searches:</h2>
+      {% for search in user.searches %}
+        <li> {{ search }} </li>
+      {% endfor %}
    </body>
 </html>
