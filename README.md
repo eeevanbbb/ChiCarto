@@ -10,7 +10,7 @@ ChiCarto is a gateway into geo-specific location data about the city of Chicago.
 1. From the root folder, run `python main.py`
 2. In your browser, navigate to http://127.0.0.1:5000/
 
-## TESTING
+## Testing
 1. From the root folder, run `python tests.py`
 
 ## Acceptance Tests

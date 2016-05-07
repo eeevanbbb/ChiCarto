@@ -7,7 +7,7 @@
       <p>You are logged in as {{ user.email }}</p>
       <h2>Searches:</h2>
       {% for search in user.searches %}
-        <li> {{ search }} </li>
+        <li><a href="/search/{{ search.id }}"> {{ search }} </a></li>
       {% endfor %}
    </body>
 </html>
