@@ -1,19 +1,12 @@
 <html>
 <head>
 <title>ChiCarto</title>
-<style>
-#map { height: 80%; }
-</style>
 </head>
    <body>
       <h1>Welcome to ChiCarto!</h1>
-
     <div>
       <a href="/me">My Account</a>
     </div>
-  <div id="map"></div>
       <script type="text/javascript" src="static/mapping.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBpx9SqTdBQ_V-vQo0H9RPTgbIn7g3MPso&callback=initMap"></script>
-
    </body>
 </html>
