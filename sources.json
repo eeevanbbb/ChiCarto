@@ -1,0 +1,49 @@
+{
+  "sources": [
+    {
+      "name": "Crimes 2001 - Present",
+      "url": "https://data.cityofchicago.org/resource/6zsd-86xi.json",
+      "title_key": "primary_type",
+      "filters": [
+        {
+          "name": "primary_type",
+          "type": "string"
+        },
+        {
+          "name": "description",
+          "type" : "string"
+        }
+      ]
+    },
+    {
+      "name": "Building Violations",
+      "url": "https://data.cityofchicago.org/resource/ucdv-yd74.json",
+      "title_key": "violation_description",
+      "filters": [
+        {
+          "name": "violation_status",
+          "type": "choice",
+          "choose_from": [
+              "CLOSED",
+              "OPEN"
+          ]
+        },
+        {
+          "name": "inspection_status",
+          "type": "choice",
+          "choose_from": [
+            "FAILED",
+            "CLOSED"
+          ]
+        },
+        {
+          "name": "violation_code",
+          "type": "string"
+        }
+      ]
+    }
+  ]
+}
+      
+            
+    

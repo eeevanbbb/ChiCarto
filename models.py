@@ -72,8 +72,9 @@ class Search(db.Model):
 
     # Execute the search
     def execute(self):
+        loc = self.latitude,self.longitude,self.radius
         for data_source in self.data_sources:
-            (status,text) = data_source.make_request() #TODO: Pass in the location parameters
+            (status,text) = data_source.make_request(loc)
             #TODO: Do something with this information
             return (status,text) #FIXME: Temporary
 
@@ -81,32 +82,48 @@ data_source_filters = db.Table('data_source_filters',
         db.Column('data_source_id', db.Integer(), db.ForeignKey('data_source.id')),
         db.Column('filter_id', db.Integer(), db.ForeignKey('filter.id')))
 
+data_source_filters_meta = db.Table('data_source_filters_meta',
+        db.Column('data_source_id', db.Integer(), db.ForeignKey('data_source.id')),
+        db.Column('filter_meta_id', db.Integer(), db.ForeignKey('filter_meta.id')))
+
 class DataSource(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255))
     url = db.Column(db.String(255))
+    title_key = db.Column(db.String(255))
+    limit = db.Column(db.Integer)
+    filters_meta = db.relationship('FilterMeta', secondary=data_source_filters_meta,
+                                backref=db.backref('data_sources', lazy='dynamic'))
     filters = db.relationship('Filter', secondary=data_source_filters,
                                 backref=db.backref('data_sources', lazy='dynamic'))
 
-    def __init__(self,name,url,filters):
+    def __init__(self,name,url,filters,filters_meta,title_key=None, limit=10):
         self.name = name
         self.url = url
         self.filters = filters
+        self.filters_meta = filters_meta
+        self.title_key = title_key
+        self.limit = limit
 
     def __repr__(self):
         return self.name
 
     #Make a request for the URL with the applicable filters
-    def make_request(self):
+    def make_request(self, loc=None):
+        lat, lng, rad = loc
         full_url = self.url
+        full_url += "?$limit={}".format(self.limit)
+        if loc is not None:
+          full_url += "&$where=within_circle(location,{},{},{})".format(lat, lng, rad)
         if len(self.filters) > 0:
-            full_url += "?"
+            full_url += "&"
             for a_filter in self.filters:
                 full_url += a_filter.name
                 full_url += "="
                 full_url += a_filter.value
-                if a_filter != self.filters[-1]:
-                    full_url += "&"
+                #if a_filter != self.filters[-1]:
+                    #full_url += "&"            
+        print(full_url)
         request = requests.get(full_url, headers={'X-App-Token':COC_app_token})
         return (request.status_code,request.text)
 
@@ -121,3 +138,17 @@ class Filter(db.Model):
 
     def __repr__(self):
         return self.name + ": " + self.value
+
+class FilterMeta(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255))
+    type_ = db.Column(db.String(255))
+    choose_from = db.Column(db.Text)
+
+    def __init__(self,name,type_, choose_from=None):
+        self.name = name
+        self.type_ = type_
+        self.choose_from = choose_from
+
+    def __repr__(self):
+        return "{{name: {}, type_: {}, choose_from: {}}}".format(self.name, self.type_, self.choose_from)

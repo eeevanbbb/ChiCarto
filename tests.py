@@ -16,6 +16,7 @@ class ChiCartoTestCase(unittest.TestCase):
         main.db.init_app(main.app)
         with main.app.test_request_context():
             main.db.create_all()
+            main.load_meta()
         self.db = main.db
         self.app = main.app.test_client()
 
@@ -49,7 +50,7 @@ class UserAuthTestCase(ChiCartoTestCase):
             assert b'You are logged in as' in rv.data
             # Should return to homepage
             rv = self.logout()
-            assert b'Apparently' in rv.data
+            assert b'ChiCarto' in rv.data
             # Test incorrect password doesn't work
             rv = self.login("a@example.com", "passw")
             assert b'Remember Me' in rv.data
@@ -57,12 +58,12 @@ class UserAuthTestCase(ChiCartoTestCase):
 class SearchTestCase(ChiCartoTestCase):
     def add_sample_search(self):
         uchicago_lat = 41.7886
-        uchicago_long = 87.5987
+        uchicago_long = -87.5987
         radius = 1000
-        url = "https://data.cityofchicago.org/resource/energy-usage-2010.json"
-        data_source1 = DataSource("Energy Usage 2010",url,[])
-        filter1 = Filter("building_type","Residential")
-        data_source2 = DataSource("Energy Usage 2010",url,[filter1])
+        url = "https://data.cityofchicago.org/resource/6zsd-86xi.json"
+        data_source1 = DataSource("Crimes 2001 - Present",url,[],[])
+        filter1 = Filter("primary_type","THEFT")
+        data_source2 = DataSource("Crimes 2001 - Present",url,[filter1],[])
         search = Search([data_source1,data_source2],uchicago_lat,uchicago_long,radius)
         main.db.session.add(search)
         main.db.session.flush()
@@ -72,16 +73,16 @@ class SearchTestCase(ChiCartoTestCase):
         with main.app.test_request_context():
             # Create objects
             uchicago_lat = 41.7886
-            uchicago_long = 87.5987
+            uchicago_long = -87.5987
             radius = 1000
-            url1 = "https://data.cityofchicago.org/resource/energy-usage-2010.json"
-            data_source1 = DataSource("Energy Usage 2010",url1,[])
+            url1 = "https://data.cityofchicago.org/resource/6zsd-86xi.json"
+            data_source1 = DataSource("Crimes 2001 - Present",url1,[],[])
             search1 = Search([data_source1],uchicago_lat,uchicago_long,radius)
-            filter1 = Filter("building_type","Residential")
-            data_source2 = DataSource("Energy Usage 2010",url1,[filter1])
+            filter1 = Filter("primary_type","THEFT")
+            data_source2 = DataSource("Crimes 2001 - Present",url1,[filter1],[])
             search2 = Search([data_source2],uchicago_lat,uchicago_long,radius)
-            filter2 = Filter("community_area_name","Woodlawn")
-            data_source3 = DataSource("Energy Usage 2010",url1,[filter1,filter2])
+            filter2 = Filter("description","FROM BUILDING")
+            data_source3 = DataSource("Crimes 2001 - Present",url1,[filter1,filter2],[])
             search3 = Search([data_source3],uchicago_lat,uchicago_long,radius)
             search4 = Search([data_source1,data_source2],uchicago_lat,uchicago_long,radius)
 
@@ -132,7 +133,6 @@ class SearchTestCase(ChiCartoTestCase):
             sid = self.add_sample_search()
             sid2 = self.add_sample_search()
             rv = self.app.get("/search")
-            print(rv.data)
             d = json.loads(rv.data.decode("utf-8"))
             assert len(d['searches']) == 2
             assert len(d['searches'][1]["data_sources"]) == 2 
