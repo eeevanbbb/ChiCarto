@@ -68,7 +68,7 @@ class SearchTestCase(ChiCartoTestCase):
         main.db.session.add(search)
         main.db.session.flush()
         return search.id
-    
+
     def test_receive_search_data(self):
         with main.app.test_request_context():
             # Create objects
@@ -119,7 +119,7 @@ class SearchTestCase(ChiCartoTestCase):
             success = user.remove_search(search)
             # Make sure this results in failure
             assert success == False
-            
+
     def test_get_search(self):
         with main.app.test_request_context():
             sid = self.add_sample_search()
@@ -135,7 +135,17 @@ class SearchTestCase(ChiCartoTestCase):
             rv = self.app.get("/search")
             d = json.loads(rv.data.decode("utf-8"))
             assert len(d['searches']) == 2
-            assert len(d['searches'][1]["data_sources"]) == 2 
+            assert len(d['searches'][1]["data_sources"]) == 2
+
+    def test_get_sources(self):
+        with main.app.test_request_context():
+            rv = self.app.get('/sources')
+            d = json.loads(rv.data.decode('utf-8'))
+            sources = d['sources']
+            assert len(sources) == 2
+            assert sources[0]['name'] == 'Crimes 2001 - Present'
+            assert len(sources[0]['filters_meta']) == 2
+            assert sources[0]['filters_meta'][0]['type'] == 'string'
 
 if __name__ == '__main__':
     unittest.main()
