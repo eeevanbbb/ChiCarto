@@ -4,6 +4,7 @@ import flask
 from flask import Flask, request, render_template
 from flask.ext.security import login_required
 import flask.ext.login as flask_login
+from flask import abort
 
 from app import db, app
 from models import *
@@ -33,6 +34,17 @@ def search(sid =  None):
         searches = [dictify_search(search) for search in s]
         json_dict = {'searches': searches }
         return flask.jsonify(**json_dict)
+
+@app.route("/search-results/<sid>")
+def search_results(sid):
+    s = Search.query.get(int(sid))
+    if s is not None:
+        (status,json_text) = s.execute()
+        results = json.loads(json_text)
+        json_dict = {'search-results': results}
+        return flask.jsonify(**json_dict)
+    else:
+        abort(404)
 
 def dictify_search(s):
     d = {"id": s.id,
