@@ -8,7 +8,7 @@
       <h2>Searches:</h2>
       <div>
         {% for search in user.searches %}
-          <li><a href="/search/{{ search.id }}"> {{ search }} </a></li>
+          <li><a href="/?s={{ search.id }}"> {{ search }} </a></li>
         {% endfor %}
       </div>
       <hr>

@@ -55,8 +55,8 @@ def dictify_search(s):
         "radius": s.radius
     }
     return d
-  
-  
+
+
 @app.route('/sources')
 def sources():
   ss = DataSource.query.all()
@@ -72,8 +72,8 @@ def dictify_source(source):
         'filters_meta': [dictify_filter_meta(f) for f in source.filters_meta],
         }
     return d
-         
-         
+
+
 def dictify_filter_meta(f):
     d = { 'id': f.id,
         'name': f.name,
@@ -81,5 +81,5 @@ def dictify_filter_meta(f):
         }
     if f.choose_from is not None:
         d['choose_from'] = f.choose_from.split(',')
-      
+
     return d
