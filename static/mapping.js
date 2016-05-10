@@ -13,14 +13,14 @@ function initMap() {
         title: 'Test Me'
                                         });
     
-        var json_file = [{"longitude" = -87.5, "latitude" = 42, "description" =
+        var json_file = [{"longitude": -87.5, "latitude": 42, "description":
                      "test point 1"},
-                     {"longitude" = -87, "latitude" = 41.5, "description" =
+                     {"longitude": -87.0, "latitude": 41.5, "description":
                      "test point 2"}]
         var marks = new Array();
         //var json_file = "/search-results/{{ search.id }}" {{ search }};
-        var len = Object.keys(json_file).length;
-        for(i = 0; i < len; i++)
+        //var len = Object.keys(json_file).length;
+        for(i = 0; i < 2; i++)
         {
             var lat1 = json_file[i].latitude;
             var lon1 = json_file[i].longitude;
