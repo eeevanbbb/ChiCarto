@@ -7,10 +7,10 @@ function initMap() {
         center: myLatLng
                                   });
 
-    var json_file = {[{"longitude": -87.5, "latitude": 42, "description":
+    /*var json_file = {[{"longitude": -87.5, "latitude": 42, "description":
                      "test point 1"},
                      {"longitude": -87.0, "latitude": 41.5, "description":
-                      "test point 2"}]};
+                      "test point 2"}]};*/
     var marker = new google.maps.Marker({
                                         position: myLatLng,
                                         map: map,
