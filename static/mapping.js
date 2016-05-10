@@ -16,7 +16,7 @@ function initMap() {
                                         map: map,
                                         title: 'Test Me'
                                         });
-        var marks = new Array();
+    var i;
         //var json_file = "/search-results/{{ search.id }}" {{ search }};
         //var len = Object.keys(json_file).length;
         for(i = 0; i < 2; i++)
@@ -24,7 +24,7 @@ function initMap() {
             var lat1 = json_file[i].latitude;
             var lon1 = json_file[i].longitude;
             var myLatLon = new google.maps.LatLng(lat1,lon1);
-            marks[i] = new google.maps.Marker({
+            var mark = new google.maps.Marker({
                 position: myLatLon,
                 map: map,
                 title: json_file[i].description
