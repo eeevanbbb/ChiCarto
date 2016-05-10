@@ -14,7 +14,7 @@ function initMap() {
     var marker = new google.maps.Marker({
                                         position: myLatLng,
                                         map: map,
-                                        title: 'Test Me'
+                                        title: 'file works'
                                         });
     var i;
         //var json_file = "/search-results/{{ search.id }}" {{ search }};
