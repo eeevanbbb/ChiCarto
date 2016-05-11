@@ -1,10 +1,11 @@
 import json
 
 import flask
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, abort,\
+    redirect, url_for
 from flask.ext.security import login_required
+from flask_security.utils import logout_user
 import flask.ext.login as flask_login
-from flask import abort
 
 from app import db, app
 from models import *
@@ -64,6 +65,20 @@ def sources():
   json_dict = {'sources': sources}
   return flask.jsonify(**json_dict)
 
+@app.route('/delete-account', methods=['GET','DELETE'])
+@login_required
+def delete_account():
+    user = flask_login.current_user
+    if request.method == 'GET':
+        return render_template('delete-account.html',
+                               user=user)
+    else:
+        dbu = User.query.get(user.id)
+        logout_user()
+        db.session.delete(dbu)
+        db.session.commit()
+        return redirect('/', code=303)
+
 def dictify_source(source):
     d = { 'id': source.id,
         'name': source.name,
@@ -72,7 +87,6 @@ def dictify_source(source):
         'filters_meta': [dictify_filter_meta(f) for f in source.filters_meta],
         }
     return d
-
 
 def dictify_filter_meta(f):
     d = { 'id': f.id,

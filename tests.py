@@ -29,6 +29,7 @@ class ChiCartoTestCase(unittest.TestCase):
     def register(self, email, password):
         with main.app.test_request_context():
             rv = main.user_datastore.create_user(email=email, password=password)
+            return rv
 
     def login(self, email, password):
         return self.app.post('/login', data=dict(
@@ -54,6 +55,17 @@ class UserAuthTestCase(ChiCartoTestCase):
             # Test incorrect password doesn't work
             rv = self.login("a@example.com", "passw")
             assert b'Remember Me' in rv.data
+
+    def test_delete_account(self):
+        with main.app.test_request_context():
+            u = self.register('a@example.com', 'password')
+            rv = self.login('a@example.com', 'password')
+            assert b'You are logged in as' in rv.data
+            rv = self.app.get('/delete-account')
+            assert b'Are you sure you want to delete' in rv.data
+            rv = self.app.delete('/delete-account', follow_redirects=True)
+            assert b'ChiCarto' in rv.data
+            assert User.query.get(u.id) is None
 
 class SearchTestCase(ChiCartoTestCase):
     def add_sample_search(self):

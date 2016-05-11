@@ -1,0 +1,30 @@
+<html>
+<head>
+<title>Delete Account</title>
+</head>
+   <body>
+      <h1>We're sorry to see you go!</h1>
+      <p>You are logged in as {{ user.email }}</p>
+      <p>Are you sure you want to delete your account?</p>
+      <div>
+        <script>
+        function deleteAccount() {
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.open("DELETE", "/delete-account", true);
+            xmlHttp.onreadystatechange = handleReadyStateChange
+            xmlHttp.send(null);
+
+            function handleReadyStateChange() {
+                if (xmlHttp.readyState == 4) {
+                    if (xmlHttp.status == 200) {
+                        window.location.replace("/")
+                    }
+                }
+            }
+        }
+        </script>
+        <button id="delButton" onclick="deleteAccount()">DELETE ACCOUNT!</button>
+      </div>
+      <hr>
+   </body>
+</html>
