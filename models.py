@@ -66,6 +66,15 @@ class Search(db.Model):
         name = "Search with data sources: "
         for data_source in self.data_sources:
             name += data_source.name
+            if len(data_source.filters) > 0:
+                name += " ("
+                for filter in data_source.filters:
+                    name += filter.name
+                    name += " = "
+                    name += filter.value
+                    if filter != data_source.filters[-1]:
+                        name += ", "
+                name += ")"
             if data_source != self.data_sources[-1]:
                 name += ", "
         return name
@@ -122,7 +131,7 @@ class DataSource(db.Model):
                 full_url += "="
                 full_url += a_filter.value
                 #if a_filter != self.filters[-1]:
-                    #full_url += "&"            
+                    #full_url += "&"
         print(full_url)
         request = requests.get(full_url, headers={'X-App-Token':COC_app_token})
         return (request.status_code,request.text)

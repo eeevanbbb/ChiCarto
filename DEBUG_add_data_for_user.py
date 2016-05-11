@@ -15,4 +15,12 @@ data_source1 = DataSource("Crimes 2001 - Present",url1,[],[])
 search1 = Search([data_source1],uchicago_lat,uchicago_long,radius)
 
 user.add_search(search1)
+
+filter1 = Filter("primary_type","THEFT")
+data_source2 = DataSource("Crimes 2001 - Present",url1,[filter1],[])
+search2 = Search([data_source2],uchicago_lat,uchicago_long,radius)
+
+user.add_search(search2)
+
+
 db.session.commit()
