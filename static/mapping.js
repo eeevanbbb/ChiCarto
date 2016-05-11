@@ -3,15 +3,10 @@ function initMap() {
     // Create a map object and specify the DOM element for display.
 
     var map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 4,
+        zoom: 12,
         center: myLatLng
                                   });
-
-    /**var json_file = [{"longitude": -87.5, "latitude": 42, "description":
-                     "test point 1"},
-                     {"longitude": -87.0, "latitude": 41.5, "description":
-                      "test point 2"}];**/
-
+        //parse JSON file from search, iterate through and add points
         searchID = QueryString.s;
         if (searchID) {
           httpGetAsync("http://127.0.0.1:5000/search-results/"+searchID, function(response) {
