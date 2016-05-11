@@ -25,7 +25,7 @@ ChiCarto is a gateway into geo-specific location data about the city of Chicago.
 Items from iteration 1 have been implemented. This includes account creation and management, logging in and out, browsing saved searches, and viewing these searches on a map.
 
 ## Teams
-* Backend models and logic = Mark and Evan
+* Backend models and logic = Mark, Evan, and Sam
 * Frontend html, javascript, google maps = Evan, Michelle, Tyler, and Alex
 * Other roles to be added here when code is committed...
 
