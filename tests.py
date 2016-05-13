@@ -73,10 +73,14 @@ class SearchTestCase(ChiCartoTestCase):
         uchicago_long = -87.5987
         radius = 1000
         url = "https://data.cityofchicago.org/resource/6zsd-86xi.json"
-        data_source1 = DataSource("Crimes 2001 - Present",url,[],[])
-        filter1 = Filter("primary_type","THEFT")
-        data_source2 = DataSource("Crimes 2001 - Present",url,[filter1],[])
-        search = Search([data_source1,data_source2],uchicago_lat,uchicago_long,radius)
+        data_source1 = DataSource("Crimes 2001 - Present", url, [])
+        filter1 = Filter("primary_type", "THEFT")
+
+        data_search1 = DataSearch(data_source1, [])
+        data_search2 = DataSearch(data_source1, [filter1])
+
+        search = Search([data_search1, data_search2], uchicago_lat, uchicago_long, radius)
+
         main.db.session.add(search)
         main.db.session.flush()
         return search.id
@@ -88,15 +92,19 @@ class SearchTestCase(ChiCartoTestCase):
             uchicago_long = -87.5987
             radius = 1000
             url1 = "https://data.cityofchicago.org/resource/6zsd-86xi.json"
-            data_source1 = DataSource("Crimes 2001 - Present",url1,[],[])
-            search1 = Search([data_source1],uchicago_lat,uchicago_long,radius)
-            filter1 = Filter("primary_type","THEFT")
-            data_source2 = DataSource("Crimes 2001 - Present",url1,[filter1],[])
-            search2 = Search([data_source2],uchicago_lat,uchicago_long,radius)
-            filter2 = Filter("description","FROM BUILDING")
-            data_source3 = DataSource("Crimes 2001 - Present",url1,[filter1,filter2],[])
-            search3 = Search([data_source3],uchicago_lat,uchicago_long,radius)
-            search4 = Search([data_source1,data_source2],uchicago_lat,uchicago_long,radius)
+            data_source1 = DataSource("Crimes 2001 - Present", url1, [])
+
+            filter1 = Filter("primary_type", "THEFT")
+            filter2 = Filter("description", "FROM BUILDING")
+
+            data_search1 = DataSearch(data_source1, [])
+            data_search2 = DataSearch(data_source1, [filter1])
+            data_search3 = DataSearch(data_source1, [filter1, filter2])
+
+            search1 = Search([data_search1], uchicago_lat, uchicago_long, radius)
+            search2 = Search([data_search2], uchicago_lat, uchicago_long, radius)
+            search3 = Search([data_search3], uchicago_lat, uchicago_long, radius)
+            search4 = Search([data_search1, data_search2], uchicago_lat, uchicago_long, radius)
 
             # Execute the searches
             (status1,text1) = search1.execute() #search w/ no filters
@@ -136,18 +144,27 @@ class SearchTestCase(ChiCartoTestCase):
         with main.app.test_request_context():
             sid = self.add_sample_search()
             rv = self.app.get("/search/{0}".format(sid))
-            d = json.loads(rv.data.decode("utf-8"))
-            assert d["id"] == sid
-            assert len(d["data_sources"]) == 2
 
-    def test_get_search(self):
+            d = json.loads(rv.data.decode("utf-8"))
+
+            assert len(d['searches']) == 1
+
+            search = d['searches'][0]
+            assert search['id'] == sid
+            assert len(search['data_searches']) == 2
+
+    def test_get_search2(self):
         with main.app.test_request_context():
             sid = self.add_sample_search()
             sid2 = self.add_sample_search()
             rv = self.app.get("/search")
+            # print('++++++++')
+            # print(rv)
+            # print(rv.data)
+            # print('++++++++')
             d = json.loads(rv.data.decode("utf-8"))
             assert len(d['searches']) == 2
-            assert len(d['searches'][1]["data_sources"]) == 2
+            assert len(d['searches'][1]["data_searches"]) == 2
 
     def test_get_sources(self):
         with main.app.test_request_context():
