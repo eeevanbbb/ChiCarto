@@ -144,11 +144,8 @@ class SearchTestCase(ChiCartoTestCase):
         with main.app.test_request_context():
             sid = self.add_sample_search()
             rv = self.app.get("/search/{0}".format(sid))
-
             d = json.loads(rv.data.decode("utf-8"))
-
             assert len(d['searches']) == 1
-
             search = d['searches'][0]
             assert search['id'] == sid
             assert len(search['data_searches']) == 2
@@ -158,10 +155,6 @@ class SearchTestCase(ChiCartoTestCase):
             sid = self.add_sample_search()
             sid2 = self.add_sample_search()
             rv = self.app.get("/search")
-            # print('++++++++')
-            # print(rv)
-            # print(rv.data)
-            # print('++++++++')
             d = json.loads(rv.data.decode("utf-8"))
             assert len(d['searches']) == 2
             assert len(d['searches'][1]["data_searches"]) == 2
