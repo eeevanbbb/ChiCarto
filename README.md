@@ -27,6 +27,7 @@ Items from iteration 1 have been implemented. This includes account creation and
 ## Teams
 * Backend models and logic = Mark, Evan, and Sam
 * Frontend html, javascript, google maps = Evan, Michelle, Tyler, and Alex
+* Project Coordinator = Michelle
 * Other roles to be added here when code is committed...
 
 ## Changes
