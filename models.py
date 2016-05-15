@@ -2,6 +2,7 @@ from flask.ext.security import UserMixin, RoleMixin
 from app import db
 import requests
 from sqlalchemy import DateTime
+import json
 
 COC_app_token = "k9JXTWBskVprntg9lMA3ahfoD"
 
@@ -44,97 +45,152 @@ class User(db.Model, UserMixin):
             return False
 
 
-search_data_sources = db.Table('search_data_sources',
+
+search_data_searches = db.Table('search_data_searches',
         db.Column('search_id', db.Integer(), db.ForeignKey('search.id')),
-        db.Column('data_source_id', db.Integer(), db.ForeignKey('data_source.id')))
+        db.Column('data_search_id', db.Integer(), db.ForeignKey('data_search.id')))
 
 class Search(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    data_sources = db.relationship('DataSource',secondary=search_data_sources,
+    data_searches = db.relationship('DataSearch',secondary=search_data_searches,
                                     backref=db.backref('searches',lazy='dynamic'))
     latitude = db.Column(db.Float())
     longitude = db.Column(db.Float())
     radius = db.Column(db.Float())
 
-    def __init__(self,data_sources,latitude,longitude,radius):
-        self.data_sources = data_sources
+    def __init__(self,data_searches,latitude,longitude,radius):
+        self.data_searches = data_searches
         self.latitude = latitude
         self.longitude = longitude
         self.radius = radius
 
     def __repr__(self):
         name = "Search with data sources: "
-        for data_source in self.data_sources:
-            name += data_source.name
-            if len(data_source.filters) > 0:
+        for data_search in self.data_searches:
+            name += data_search.data_source.name
+            if len(data_search.filters) > 0:
                 name += " ("
-                for filter in data_source.filters:
+                for filter in data_search.filters:
                     name += filter.name
                     name += " = "
                     name += filter.value
-                    if filter != data_source.filters[-1]:
+                    if filter != data_search.filters[-1]:
                         name += ", "
                 name += ")"
-            if data_source != self.data_sources[-1]:
+            if data_search != self.data_searches[-1]:
                 name += ", "
         return name
 
     # Execute the search
     def execute(self):
-        loc = self.latitude,self.longitude,self.radius
-        for data_source in self.data_sources:
-            (status,text) = data_source.make_request(loc)
-            #TODO: Do something with this information
-            return (status,text) #FIXME: Temporary
+        loc = self.latitude, self.longitude, self.radius
+        requested_data = []
+        return_status = 200
+        for data_search in self.data_searches:
+            (status, text) = data_search.make_request(loc)
+            if (status != 200):
+                return_status = status
+                print('Error Loading Data from %s' % (data_search.data_source.name))
 
-data_source_filters = db.Table('data_source_filters',
-        db.Column('data_source_id', db.Integer(), db.ForeignKey('data_source.id')),
+            data = {'id': data_search.data_source.id, 'status': status, 'items': json.loads(text)}
+            requested_data.append(data)
+            # requested_data[data_search.data_source.id] = data
+
+        return (return_status, requested_data)
+
+    # dictify - Create dictionary representation for object
+    def dictify(self):
+        d = {
+            "id": self.id,
+            "data_searches": [ds.dictify() for ds in self.data_searches],
+            "latitude": self.latitude,
+            "longitude": self.longitude,
+            "radius": self.radius}
+        return d
+
+
+data_search_filters = db.Table('data_search_filters',
+        db.Column('data_search_id', db.Integer(), db.ForeignKey('data_search.id')),
         db.Column('filter_id', db.Integer(), db.ForeignKey('filter.id')))
+
+
+class DataSearch(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    data_source_id = db.Column(db.Integer(), db.ForeignKey('data_source.id'))
+    data_source = db.relationship('DataSource', foreign_keys='DataSearch.data_source_id')
+    filters = db.relationship('Filter', secondary=data_search_filters,
+                              backref=db.backref('data_searches', lazy='dynamic'))
+    limit = db.Column(db.Integer())
+
+    def __init__(self, data_source, filters, limit=None):
+        self.data_source = data_source
+        self.filters = filters
+        self.limit = limit
+
+    def __repr__(self):
+        return "id: {}, data_source: {}, limit: {}, filters: {}".\
+            format(repr(self.id), repr(self.data_source), self.limit, repr(self.filters))
+
+    #Make a request for the URL with the applicable filters
+    def make_request(self, loc=None):
+        lat, lng, rad = loc
+        full_url = self.data_source.url + '?'
+        if (self.limit is not None):
+            full_url += "&$limit={}".format(self.limit)
+        if loc is not None:
+            full_url += "&$where=within_circle(location,{},{},{})".format(lat, lng, rad)
+        if len(self.filters) > 0:
+            for a_filter in self.filters:
+                full_url += "&"
+                full_url += a_filter.name
+                full_url += "="
+                full_url += a_filter.value
+        # print(full_url)
+        request = requests.get(full_url, headers={'X-App-Token': COC_app_token})
+        return (request.status_code, request.text)
+
+    # dictify - Create dictionary representation for object
+    def dictify(self):
+        d = {
+            "id": self.id,
+            "data_source": self.data_source.dictify(),
+            "limit": self.limit,
+            "filters": [f.dictify() for f in self.filters]}
+        return d
+
 
 data_source_filters_meta = db.Table('data_source_filters_meta',
         db.Column('data_source_id', db.Integer(), db.ForeignKey('data_source.id')),
         db.Column('filter_meta_id', db.Integer(), db.ForeignKey('filter_meta.id')))
+
 
 class DataSource(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255))
     url = db.Column(db.String(255))
     title_key = db.Column(db.String(255))
-    limit = db.Column(db.Integer)
     filters_meta = db.relationship('FilterMeta', secondary=data_source_filters_meta,
                                 backref=db.backref('data_sources', lazy='dynamic'))
-    filters = db.relationship('Filter', secondary=data_source_filters,
-                                backref=db.backref('data_sources', lazy='dynamic'))
 
-    def __init__(self,name,url,filters,filters_meta,title_key=None, limit=10):
+    def __init__(self,name,url,filters_meta,title_key=None):
         self.name = name
         self.url = url
-        self.filters = filters
         self.filters_meta = filters_meta
         self.title_key = title_key
-        self.limit = limit
 
     def __repr__(self):
         return self.name
 
-    #Make a request for the URL with the applicable filters
-    def make_request(self, loc=None):
-        lat, lng, rad = loc
-        full_url = self.url
-        full_url += "?$limit={}".format(self.limit)
-        if loc is not None:
-          full_url += "&$where=within_circle(location,{},{},{})".format(lat, lng, rad)
-        if len(self.filters) > 0:
-            full_url += "&"
-            for a_filter in self.filters:
-                full_url += a_filter.name
-                full_url += "="
-                full_url += a_filter.value
-                #if a_filter != self.filters[-1]:
-                    #full_url += "&"
-        print(full_url)
-        request = requests.get(full_url, headers={'X-App-Token':COC_app_token})
-        return (request.status_code,request.text)
+    # dictify - Create dictionary representation for object
+    def dictify(self):
+        d = {
+            "id": self.id,
+            "name": self.name,
+            "url": self.url,
+            "title_key": self.title_key,
+            "filters_meta": [fm.dictify() for fm in self.filters_meta]}
+        return d
+
 
 class Filter(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -147,6 +203,15 @@ class Filter(db.Model):
 
     def __repr__(self):
         return self.name + ": " + self.value
+
+    # dictify - Create dictionary representation for object
+    def dictify(self):
+        d = {
+            "id": self.id,
+            "name": self.name,
+            "value": self.value}
+        return d
+
 
 class FilterMeta(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -161,3 +226,13 @@ class FilterMeta(db.Model):
 
     def __repr__(self):
         return "{{name: {}, type_: {}, choose_from: {}}}".format(self.name, self.type_, self.choose_from)
+
+    # dictify - Create dictionary representation for object
+    def dictify(self):
+        d = {
+            'id': self.id,
+            'name': self.name,
+            'type': self.type_}
+        if self.choose_from is not None:
+            d['choose_from'] = self.choose_from.split(',')
+        return d

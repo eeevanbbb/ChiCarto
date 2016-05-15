@@ -29,7 +29,7 @@ def load_meta():
           ch_fr = ",".join(fil_met['choose_from'])
         _filter = FilterMeta(fname, type_, ch_fr)
         fm.append(_filter)
-      ds = DataSource(name,url,[],fm, title_key=tk)
+      ds = DataSource(name,url,fm, title_key=tk)
       db.session.add(ds)
     db.session.commit()
       
