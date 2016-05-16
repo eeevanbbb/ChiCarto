@@ -1,0 +1,231 @@
+<html>
+<head>
+<title>Create Search</title>
+</head>
+<body>
+  <script>
+  //Thanks to: http://stackoverflow.com/questions/247483/http-get-request-in-javascript
+  function httpGetAsync(theUrl, callback)
+  {
+      var xmlHttp = new XMLHttpRequest();
+      xmlHttp.onreadystatechange = function() {
+          if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+              callback(xmlHttp.responseText);
+            }
+      }
+      xmlHttp.open("GET", theUrl, true); // true for asynchronous
+      xmlHttp.send(null);
+  }
+
+  //To-Do: Add updating list of added sources/filters/values
+  //To-Do: Add remove buttons for each data source and filter
+  //To-Do: Add location/radius information fields
+  //To-Do: Add send button
+
+  //The main search object
+  var search = {}
+  search["sources"] = [];
+
+  //Get data about sources
+  var sources = []
+  httpGetAsync("/sources",function(response) {
+    response = JSON.parse(response);
+    sources  = response["sources"];
+    for (var i = 0; i<sources.length; i++) {
+      source = sources[i];
+      createSource(source);
+    }
+  });
+
+  //Return the source for the given id
+  function dataSourceForId(id) {
+    for (var i = 0; i<sources.length; i++) {
+      source = sources[i];
+      if (source["id"] == id) {
+        return source;
+      }
+    }
+    return null;
+  }
+
+  //Return the user source for the given source
+  function userSourceForSource(source) {
+    userSources = search["sources"];
+    for (var i = 0; i<userSources.length; i++) {
+      var userSource = userSources[i];
+      if (userSource["id"] == source["id"]) {
+        return userSource;
+      }
+    }
+    return null;
+  }
+
+  //Has the user added the given source
+  function hasUserAddedSource(source) {
+    return (userSourceForSource(source) != null);
+  }
+
+  //Return the current data source
+  function currentDataSource() {
+    var dataSourcesSelect = document.getElementById("data-sources");
+    var selectedSourceId = dataSourcesSelect.options[dataSourcesSelect.selectedIndex].value;
+    return dataSourceForId(selectedSourceId);
+  }
+
+  //Add a data source to the dropdown menu
+  //Thanks to: http://stackoverflow.com/questions/9895082/javascript-populate-drop-down-list-with-array
+  function createSource(source) {
+    var dataSourcesSelect = document.getElementById("data-sources");
+    var option = document.createElement("option");
+    option.textContent = source["name"];
+    option.value = source["id"];
+    dataSourcesSelect.appendChild(option);
+  }
+
+  //Add a source to the search
+  function addDataSource() {
+    source = currentDataSource();
+    if (!hasUserAddedSource(source)) {
+      search["sources"].push({ "id": source["id"], "filters": [] });
+      changedToDataSource();
+    }
+  }
+
+  //Call when the dropdown changed
+  function changedToDataSource() {
+    var addButton  = document.getElementById("add-source");
+    var filterDiv = document.getElementById("filter-div");
+    var filterButton = document.getElementById("add-filter");
+    var valueDiv        = document.getElementById("value-div");
+    source = currentDataSource();
+    if (hasUserAddedSource(source)) {
+      setFiltersForSelectedDataSource();
+      addButton.style.visibility = "hidden";
+      filterDiv.style.visibility = "visible";
+    } else {
+      addButton.style.visibility = "visible";
+      filterDiv.style.visibility = "hidden";
+      filterButton.style.visibility = "hidden"; //Don't know why this is necessary...
+      valueDiv.style.visibility  = "hidden";
+    }
+  }
+
+  //Add a filter to the dropdown menu
+  function createFilter(filter) {
+    var filtersSelect = document.getElementById("filters");
+    var option = document.createElement("option");
+    option.textContent = filter["name"];
+    option.value = filter["id"];
+    filtersSelect.appendChild(option);
+  }
+
+  //Set the filters for the selected data source
+  function setFiltersForSelectedDataSource() {
+    source = currentDataSource();
+    filters = source["filters_meta"];
+    //Remove all current filters from dropdown
+    var filterSelect = document.getElementById("filters");
+    while (filterSelect.firstChild) {
+      filterSelect.removeChild(filterSelect.firstChild);
+    }
+    //Add new filters
+    for (var j = 0; j<filters.length; j++) {
+      createFilter(filters[j]);
+    }
+
+    changedToFilter();
+  }
+
+  //Return the filter for a given id
+  //***Assumes the filter's data source is the current one
+  function filterForId(id) {
+    source = currentDataSource();
+    filters = source["filters_meta"];
+    for (var i = 0; i<filters.length; i++) {
+      var filter = filters[i];
+      if (filter["id"] == id) {
+        return filter;
+      }
+    }
+    return null;
+  }
+
+  //Return the current filter
+  function currentFilter() {
+    var filterSelect = document.getElementById("filters");
+    return filterForId(filterSelect.value);
+  }
+
+  //Return the userFilter for the given filter
+  //***Assumes the filter is for the currentSource
+  function userFilterForFilter(filter) {
+    var userSource = userSourceForSource(currentDataSource());
+    var userFilters = userSource["filters"];
+    for (var i = 0; i<userFilters.length; i++) {
+      var userFilter = userFilters[i];
+      if (userFilter["name"] == filter["name"]) {
+        return userFilter;
+      }
+    }
+    return null;
+  }
+
+  //Has the user added the given filter
+  function hasUserAddedFilter(filter) {
+    return (userFilterForFilter(filter) != null);
+  }
+
+  //Call when the dropdown changed
+  function changedToFilter() {
+    var filter = currentFilter();
+    var valueDiv        = document.getElementById("value-div");
+    var valueInput      = document.getElementById("value-input");
+    var addFilterButton = document.getElementById("add-filter");
+    if (hasUserAddedFilter(filter)) {
+      addFilterButton.style.visibility = "hidden";
+      valueDiv.style.visibility = "visible";
+      valueInput.value = userFilterForFilter(filter)["value"];
+    } else {
+      addFilterButton.style.visibility = "visible";
+      valueDiv.style.visibility = "hidden";
+    }
+  }
+
+  //Show the value div (do not add the filter until a value is provided)
+  function addFilter() {
+    var valueDiv        = document.getElementById("value-div");
+    var valueInput      = document.getElementById("value-input");
+    var addFilterButton = document.getElementById("add-filter");
+    addFilterButton.style.visibility = "hidden";
+    valueDiv.style.visibility = "visible";
+    valueInput.value = "";
+  }
+
+  //Set the value for the current filter
+  function setValue() {
+    if (!hasUserAddedFilter(currentFilter())) {
+      var valueInput = document.getElementById("value-input");
+      var userSource = userSourceForSource(currentDataSource());
+      userSource["filters"].push({ "name": currentFilter()["name"],"value": valueInput.value })
+      changedToFilter()
+    }
+  }
+  </script>
+  <h1>Create a Search</h1>
+  <hr>
+  <div id="data-source-div">
+    <h2>Data Source</h2>
+    <select id="data-sources" onchange="changedToDataSource()"></select>
+    <button type="button" id="add-source" onclick="addDataSource()">Add</button>
+  </div>
+  <div id="filter-div" style="visibility: hidden;">
+    <h2>Filter</h2>
+    <select id="filters" onchange="changedToFilter()"></select>
+    <button type="button" id="add-filter" onclick="addFilter()">Add</button>
+  </div>
+  <div id="value-div" style="visibility: hidden;">
+    Value: <input id="value-input" type="text">
+    <button type="button" id="set-value" onclick="setValue()">Set</button>
+  </div>
+</body>
+</html>

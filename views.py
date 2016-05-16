@@ -23,41 +23,73 @@ def me():
 
 # Look at file 'sample_json_search_request.json' to see sample json data in post request this function accepts
 # Though it wouldn't be difficult to change the format of the json data if needed to interact with the front-end
-@app.route('/create_search', methods=['POST'])
-def create_search():
-    try: 
+@app.route('/create_search', methods=['GET','POST'])
+@login_required
+def test_create_search_goodrch():
+    if request.method == "POST":
+        try:
+            data = request.get_json(force=True)
+
+            lat = data['latitude']
+            lon = data['longitude']
+            radius = data['radius']
+            sources = data['sources']
+
+            rating = None
+            name = None
+
+            if "rating" in data:
+                rating = data['rating']
+
+            if "name" in data:
+                name = data['name']
+
+            data_searches = []
+
+            for source in sources:
+                source_id = source['id']
+                data_source = db.session.query(DataSource).filter(DataSource.id == source_id).one()
+                limit = source['limit']
+                filters_dict = source['filters']
+                filters = []
+
+                for filter_temp in filters_dict:
+                    # Check to see if this filter value is valid for this filter and DataSource
+                    new_filter = Filter(filter_temp['name'], filter_temp['value'])
+                    filters.append(new_filter)
+
+                data_search = DataSearch(data_source, filters, limit)
+                db.session.add(data_search)
+                data_searches.append(data_search)
+
+            search = Search(data_searches, lat, lon, radius, rating, name)
+            db.session.add(search)
+
+            flask_login.current_user.add_search(search)
+
+            db.session.commit()
+
+            return search_results(search.id)
+            
+        except (Exception) as e:
+            abort (422)
+    elif request.method == "GET":
+        return render_template('create.html')
+
+
+@app.route('/rate_search/', methods=['GET','POST'])
+def rate_search():
+    if request.method == "POST":
+
+        if flask_login.current_user.is_authenticated is False:
+            print('received rate_search post request from AnonymousUser - Ignoring')
+            json_dict = {'Error': 'Cannot create a rate a search unless you are logged in'}
+            return flask.jsonify(**json_dict)
+
         data = request.get_json(force=True)
 
-        lat = data['latitude']
-        lon = data['longitude']
-        radius = data['radius']
-        sources = data['sources']
-
-        data_searches = []
-
-        for source in sources:
-            source_id = source['id']
-            data_source = db.session.query(DataSource).filter(DataSource.id == source_id).one()
-            limit = source['limit']
-            filters_dict = source['filters']
-            filters = []
-
-            for filter_temp in filters_dict:
-                # Check to see if this filter value is valid for this filter and DataSource
-                new_filter = Filter(filter_temp['name'], filter_temp['value'])
-                filters.append(new_filter)
-
-            data_search = DataSearch(data_source, filters, limit)
-            db.session.add(data_search)
-            data_searches.append(data_search)
-
-        search = Search(data_searches, lat, lon, radius)
-        db.session.add(search)
-        db.session.commit()
-
-        return search_results(search.id)
-    except (Exception) as e:
-        abort (422)
+        search_id = data['id']
+        rating = data['rating']
 
 # @app.route("/search-results/<sid>")
 # def search_results(sid):
