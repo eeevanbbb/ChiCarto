@@ -23,39 +23,41 @@ def me():
 
 # Look at file 'sample_json_search_request.json' to see sample json data in post request this function accepts
 # Though it wouldn't be difficult to change the format of the json data if needed to interact with the front-end
-@app.route('/create_search/', methods=['POST'])
+@app.route('/create_search', methods=['POST'])
 def create_search():
-    data = request.get_json(force=True)
+    try: 
+        data = request.get_json(force=True)
 
-    lat = data['latitude']
-    lon = data['longitude']
-    radius = data['radius']
-    sources = data['sources']
+        lat = data['latitude']
+        lon = data['longitude']
+        radius = data['radius']
+        sources = data['sources']
 
-    data_searches = []
+        data_searches = []
 
-    for source in sources:
-        source_id = source['id']
-        data_source = db.session.query(DataSource).filter(DataSource.id == source_id).one()
-        limit = source['limit']
-        filters_dict = source['filters']
-        filters = []
+        for source in sources:
+            source_id = source['id']
+            data_source = db.session.query(DataSource).filter(DataSource.id == source_id).one()
+            limit = source['limit']
+            filters_dict = source['filters']
+            filters = []
 
-        for filter_temp in filters_dict:
-            # Check to see if this filter value is valid for this filter and DataSource
-            new_filter = Filter(filter_temp['name'], filter_temp['value'])
-            filters.append(new_filter)
+            for filter_temp in filters_dict:
+                # Check to see if this filter value is valid for this filter and DataSource
+                new_filter = Filter(filter_temp['name'], filter_temp['value'])
+                filters.append(new_filter)
 
-        data_search = DataSearch(data_source, filters, limit)
-        db.session.add(data_search)
-        data_searches.append(data_search)
+            data_search = DataSearch(data_source, filters, limit)
+            db.session.add(data_search)
+            data_searches.append(data_search)
 
-    search = Search(data_searches, lat, lon, radius)
-    db.session.add(search)
-    db.session.commit()
+        search = Search(data_searches, lat, lon, radius)
+        db.session.add(search)
+        db.session.commit()
 
-    return search_results(search.id)
-
+        return search_results(search.id)
+    except (Exception) as e:
+        abort (422)
 
 # @app.route("/search-results/<sid>")
 # def search_results(sid):

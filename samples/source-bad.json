@@ -1,0 +1,27 @@
+{
+  "latitude": 41.7886,
+  "longitude": -87.5987,
+  "radius": 1000,
+  "sources": [
+    {
+      "id": 1,
+      "limit": 10, 
+      "filters": [
+        {
+          "name": "primary_type",
+          "value": "THEFT"
+        }
+      ]
+    },
+    {
+      "id": 82,
+      "limit": 10,
+      "filters": [
+        {
+          "name": "inspection_status",
+          "value": "CLOSED"
+        }
+      ]
+    }
+  ]
+}
