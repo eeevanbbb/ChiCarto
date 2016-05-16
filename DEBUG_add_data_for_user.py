@@ -36,6 +36,3 @@ user.add_search(search1)
 user.add_search(search2)
 
 db.session.commit()
-
-print(search1.id)
-print(search2.id)
