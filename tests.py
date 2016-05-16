@@ -183,6 +183,20 @@ class SearchTestCase(ChiCartoTestCase):
                 assert sz > 0 and sz <= 10
                 assert rv.status == '200 OK'
 
+    def test_create_search_good2(self):
+        with main.app.test_request_context():
+            self.register('a@example.com', 'password')
+            rv = self.login('a@example.com', 'password')
+            rv = self.app.get('/me')
+            assert (rv.status == '200 OK')
+            with open('samples/source-valid2.json','r') as f:
+                s = f.read()
+                rv = self.app.post('/create_search', data=s,content_type='application/json')
+                js = json.loads(rv.data.decode('utf-8'))
+                sz = len(js['search-results'][0]['items'])
+                assert sz > 0 and sz <= 10
+                assert rv.status == '200 OK'
+
     def test_create_search_bad(self):
         with main.app.test_request_context():
             self.register('a@example.com', 'password')
@@ -190,6 +204,17 @@ class SearchTestCase(ChiCartoTestCase):
             rv = self.app.get('/me')
             assert (rv.status == '200 OK')
             with open('samples/source-bad.json','r') as f:
+                s = f.read()
+                rv = self.app.post('/create_search', data=s,content_type='application/json')
+                assert rv.status.startswith('422')
+
+    def test_create_search_bad2(self):
+        with main.app.test_request_context():
+            self.register('a@example.com', 'password')
+            rv = self.login('a@example.com', 'password')
+            rv = self.app.get('/me')
+            assert (rv.status == '200 OK')
+            with open('samples/source-bad2.json','r') as f:
                 s = f.read()
                 rv = self.app.post('/create_search', data=s,content_type='application/json')
                 assert rv.status.startswith('422')
