@@ -25,7 +25,7 @@ def me():
 # Though it wouldn't be difficult to change the format of the json data if needed to interact with the front-end
 @app.route('/create_search', methods=['GET','POST'])
 @login_required
-def test_create_search_goodrch():
+def create_search():
     if request.method == "POST":
         try:
             data = request.get_json(force=True)
