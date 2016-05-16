@@ -2,6 +2,8 @@
   "latitude": 41.7886,
   "longitude": -87.5987,
   "radius": 1000,
+  "rating": 3,
+  "name": "sams's search",
   "sources": [
     {
       "id": 1,
