@@ -57,15 +57,21 @@ class Search(db.Model):
     latitude = db.Column(db.Float())
     longitude = db.Column(db.Float())
     radius = db.Column(db.Float())
+    rating = db.Column(db.Integer())
+    name = db.Column(db.String(255))
 
-    def __init__(self,data_searches,latitude,longitude,radius):
+    def __init__(self,data_searches,latitude,longitude,radius,rating=None,name=None):
         self.data_searches = data_searches
         self.latitude = latitude
         self.longitude = longitude
         self.radius = radius
+        self.rating = rating
+        self.name = name
 
     def __repr__(self):
         name = "Search with data sources: "
+        if self.name is not None:
+            name = self.name + " - " + name
         for data_search in self.data_searches:
             name += data_search.data_source.name
             if len(data_search.filters) > 0:
@@ -105,7 +111,9 @@ class Search(db.Model):
             "data_searches": [ds.dictify() for ds in self.data_searches],
             "latitude": self.latitude,
             "longitude": self.longitude,
-            "radius": self.radius}
+            "radius": self.radius,
+            "rating": self.rating,
+            "name": self.name}
         return d
 
 

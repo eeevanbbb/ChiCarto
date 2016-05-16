@@ -26,12 +26,27 @@ def me():
 @app.route('/create_search/', methods=['GET','POST'])
 def create_search():
     if request.method == "POST":
+
+        if flask_login.current_user.is_authenticated is False:
+            print('received create_search post request from AnonymousUser - Ignoring')
+            json_dict = {'Error': 'Cannot create a search unless you are logged in'}
+            return flask.jsonify(**json_dict)
+
         data = request.get_json(force=True)
 
         lat = data['latitude']
         lon = data['longitude']
         radius = data['radius']
         sources = data['sources']
+
+        rating = None
+        name = None
+
+        if "rating" in data:
+            rating = data['rating']
+
+        if "name" in data:
+            name = data['name']
 
         data_searches = []
 
@@ -51,13 +66,33 @@ def create_search():
             db.session.add(data_search)
             data_searches.append(data_search)
 
-        search = Search(data_searches, lat, lon, radius)
+        search = Search(data_searches, lat, lon, radius, rating, name)
         db.session.add(search)
+
+        flask_login.current_user.add_search(search)
+
         db.session.commit()
 
         return search_results(search.id)
     elif request.method == "GET":
         return render_template('create.html')
+
+
+@app.route('/rate_search/', methods=['GET','POST'])
+def create_search():
+    if request.method == "POST":
+
+        if flask_login.current_user.is_authenticated is False:
+            print('received rate_search post request from AnonymousUser - Ignoring')
+            json_dict = {'Error': 'Cannot create a rate a search unless you are logged in'}
+            return flask.jsonify(**json_dict)
+
+        data = request.get_json(force=True)
+
+        search_id = data['id']
+        rating = data['rating']
+
+
 
 
 # @app.route("/search-results/<sid>")
