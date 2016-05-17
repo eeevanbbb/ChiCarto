@@ -77,19 +77,24 @@ def create_search():
         return render_template('create.html')
 
 
-@app.route('/rate_search/', methods=['GET','POST'])
+@app.route('/rate_search', methods=['POST'])
 def rate_search():
     if request.method == "POST":
-
-        if flask_login.current_user.is_authenticated is False:
-            print('received rate_search post request from AnonymousUser - Ignoring')
-            json_dict = {'Error': 'Cannot create a rate a search unless you are logged in'}
-            return flask.jsonify(**json_dict)
-
-        data = request.get_json(force=True)
-
-        search_id = data['id']
-        rating = data['rating']
+        try:
+            data = request.get_json(force=True)
+            sid = data['id']
+            s = Search.query.get(int(sid))
+            if s is not None:
+                rating = int(data['rating'])
+                if rating >= 0 and rating <= 5:
+                    s.rating = rating
+                    return search(s.id)
+                else:
+                    abort(404)
+            else:
+                abort(404)
+        except:
+            abort(422)
 
 # @app.route("/search-results/<sid>")
 # def search_results(sid):
@@ -128,7 +133,7 @@ def search_results(sid):
     s = Search.query.get(int(sid))
     if s is not None:
         (status, results) = s.execute()
-        json_dict = {'search-results': results}
+        json_dict = {'search-results': results, 'id': sid}
         return flask.jsonify(**json_dict)
     else:
         abort(404)
