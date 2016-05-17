@@ -78,6 +78,7 @@
     var dataSourcesSelect = document.getElementById("data-sources");
     var option = document.createElement("option");
     option.textContent = source["name"];
+    option.id = "Source-Option-" + source["id"];
     option.value = source["id"];
     dataSourcesSelect.appendChild(option);
   }
@@ -88,24 +89,48 @@
     if (!hasUserAddedSource(source)) {
       search["sources"].push({ "id": source["id"], "filters": [] });
       changedToDataSource();
+
+      var optionElement = document.getElementById("Source-Option-" + source["id"]);
+      optionElement.textContent = source["name"]+" (ADDED)";
     }
   }
 
+  //Remove a source from the search
+  function removeDataSource() {
+    source = currentDataSource();
+    if (hasUserAddedSource(source)) {
+      var index = search["sources"].indexOf(userSourceForSource(source));
+      if (index > -1) {
+        search["sources"].splice(index,1);
+        changedToDataSource();
+
+        var optionElement = document.getElementById("Source-Option-" + source["id"]);
+        optionElement.textContent = source["name"];
+      }
+    }
+   }
+
   //Call when the dropdown changed
   function changedToDataSource() {
-    var addButton  = document.getElementById("add-source");
-    var filterDiv = document.getElementById("filter-div");
-    var filterButton = document.getElementById("add-filter");
-    var valueDiv        = document.getElementById("value-div");
+    var addButton          = document.getElementById("add-source");
+    var removeButton       = document.getElementById("remove-source");
+    var filterDiv          = document.getElementById("filter-div");
+    var addFilterButton    = document.getElementById("add-filter");
+    var removeFilterButton = document.getElementById("remove-filter");
+    var valueDiv           = document.getElementById("value-div");
     source = currentDataSource();
     if (hasUserAddedSource(source)) {
       setFiltersForSelectedDataSource();
       addButton.style.visibility = "hidden";
+      removeButton.style.visibility = "visible";
       filterDiv.style.visibility = "visible";
     } else {
       addButton.style.visibility = "visible";
+      removeButton.style.visibility = "hidden";
       filterDiv.style.visibility = "hidden";
-      filterButton.style.visibility = "hidden"; //Don't know why this is necessary...
+      //Don't know why these are necessary...
+      addFilterButton.style.visibility = "hidden";
+      removeFilterButton.style.visibility = "hidden";
       valueDiv.style.visibility  = "hidden";
     }
   }
@@ -115,7 +140,11 @@
     var filtersSelect = document.getElementById("filters");
     var option = document.createElement("option");
     option.textContent = filter["name"];
+    if (hasUserAddedFilter(filter)) {
+      option.textContent = filter["name"]+" (ADDED)";
+    }
     option.value = filter["id"];
+    option.id = "Filter-Option-" + filter["id"];
     filtersSelect.appendChild(option);
   }
 
@@ -178,15 +207,18 @@
   //Call when the dropdown changed
   function changedToFilter() {
     var filter = currentFilter();
-    var valueDiv        = document.getElementById("value-div");
-    var valueInput      = document.getElementById("value-input");
-    var addFilterButton = document.getElementById("add-filter");
+    var valueDiv           = document.getElementById("value-div");
+    var valueInput         = document.getElementById("value-input");
+    var addFilterButton    = document.getElementById("add-filter");
+    var removeFilterButton = document.getElementById("remove-filter");
     if (hasUserAddedFilter(filter)) {
       addFilterButton.style.visibility = "hidden";
+      removeFilterButton.style.visibility = "visible";
       valueDiv.style.visibility = "visible";
       valueInput.value = userFilterForFilter(filter)["value"];
     } else {
       addFilterButton.style.visibility = "visible";
+      removeFilterButton.style.visibility = "hidden";
       valueDiv.style.visibility = "hidden";
     }
   }
@@ -203,11 +235,31 @@
 
   //Set the value for the current filter
   function setValue() {
-    if (!hasUserAddedFilter(currentFilter())) {
+    var filter = currentFilter();
+    if (!hasUserAddedFilter(filter)) {
       var valueInput = document.getElementById("value-input");
       var userSource = userSourceForSource(currentDataSource());
-      userSource["filters"].push({ "name": currentFilter()["name"],"value": valueInput.value })
+      userSource["filters"].push({ "name": filter["name"],"value": valueInput.value })
       changedToFilter()
+
+      var optionElement = document.getElementById("Filter-Option-" + filter["id"]);
+      optionElement.textContent = filter["name"]+" (ADDED)";
+    }
+  }
+
+  //Remove the current filter
+  function removeFilter() {
+    filter = currentFilter();
+    if (hasUserAddedFilter(filter)) {
+      var userSource = userSourceForSource(currentDataSource());
+      var index = userSource["filters"].indexOf(userFilterForFilter(filter));
+      if (index > -1) {
+        userSource["filters"].splice(index,1);
+        changedToFilter();
+
+        var optionElement = document.getElementById("Filter-Option-" + filter["id"]);
+        optionElement.textContent = filter["name"];
+      }
     }
   }
   </script>
@@ -217,11 +269,13 @@
     <h2>Data Source</h2>
     <select id="data-sources" onchange="changedToDataSource()"></select>
     <button type="button" id="add-source" onclick="addDataSource()">Add</button>
+    <button type="button" id="remove-source" onclick="removeDataSource()" style="visibility: hidden;">Remove</button>
   </div>
   <div id="filter-div" style="visibility: hidden;">
     <h2>Filter</h2>
     <select id="filters" onchange="changedToFilter()"></select>
     <button type="button" id="add-filter" onclick="addFilter()">Add</button>
+    <button type="button" id="remove-filter" onclick="removeFilter()" style="visibility: hidden;">Remove</button>
   </div>
   <div id="value-div" style="visibility: hidden;">
     Value: <input id="value-input" type="text">
