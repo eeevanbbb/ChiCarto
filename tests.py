@@ -222,20 +222,24 @@ class SearchTestCase(ChiCartoTestCase):
     def test_rate_search_good(self):
         # make sure that you get the correct response when you give a valid search a valid rating
         with main.app.test_request_context():
+            # register a user
             self.register('a@example.com', 'password')
             rv = self.login('a@example.com', 'password')
             rv = self.app.get('/me')
+            # check that registration was successful
             assert (rv.status == '200 OK')
             with open('samples/source-valid.json','r') as f:
                 s = f.read()
+                # send a post message to server to create a search
                 rv = self.app.post('/create_search', data=s,content_type='application/json')
                 js = json.loads(rv.data.decode('utf-8'))
                 sid = js['id']
                 rating = 3
                 data = {'id': sid, 'rating': rating}
+                # send a post message to server to rate the search we just created
                 rv = self.app.post('/rate_search', data=json.dumps(data), content_type='application/json')
                 js = json.loads(rv.data.decode('utf-8'))['searches'][0]
-
+                # assert that we get the correct response - meaning that the rating was updated
                 assert sid == js['id']
                 assert rating == js['rating']
                 assert rv.status == '200 OK'
@@ -244,34 +248,40 @@ class SearchTestCase(ChiCartoTestCase):
         # make sure that the rating stays with the search, until you change the rating,
         # and then make sure new rating is used
         with main.app.test_request_context():
+            # register a user
             self.register('a@example.com', 'password')
             rv = self.login('a@example.com', 'password')
             rv = self.app.get('/me')
+            # check that registration was successful
             assert (rv.status == '200 OK')
             with open('samples/source-valid.json','r') as f:
                 s = f.read()
+                # send a post message to server to create a search
                 rv = self.app.post('/create_search', data=s,content_type='application/json')
                 js = json.loads(rv.data.decode('utf-8'))
                 sid = js['id']
                 rating = 3
                 data = {'id': sid, 'rating': rating}
+                # send a post message to server to rate the search we just created
                 rv = self.app.post('/rate_search', data=json.dumps(data), content_type='application/json')
-                # js = json.loads(rv.data.decode('utf-8'))['searches'][0]
 
+                # get data for the search to verify that the rating was actually saved in database
                 rv = self.app.get('/search/' + str(sid))
                 js = json.loads(rv.data.decode('utf-8'))['searches'][0]
-
+                # assert that we get the correct response - meaning that the rating was updated
                 assert sid == js['id']
                 assert rating == js['rating']
                 assert rv.status == '200 OK'
 
                 rating = 5
                 data = {'id': sid, 'rating': rating}
+                # send a post message to server to rate the search with a different rating
                 rv = self.app.post('/rate_search', data=json.dumps(data), content_type='application/json')
-                # js = json.loads(rv.data.decode('utf-8'))['searches'][0]
 
+                # get data for the search to verify that the rating was actually saved in database
                 rv = self.app.get('/search/' + str(sid))
                 js = json.loads(rv.data.decode('utf-8'))['searches'][0]
+                # assert that we get the correct response - meaning that the rating was updated
 
                 assert sid == js['id']
                 assert rating == js['rating']
@@ -280,12 +290,15 @@ class SearchTestCase(ChiCartoTestCase):
     def test_rate_search_bad(self):
         # make sure error is returned if you try to rate a non-existent search
         with main.app.test_request_context():
+            # register a user
             self.register('a@example.com', 'password')
             rv = self.login('a@example.com', 'password')
             rv = self.app.get('/me')
+            # check that registration was successful
             assert (rv.status == '200 OK')
             with open('samples/source-valid.json','r') as f:
                 s = f.read()
+                # send a post message to server to create a search
                 rv = self.app.post('/create_search', data=s,content_type='application/json')
                 js = json.loads(rv.data.decode('utf-8'))
                 sid = js['id']
@@ -293,17 +306,21 @@ class SearchTestCase(ChiCartoTestCase):
                 # try to rate a search that doesn't exist
                 data = {'id': sid+12345, 'rating': rating}
                 rv = self.app.post('/rate_search', data=json.dumps(data), content_type='application/json')
+                # assert that we get the correct response - meaning that the rating was ignored
                 assert rv.status.startswith('422')
 
     def test_rate_search_bad2(self):
         # make sure error is returned if you try to rate a search with an invalid rating (i.e. >5 or <0)
         with main.app.test_request_context():
+            # register a user
             self.register('a@example.com', 'password')
             rv = self.login('a@example.com', 'password')
             rv = self.app.get('/me')
+            # check that registration was successful
             assert (rv.status == '200 OK')
             with open('samples/source-valid.json','r') as f:
                 s = f.read()
+                # send a post message to server to create a search
                 rv = self.app.post('/create_search', data=s,content_type='application/json')
                 js = json.loads(rv.data.decode('utf-8'))
                 sid = js['id']
@@ -311,6 +328,7 @@ class SearchTestCase(ChiCartoTestCase):
                 # try to give an invalid rating for a search
                 data = {'id': sid, 'rating': rating}
                 rv = self.app.post('/rate_search', data=json.dumps(data), content_type='application/json')
+                # assert that we get the correct response - meaning that the rating was ignored
                 assert rv.status.startswith('422')
 
 
