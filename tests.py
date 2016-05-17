@@ -308,7 +308,7 @@ class SearchTestCase(ChiCartoTestCase):
                 js = json.loads(rv.data.decode('utf-8'))
                 sid = js['id']
                 rating = 6
-                # try to rate a search that doesn't exist
+                # try to give an invalid rating for a search
                 data = {'id': sid, 'rating': rating}
                 rv = self.app.post('/rate_search', data=json.dumps(data), content_type='application/json')
                 assert rv.status.startswith('422')
