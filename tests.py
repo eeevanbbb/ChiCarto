@@ -171,13 +171,17 @@ class SearchTestCase(ChiCartoTestCase):
 
     def test_create_search_good(self):
         with main.app.test_request_context():
+            # register and login a user, checking for success
             self.register('a@example.com', 'password')
             rv = self.login('a@example.com', 'password')
             rv = self.app.get('/me')
             assert (rv.status == '200 OK')
             with open('samples/source-valid.json','r') as f:
+                # post a valid test search
                 s = f.read()
                 rv = self.app.post('/create_search', data=s,content_type='application/json')
+                # if search was valid we'll get the results of that search
+                # and check if it's good
                 js = json.loads(rv.data.decode('utf-8'))
                 sz = len(js['search-results'][0]['items'])
                 assert sz > 0 and sz <= 10
@@ -185,13 +189,16 @@ class SearchTestCase(ChiCartoTestCase):
 
     def test_create_search_good2(self):
         with main.app.test_request_context():
+            # register and login user
             self.register('a@example.com', 'password')
             rv = self.login('a@example.com', 'password')
             rv = self.app.get('/me')
             assert (rv.status == '200 OK')
             with open('samples/source-valid2.json','r') as f:
+                # post valid test search
                 s = f.read()
                 rv = self.app.post('/create_search', data=s,content_type='application/json')
+                # make sure we get results back and they obey the search's params
                 js = json.loads(rv.data.decode('utf-8'))
                 sz = len(js['search-results'][0]['items'])
                 assert sz > 0 and sz <= 10
@@ -199,24 +206,30 @@ class SearchTestCase(ChiCartoTestCase):
 
     def test_create_search_bad(self):
         with main.app.test_request_context():
+            # register and login user
             self.register('a@example.com', 'password')
             rv = self.login('a@example.com', 'password')
             rv = self.app.get('/me')
             assert (rv.status == '200 OK')
             with open('samples/source-bad.json','r') as f:
+                # post bad test search
                 s = f.read()
                 rv = self.app.post('/create_search', data=s,content_type='application/json')
+                # make sure it was not accepted
                 assert rv.status.startswith('422')
 
     def test_create_search_bad2(self):
         with main.app.test_request_context():
+            # register and login user
             self.register('a@example.com', 'password')
             rv = self.login('a@example.com', 'password')
             rv = self.app.get('/me')
             assert (rv.status == '200 OK')
             with open('samples/source-bad2.json','r') as f:
+                # post bad search
                 s = f.read()
                 rv = self.app.post('/create_search', data=s,content_type='application/json')
+                # assert that it was rejected
                 assert rv.status.startswith('422')
 
     def test_rate_search_good(self):
