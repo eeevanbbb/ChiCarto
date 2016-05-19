@@ -79,7 +79,7 @@ def create_search():
         return render_template('create.html')
 
 
-@app.route('/rate_search', methods=['POST'])
+@app.route('/rate_search', methods=['POST', 'GET'])
 def rate_search():
     if request.method == "POST":
         try:
@@ -97,6 +97,8 @@ def rate_search():
                 abort(404)
         except:
             abort(422)
+    else:
+        render_template('rate.html');
 
 @app.route("/search", defaults = {"sid": None})
 @app.route("/search/<sid>")
