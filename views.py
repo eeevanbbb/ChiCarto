@@ -70,8 +70,10 @@ def create_search():
             db.session.commit()
 
             return search_results(search.id)
-            
+
         except (Exception) as e:
+            print("Exception: ")
+            print(e)
             abort (422)
     elif request.method == "GET":
         return render_template('create.html')
@@ -145,4 +147,3 @@ def delete_account():
         db.session.delete(dbu)
         db.session.commit()
         return redirect('/', code=303)
-

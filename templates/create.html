@@ -87,7 +87,7 @@
   function addDataSource() {
     source = currentDataSource();
     if (!hasUserAddedSource(source)) {
-      search["sources"].push({ "id": source["id"], "filters": [] });
+      search["sources"].push({ "id": source["id"], "filters": [], "limit": 10 });
       changedToDataSource();
 
       var optionElement = document.getElementById("Source-Option-" + source["id"]);
@@ -118,6 +118,9 @@
   function changedToDataSource() {
     var addButton          = document.getElementById("add-source");
     var removeButton       = document.getElementById("remove-source");
+    var limitText          = document.getElementById("limit-text");
+    var limitInput         = document.getElementById("limit-input");
+    var limitButton        = document.getElementById("set-limit");
     var filterDiv          = document.getElementById("filter-div");
     var addFilterButton    = document.getElementById("add-filter");
     var removeFilterButton = document.getElementById("remove-filter");
@@ -128,15 +131,31 @@
       addButton.style.visibility = "hidden";
       removeButton.style.visibility = "visible";
       filterDiv.style.visibility = "visible";
+      limitText.style.visibility = "visible";
+      limitInput.style.visibility = "visible";
+      limitButton.style.visibility = "visible";
+      limitInput.value = userSourceForSource(source)["limit"];
     } else {
       addButton.style.visibility = "visible";
       removeButton.style.visibility = "hidden";
       filterDiv.style.visibility = "hidden";
+      limitText.style.visibility = "hidden";
+      limitInput.style.visibility = "hidden";
+      limitButton.style.visibility = "hidden";
       //Don't know why these are necessary...
       addFilterButton.style.visibility = "hidden";
       removeFilterButton.style.visibility = "hidden";
       valueDiv.style.visibility  = "hidden";
     }
+  }
+
+  //Set the limit for the current data source
+  function setLimit() {
+    var element = document.getElementById("limit-input");
+    var limit = element.value;
+    //TO-DO: Some validation
+    userSourceForSource(currentDataSource())["limit"] = parseInt(limit);
+    updateOutputText();
   }
 
   //Add a filter to the dropdown menu
@@ -318,7 +337,7 @@
     var element = document.getElementById("radius-input");
     var radius = element.value;
     //TO-DO: Some kind of validation
-    search["radius"] = radius;
+    search["radius"] = parseFloat(radius);
     updateOutputText();
   }
 
@@ -335,8 +354,15 @@
   //SUBMIT FUNCTIONS
 
   function submit() {
+    //TO-DO: Validation of required fields
     httpPostAsync("/create_search",search,function(response) {
       console.log("Response: "+response);
+      response = JSON.parse(response);
+      if (response["id"] != null) {
+        window.location.href = "/?s=" + response["id"];
+      } else {
+        console.log("null search id");
+      }
     });
   }
 
@@ -351,10 +377,12 @@
       }
       xmlHttp.open("POST", theUrl, true); // true for asynchronous
       xmlHttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+      console.log("Request: "+JSON.stringify(object));
       xmlHttp.send(JSON.stringify(object));
   }
   </script>
   <h1>Create a Search</h1>
+  <a href="/me">My Account</a>
   <hr>
   <div id="input-div" style="width: 50%;">
     <div id="data-source-div">
@@ -362,6 +390,10 @@
       <select id="data-sources" onchange="changedToDataSource()"></select>
       <button type="button" id="add-source" onclick="addDataSource()">Add</button>
       <button type="button" id="remove-source" onclick="removeDataSource()" style="visibility: hidden;">Remove</button>
+      <br>
+      <p id="limit-text" style="display: inline; visibility: hidden;">Limit: </p>
+      <input id="limit-input" style="visibility: hidden;">
+      <button type="button" id="set-limit" onclick="setLimit()" style="visibility: hidden;">Set</button>
     </div>
     <div id="filter-div" style="visibility: hidden;">
       <h2>Filter</h2>
