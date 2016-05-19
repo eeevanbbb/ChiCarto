@@ -12,15 +12,15 @@ function initMap() {
           httpGetAsync("http://127.0.0.1:5000/search-results/"+searchID, function(response) {
             var bounds = new google.maps.LatLngBounds();
             response = JSON.parse(response);
-            var len = Object.keys(response["search-results"]).length;
-            for (var i = 0; i < len; i++) {
-                var lat1 = response["search-results"][i].latitude;
-                var lon1 = response["search-results"][i].longitude;
+            var items = response["search-results"][0]["items"];
+            for (var i = 0; i < items.length; i++) {
+                var lat1 = items[i].latitude;
+                var lon1 = items[i].longitude;
                 var myLatLon = new google.maps.LatLng(lat1,lon1);
                 var mark = new google.maps.Marker({
                     position: myLatLon,
                     map: map,
-                    title: response["search-results"][i].description
+                    title: items[i].description
                                                     });
                 bounds.extend(mark.getPosition());
             }
