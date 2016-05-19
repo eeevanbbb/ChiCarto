@@ -92,6 +92,8 @@
 
       var optionElement = document.getElementById("Source-Option-" + source["id"]);
       optionElement.textContent = source["name"]+" (ADDED)";
+
+      updateOutputText();
     }
   }
 
@@ -106,6 +108,8 @@
 
         var optionElement = document.getElementById("Source-Option-" + source["id"]);
         optionElement.textContent = source["name"];
+
+        updateOutputText();
       }
     }
    }
@@ -236,15 +240,20 @@
   //Set the value for the current filter
   function setValue() {
     var filter = currentFilter();
+    var valueInput = document.getElementById("value-input");
+    var userSource = userSourceForSource(currentDataSource());
     if (!hasUserAddedFilter(filter)) {
-      var valueInput = document.getElementById("value-input");
-      var userSource = userSourceForSource(currentDataSource());
       userSource["filters"].push({ "name": filter["name"],"value": valueInput.value })
       changedToFilter()
 
       var optionElement = document.getElementById("Filter-Option-" + filter["id"]);
       optionElement.textContent = filter["name"]+" (ADDED)";
+    } else {
+      var userFilter = userFilterForFilter(filter);
+      userFilter["value"] = valueInput.value;
     }
+
+    updateOutputText();
   }
 
   //Remove the current filter
@@ -258,28 +267,137 @@
         changedToFilter();
 
         var optionElement = document.getElementById("Filter-Option-" + filter["id"]);
-        optionElement.textContent = filter["name"];
+        optionElement.innerHTML = filter["name"];
+
+        updateOutputText();
       }
     }
+  }
+
+  //Update the output text
+  function updateOutputText() {
+    var element = document.getElementById("search-object-output")
+    element.innerHTML = JSON.stringify(search,null,2);
+  }
+
+  //LOCATION FUNCTIONS
+
+  function setLatitude() {
+    var element = document.getElementById("lat-input");
+    var latitude = element.value;
+    //TO-DO: Some kind of validation
+    search["latitude"] = latitude;
+    updateOutputText();
+  }
+
+  function setLongitude() {
+    var element = document.getElementById("lon-input");
+    var longitude = element.value;
+    //TO-DO: Some kind of validation
+    search["longitude"] = longitude;
+    updateOutputText();
+  }
+
+  function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(updateLocation);
+    }
+  }
+
+  function updateLocation(position) {
+    search["latitude"]  = position.coords.latitude;
+    search["longitude"] = position.coords.longitude;
+    var latInput = document.getElementById("lat-input");
+    var lonInput = document.getElementById("lon-input");
+    latInput.value = position.coords.latitude;
+    lonInput.value = position.coords.longitude;
+    updateOutputText();
+  }
+
+  function setRadius() {
+    var element = document.getElementById("radius-input");
+    var radius = element.value;
+    //TO-DO: Some kind of validation
+    search["radius"] = radius;
+    updateOutputText();
+  }
+
+  //METADATA FUNCTIONS
+
+  function setName() {
+    var element = document.getElementById("name-input");
+    var name = element.value;
+    //TO-DO: Some kind of validation
+    search["name"] = name;
+    updateOutputText();
+  }
+
+  //SUBMIT FUNCTIONS
+
+  function submit() {
+    httpPostAsync("/create_search",search,function(response) {
+      console.log("Response: "+response);
+    });
+  }
+
+  //Thanks to: http://stackoverflow.com/questions/247483/http-get-request-in-javascript
+  function httpPostAsync(theUrl, object, callback)
+  {
+      var xmlHttp = new XMLHttpRequest();
+      xmlHttp.onreadystatechange = function() {
+          if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+              callback(xmlHttp.responseText);
+            }
+      }
+      xmlHttp.open("POST", theUrl, true); // true for asynchronous
+      xmlHttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+      xmlHttp.send(JSON.stringify(object));
   }
   </script>
   <h1>Create a Search</h1>
   <hr>
-  <div id="data-source-div">
-    <h2>Data Source</h2>
-    <select id="data-sources" onchange="changedToDataSource()"></select>
-    <button type="button" id="add-source" onclick="addDataSource()">Add</button>
-    <button type="button" id="remove-source" onclick="removeDataSource()" style="visibility: hidden;">Remove</button>
+  <div id="input-div" style="width: 50%;">
+    <div id="data-source-div">
+      <h2>Data Source</h2>
+      <select id="data-sources" onchange="changedToDataSource()"></select>
+      <button type="button" id="add-source" onclick="addDataSource()">Add</button>
+      <button type="button" id="remove-source" onclick="removeDataSource()" style="visibility: hidden;">Remove</button>
+    </div>
+    <div id="filter-div" style="visibility: hidden;">
+      <h2>Filter</h2>
+      <select id="filters" onchange="changedToFilter()"></select>
+      <button type="button" id="add-filter" onclick="addFilter()">Add</button>
+      <button type="button" id="remove-filter" onclick="removeFilter()" style="visibility: hidden;">Remove</button>
+    </div>
+    <div id="value-div" style="visibility: hidden;">
+      Value: <input id="value-input" type="text">
+      <button type="button" id="set-value" onclick="setValue()">Set</button>
+    </div>
+    <div id="location-div">
+      <h2>Location</h2>
+      <button type="button" id="get-loc" onclick="getLocation()">Get My Location</button>
+      <br>
+      Latitude: <input id="lat-input" type="text">
+      <button type="button" id="set-lat" onclick="setLatitude()">Set</button>
+      <br>
+      Longitude: <input id="lon-input" type="text">
+      <button type="button" id="set-lon" onclick="setLongitude()">Set</button>
+      <br>
+      Radius: <input id="radius-input" type="text">
+      <button type="button" id="set-radius" onclick="setRadius()">Set</button>
+    </div>
+    <div id="metadata-div">
+      <h2>Metadata</h2>
+      Name: <input id="name-input" type="text">
+      <button type="button" id="set-name" onclick="setName()">Set</button>
+    </div>
   </div>
-  <div id="filter-div" style="visibility: hidden;">
-    <h2>Filter</h2>
-    <select id="filters" onchange="changedToFilter()"></select>
-    <button type="button" id="add-filter" onclick="addFilter()">Add</button>
-    <button type="button" id="remove-filter" onclick="removeFilter()" style="visibility: hidden;">Remove</button>
+  <div id="submit-div">
+    <h2>Submit</h2>
+    <button type="button" id="submit" onclick="submit()">Submit</button>
   </div>
-  <div id="value-div" style="visibility: hidden;">
-    Value: <input id="value-input" type="text">
-    <button type="button" id="set-value" onclick="setValue()">Set</button>
+  <div id="output-div" style="float: right; width: 50%">
+    <p id="search-object-output">Search Object Goes Here...</p>
   </div>
 </body>
 </html>
