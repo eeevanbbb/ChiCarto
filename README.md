@@ -16,9 +16,9 @@ ChiCarto is a gateway into geo-specific location data about the city of Chicago.
 ## Acceptance Tests
 * Register an account
 * Log out, then log back in
-* View searches for your account
-  * To populate sample data for a user, from the root folder, run `python DEBUG_add_data_for_user.py [email]` where `[email]` represents the email address you registered with
-  * Then refresh the user's profile page and two searches should appear (one with a filter attached to it)
+* Delete your account
+* Create a search
+* View your searches
 * View each search on a map
 
 ## What is Implemented
