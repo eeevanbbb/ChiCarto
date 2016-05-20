@@ -24,7 +24,9 @@ function initMap() {
                                                     });
                 bounds.extend(mark.getPosition());
             }
-            map.fitBounds(bounds);
+            if (items.length > 0) {
+              map.fitBounds(bounds);
+            }
           });
       }
 }
