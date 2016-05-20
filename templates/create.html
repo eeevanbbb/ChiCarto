@@ -8,52 +8,53 @@
   <a href="/">Home</a>
   <a href="/me">My Account</a>
   <hr>
-  <div id="input-div" style="width: 50%;">
-    <div id="data-source-div">
-      <h2>Data Source</h2>
-      <select id="data-sources" onchange="changedToDataSource()"></select>
-      <button type="button" id="add-source" onclick="addDataSource()">Add</button>
-      <button type="button" id="remove-source" onclick="removeDataSource()" style="visibility: hidden;">Remove</button>
-      <br>
-      <p id="limit-text" style="display: inline; visibility: hidden;">Limit: </p>
-      <input id="limit-input" style="visibility: hidden;">
-      <button type="button" id="set-limit" onclick="setLimit()" style="visibility: hidden;">Set</button>
+  <div id="container-div" style="width: 100%; overflow: hidden;">
+    <div id="input-div" style="width: 50%; float: left;">
+      <div id="data-source-div">
+        <h2>Data Source</h2>
+        <select id="data-sources" onchange="changedToDataSource()"></select>
+        <button type="button" id="add-source" onclick="addDataSource()">Add</button>
+        <button type="button" id="remove-source" onclick="removeDataSource()" style="visibility: hidden;">Remove</button>
+        <br>
+        <p id="limit-text" style="display: inline; visibility: hidden;">Limit: </p>
+        <input id="limit-input" style="visibility: hidden;">
+        <button type="button" id="set-limit" onclick="setLimit()" style="visibility: hidden;">Set</button>
+      </div>
+      <div id="filter-div" style="visibility: hidden;">
+        <h2>Filter</h2>
+        <select id="filters" onchange="changedToFilter()"></select>
+        <button type="button" id="add-filter" onclick="addFilter()">Add</button>
+        <button type="button" id="remove-filter" onclick="removeFilter()" style="visibility: hidden;">Remove</button>
+      </div>
+      <div id="value-div" style="visibility: hidden;">
+        Value: <input id="value-input" type="text">
+        <button type="button" id="set-value" onclick="setValue()">Set</button>
+      </div>
+      <div id="location-div">
+        <h2>Location</h2>
+        <button type="button" id="get-loc" onclick="getLocation()">Get My Location</button>
+        <br>
+        Latitude: <input id="lat-input" type="text">
+        <button type="button" id="set-lat" onclick="setLatitude()">Set</button>
+        <br>
+        Longitude: <input id="lon-input" type="text">
+        <button type="button" id="set-lon" onclick="setLongitude()">Set</button>
+        <br>
+        Radius: <input id="radius-input" type="text">
+        <button type="button" id="set-radius" onclick="setRadius()">Set</button>
+      </div>
+      <div id="metadata-div">
+        <h2>Metadata</h2>
+        Name: <input id="name-input" type="text">
+        <button type="button" id="set-name" onclick="setName()">Set</button>
+      </div>
     </div>
-    <div id="filter-div" style="visibility: hidden;">
-      <h2>Filter</h2>
-      <select id="filters" onchange="changedToFilter()"></select>
-      <button type="button" id="add-filter" onclick="addFilter()">Add</button>
-      <button type="button" id="remove-filter" onclick="removeFilter()" style="visibility: hidden;">Remove</button>
+    <div id="output-div" style="margin-left: 50%;">
+      <p id="search-object-output">Search Object Goes Here...</p>
+      <div id="submit-div">
+        <button type="button" id="submit" onclick="submit()">Submit</button>
+      </div>
     </div>
-    <div id="value-div" style="visibility: hidden;">
-      Value: <input id="value-input" type="text">
-      <button type="button" id="set-value" onclick="setValue()">Set</button>
-    </div>
-    <div id="location-div">
-      <h2>Location</h2>
-      <button type="button" id="get-loc" onclick="getLocation()">Get My Location</button>
-      <br>
-      Latitude: <input id="lat-input" type="text">
-      <button type="button" id="set-lat" onclick="setLatitude()">Set</button>
-      <br>
-      Longitude: <input id="lon-input" type="text">
-      <button type="button" id="set-lon" onclick="setLongitude()">Set</button>
-      <br>
-      Radius: <input id="radius-input" type="text">
-      <button type="button" id="set-radius" onclick="setRadius()">Set</button>
-    </div>
-    <div id="metadata-div">
-      <h2>Metadata</h2>
-      Name: <input id="name-input" type="text">
-      <button type="button" id="set-name" onclick="setName()">Set</button>
-    </div>
-  </div>
-  <div id="submit-div">
-    <h2>Submit</h2>
-    <button type="button" id="submit" onclick="submit()">Submit</button>
-  </div>
-  <div id="output-div" style="float: right; width: 50%">
-    <p id="search-object-output">Search Object Goes Here...</p>
   </div>
 </body>
 </html>
