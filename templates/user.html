@@ -6,7 +6,7 @@
   color: red;
 } 
 </style>
-<link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet" type="text/css" href="static/style.css">
 </head>
    <body>
       <h1>Welcome!</h1>
@@ -16,7 +16,9 @@
         {% for search in user.searches %}
           <li><a href="/?s={{ search.id }}"> {{ search }} </a></li>
  <!-- code taken from https://codepen.io/jamesbarnett/pen/vlpkh -->
+
 <p>Rate The Search</p>
+<form>
 <fieldset class="rating">
     <input type="radio" id="star5" name="rating" value="5" /><label class = "full" for="star5" title="Awesome - 5 stars"></label>
     <input type="radio" id="star4half" name="rating" value="4 and a half" /><label class="half" for="star4half" title="Pretty good - 4.5 stars"></label>
@@ -28,8 +30,9 @@
     <input type="radio" id="star1half" name="rating" value="1 and a half" /><label class="half" for="star1half" title="Meh - 1.5 stars"></label>
     <input type="radio" id="star1" name="rating" value="1" /><label class = "full" for="star1" title="Sucks big time - 1 star"></label>
     <input type="radio" id="starhalf" name="rating" value="half" /><label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>
-</fieldset> 
-
+</fieldset>
+</form>
+<br> <br> <br>
         {% endfor %}
       </div>
       <hr>
