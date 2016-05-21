@@ -250,11 +250,10 @@ class SearchTestCase(ChiCartoTestCase):
                 rating = 3
                 data = {'id': sid, 'rating': rating}
                 # send a post message to server to rate the search we just created
-                rv = self.app.post('/rate_search', data=json.dumps(data), content_type='application/json')
-                js = json.loads(rv.data.decode('utf-8'))['searches'][0]
+                rv = self.app.post('/rate_search', data=data)
+                js = json.loads(rv.data.decode('utf-8'))['rating']
                 # assert that we get the correct response - meaning that the rating was updated
-                assert sid == js['id']
-                assert rating == js['rating']
+                assert rating == js['val']
                 assert rv.status == '200 OK'
 
     def test_rate_search_good2(self):
@@ -276,28 +275,20 @@ class SearchTestCase(ChiCartoTestCase):
                 rating = 3
                 data = {'id': sid, 'rating': rating}
                 # send a post message to server to rate the search we just created
-                rv = self.app.post('/rate_search', data=json.dumps(data), content_type='application/json')
-
-                # get data for the search to verify that the rating was actually saved in database
-                rv = self.app.get('/search/' + str(sid))
-                js = json.loads(rv.data.decode('utf-8'))['searches'][0]
+                rv = self.app.post('/rate_search', data=data)
+                js = json.loads(rv.data.decode('utf-8'))['rating']
                 # assert that we get the correct response - meaning that the rating was updated
-                assert sid == js['id']
-                assert rating == js['rating']
+                assert rating == js['val']
                 assert rv.status == '200 OK'
 
                 rating = 5
                 data = {'id': sid, 'rating': rating}
                 # send a post message to server to rate the search with a different rating
-                rv = self.app.post('/rate_search', data=json.dumps(data), content_type='application/json')
-
-                # get data for the search to verify that the rating was actually saved in database
-                rv = self.app.get('/search/' + str(sid))
-                js = json.loads(rv.data.decode('utf-8'))['searches'][0]
+                rv = self.app.post('/rate_search', data=data)
+                js = json.loads(rv.data.decode('utf-8'))['rating']
                 # assert that we get the correct response - meaning that the rating was updated
 
-                assert sid == js['id']
-                assert rating == js['rating']
+                assert rating == js['val']
                 assert rv.status == '200 OK'
 
     def test_rate_search_bad(self):

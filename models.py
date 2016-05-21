@@ -44,11 +44,37 @@ class User(db.Model, UserMixin):
         else:
             return False
 
+#user_searches = db.Table('search_ratings',
+#        db.Column('user_id', db.Integer(), db.ForeignKey('user.id')),
+#        db.Column('search_id', db.Integer(), db.ForeignKey('search.id')))
 
+class Rating(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    val = db.Column(db.Float())
+    user_id = db.Column(db.Integer(), db.ForeignKey('user.id'))
+    user = db.relationship('User', foreign_keys='Rating.user_id')
+
+    def __init__(self, user, val):
+        if val < 0 or val > 5:
+            raise ValueError('rating must be between 0 and 5')
+        self.user = user
+        self.val = val
+
+    def dictify(self):
+        d = {
+                'id': self.id,
+                'user': self.user.id,
+                'val': self.val
+            }
+        return d
 
 search_data_searches = db.Table('search_data_searches',
         db.Column('search_id', db.Integer(), db.ForeignKey('search.id')),
         db.Column('data_search_id', db.Integer(), db.ForeignKey('data_search.id')))
+
+search_ratings = db.Table('search_ratings',
+                          db.Column('search_id', db.Integer(), db.ForeignKey('search.id')),
+                          db.Column('rating_id', db.Integer(), db.ForeignKey('rating.id')))
 
 class Search(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -57,7 +83,8 @@ class Search(db.Model):
     latitude = db.Column(db.Float())
     longitude = db.Column(db.Float())
     radius = db.Column(db.Float())
-    rating = db.Column(db.Integer())
+    ratings = db.relationship('Rating',secondary=search_ratings,
+                              backref=db.backref('searches',lazy='dynamic'))
     name = db.Column(db.String(255))
 
     def __init__(self,data_searches,latitude,longitude,radius,rating=None,name=None):
@@ -104,6 +131,25 @@ class Search(db.Model):
 
         return (return_status, requested_data)
 
+    # Add rating to this search
+    def add_rating(self, rating):
+        self.ratings.append(rating)
+
+    # Remove a given rating from the list of ratings
+    # Return False if the rating is not in this search's ratings, True otherwise
+    def remove_rating(self,rating):
+        if rating in self.ratings:
+            self.ratings.remove(rating)
+            return True
+        else:
+            return False
+
+    def get_rating(self):
+        r = 0
+        if len(self.ratings) > 0:
+            r = sum([rating.val for rating in self.ratings])/len(self.ratings)
+        return r
+
     # dictify - Create dictionary representation for object
     def dictify(self):
         d = {
@@ -112,7 +158,7 @@ class Search(db.Model):
             "latitude": self.latitude,
             "longitude": self.longitude,
             "radius": self.radius,
-            "rating": self.rating,
+            "rating": self.get_rating(),
             "name": self.name}
         return d
 

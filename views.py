@@ -18,7 +18,14 @@ def hello():
 @app.route("/me")
 @login_required
 def me():
-    return render_template('user.html',user=flask_login.current_user)
+    user = flask_login.current_user
+    rated = set()
+    for search in user.searches:
+        for rating in search.ratings:
+            if rating.user_id == user.id:
+                rated.add(search.id)
+                break
+    return render_template('user.html',user=flask_login.current_user, rated=rated)
 
 
 # Look at file 'sample_json_search_request.json' to see sample json data in post request this function accepts
@@ -72,17 +79,17 @@ def create_search():
             return search_results(search.id)
 
         except (Exception) as e:
-            print("Exception: ")
-            print(e)
+            #print("Exception: ")
+            #print(e)
             abort (422)
     elif request.method == "GET":
         return render_template('create.html')
 
 
 @app.route('/rate_search', methods=['POST', 'GET'])
+@login_required
 def rate_search():
     if request.method == "POST":
-        print(request.form)
         try:#what is this doing? Is it displaying the rating if a rating exists?
 # need to put somewhere: rating = form.rating
 #right now not sure if the form data is being sent to model.py?????
@@ -90,13 +97,15 @@ def rate_search():
             data = request.form
             sid = data['id']
             s = Search.query.get(int(sid))
+            user = flask_login.current_user
             if s is not None:
-                rating = float(data['rating'])
-                if rating >= 0 and rating <= 5:
-                    s.rating = rating
-                    return search(s.id)
-                else:
-                    abort(404)
+                rate_val = float(data['rating'])
+                rating = Rating(user, rate_val)
+                db.session.add(rating)
+                json_dict = {'rating': rating.dictify() }
+                s.add_rating(rating)
+                db.session.commit()
+                return flask.jsonify(**json_dict)
             else:
                 abort(404)
         except (Exception) as e:
@@ -104,6 +113,15 @@ def rate_search():
             abort(422)
     else:
         return render_template('rate.html'); #currently rate.html is not being used...? instead the rating is implemented in user.html. may want to change
+
+@app.route('/ratings/<sid>', methods=['GET'])
+def ratings(sid):
+    s = Search.query.get(int(sid))
+    if s is None:
+      abort(404)
+    ratings = s.ratings
+    js_dict = {'ratings': [r.dictify() for r in ratings]}
+    return flask.jsonify(**js_dict)
 
 @app.route("/search", defaults = {"sid": None})
 @app.route("/search/<sid>")

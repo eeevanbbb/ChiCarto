@@ -1,64 +1,72 @@
 <html>
-<head>
-<title>Profile</title>
-<style>
-#delete {
-  color: red;
-}
-div.searchcontainer {
-background-color:white;
-color:black;
-margin:20px;
-padding:20px;
-}
-</style>
-<link rel="stylesheet" type="text/css" href="static/style.css">
-</head>
-   <body>
-      <h1>Welcome!</h1>
-      <p>You are logged in as {{ user.email }}</p>
-      <h2>Searches:</h2>
-      <div>
-        {% for search in user.searches %}
-          <li><a href="/?s={{ search.id }}"> {{ search }} </a></li>
- <!-- code taken from https://codepen.io/jamesbarnett/pen/vlpkh -->
-<div class ="searchcontainer">
-<p>Rate The Search</p>
-<form action="/rate_search" method="POST"> <!-- action specifies where to send the form data when the form is submitted-->
-<!-- I think we want to send the form data to the model so that's why I put model.py but I don't really know what I am doing
+    <head>
+        <title>Profile</title>
+        <style>
+        #delete {
+            color: red;
+        }
+        div.searchcontainer {
+            background-color:white;
+            color:black;
+            margin:20px;
+            padding:20px;
+        }
+        </style>
+    <link rel="stylesheet" type="text/css" href="static/style.css">
+    </head>
+    <body>
+        <h1>Welcome!</h1>
+        <p>You are logged in as {{ user.email }}</p>
+        <h2>Searches:</h2>
+        <div>
+            {% for search in user.searches %}
+                {% if search.id in rated %}
+                    <li><a href="/?s={{ search.id }}"> {{ search }} </a></li>
+                    <p>Rating {{ search.get_rating() }} </p>
+                    <p> YOU CAN'T RATE THIS </p>
+                {% else %}
+                    <li><a href="/?s={{ search.id }}"> {{ search }} </a></li>
+                    <p>Rating {{ search.get_rating() }} </p>
+        <!-- code taken from https://codepen.io/jamesbarnett/pen/vlpkh -->
+                    <div class ="searchcontainer">
+                        <p>Rate The Search</p>
 
-Also right now when you try to rate the second thing it only wants to rate the first thing, so that's good (not)-->
-<fieldset class="rating">
-    <input type="radio" id="star5-{{ search.id }}" name="rating" value="5" /><label class = "full" for="star5-{{ search.id }}" title="Awesome - 5 stars"></label>
-    <input type="radio" id="star4half-{{ search.id }}" name="rating" value="4.5" /><label class="half" for="star4half-{{ search.id }}" title="Pretty good - 4.5 stars"></label>
-    <input type="radio" id="star4-{{ search.id }}" name="rating" value="4" /><label class = "full" for="star4-{{ search.id }}" title="Pretty good - 4 stars"></label>
-    <input type="radio" id="star3half-{{ search.id }}" name="rating" value="3.5" /><label class="half" for="star3half-{{ search.id }}" title="Meh - 3.5 stars"></label>
-    <input type="radio" id="star3-{{ search.id }}" name="rating" value="3" /><label class = "full" for="star3-{{ search.id }}" title="Meh - 3 stars"></label>
-    <input type="radio" id="star2half-{{ search.id }}" name="rating" value="2.5" /><label class="half" for="star2half-{{ search.id }}" title="Kinda bad - 2.5 stars"></label>
-    <input type="radio" id="star2-{{ search.id }}" name="rating" value="2" /><label class = "full" for="star2-{{ search.id }}" title="Kinda bad - 2 stars"></label>
-    <input type="radio" id="star1half-{{ search.id }}" name="rating" value="1.5" /><label class="half" for="star1half-{{ search.id }}" title="Meh - 1.5 stars"></label>
-    <input type="radio" id="star1-{{ search.id }}" name="rating" value="1" /><label class = "full" for="star1-{{ search.id }}" title="Sucks big time - 1 star"></label>
-    <input type="radio" id="starhalf-{{ search.id }}" name="rating" value="0.5" /><label class="half" for="starhalf-{{ search.id }}" title="Sucks big time - 0.5 stars"></label>
-</fieldset>
-<br><br>
-<input type="hidden" name="id" value="{{ search.id }}"/>
-<input type="submit" value="Submit">
-</form>
-</div>
-        {% endfor %}
-      </div>
-      <hr>
-      <div>
-        <a href="/">Home</a>
-      </div>
-      <div>
-        <a href="/create_search">Create Search</a>
-      </div>
-      <div>
-        <a href="/logout">Logout</a>
-      </div>
-      <div>
-        <a id="delete" href="/delete-account">Delete Account</a>
-      </div>
-   </body>
+                        <form action="/rate_search" method="POST"> <!-- action specifies where to send the form data when the form is submitted-->
+        <!-- I think we want to send the form data to the model so that's why I put model.py but I don't really know what I am doing
+
+        Also right now when you try to rate the second thing it only wants to rate the first thing, so that's good (not)-->
+                            <fieldset class="rating">
+                                <input type="radio" id="star5-{{ search.id }}" name="rating" value="5" /><label class = "full" for="star5-{{ search.id }}" title="Awesome - 5 stars"></label>
+                                <input type="radio" id="star4half-{{ search.id }}" name="rating" value="4.5" /><label class="half" for="star4half-{{ search.id }}" title="Pretty good - 4.5 stars"></label>
+                                <input type="radio" id="star4-{{ search.id }}" name="rating" value="4" /><label class = "full" for="star4-{{ search.id }}" title="Pretty good - 4 stars"></label>
+                                <input type="radio" id="star3half-{{ search.id }}" name="rating" value="3.5" /><label class="half" for="star3half-{{ search.id }}" title="Meh - 3.5 stars"></label>
+                                <input type="radio" id="star3-{{ search.id }}" name="rating" value="3" /><label class = "full" for="star3-{{ search.id }}" title="Meh - 3 stars"></label>
+                                <input type="radio" id="star2half-{{ search.id }}" name="rating" value="2.5" /><label class="half" for="star2half-{{ search.id }}" title="Kinda bad - 2.5 stars"></label>
+                                <input type="radio" id="star2-{{ search.id }}" name="rating" value="2" /><label class = "full" for="star2-{{ search.id }}" title="Kinda bad - 2 stars"></label>
+                                <input type="radio" id="star1half-{{ search.id }}" name="rating" value="1.5" /><label class="half" for="star1half-{{ search.id }}" title="Meh - 1.5 stars"></label>
+                                <input type="radio" id="star1-{{ search.id }}" name="rating" value="1" /><label class = "full" for="star1-{{ search.id }}" title="Sucks big time - 1 star"></label>
+                                <input type="radio" id="starhalf-{{ search.id }}" name="rating" value="0.5" /><label class="half" for="starhalf-{{ search.id }}" title="Sucks big time - 0.5 stars"></label>
+                            </fieldset>
+                            <br><br>
+                            <input type="hidden" name="id" value="{{ search.id }}"/>
+                            <input type="submit" value="Submit">
+                        </form>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <hr>
+        <div>
+            <a href="/">Home</a>
+        </div>
+        <div>
+            <a href="/create_search">Create Search</a>
+        </div>
+        <div>
+            <a href="/logout">Logout</a>
+        </div>
+        <div>
+            <a id="delete" href="/delete-account">Delete Account</a>
+        </div>
+    </body>
 </html>
