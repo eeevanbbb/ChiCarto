@@ -5,6 +5,12 @@
 #delete {
   color: red;
 } 
+div.searchcontainer {
+background-color:white;
+color:black;
+margin:20px;
+padding:20px;
+} 
 </style>
 <link rel="stylesheet" type="text/css" href="static/style.css">
 </head>
@@ -16,9 +22,9 @@
         {% for search in user.searches %}
           <li><a href="/?s={{ search.id }}"> {{ search }} </a></li>
  <!-- code taken from https://codepen.io/jamesbarnett/pen/vlpkh -->
-
+<div class ="searchcontainer">
 <p>Rate The Search</p>
-<form>
+<form action="/rate_search" method="POST">
 <fieldset class="rating">
     <input type="radio" id="star5" name="rating" value="5" /><label class = "full" for="star5" title="Awesome - 5 stars"></label>
     <input type="radio" id="star4half" name="rating" value="4 and a half" /><label class="half" for="star4half" title="Pretty good - 4.5 stars"></label>
@@ -31,8 +37,11 @@
     <input type="radio" id="star1" name="rating" value="1" /><label class = "full" for="star1" title="Sucks big time - 1 star"></label>
     <input type="radio" id="starhalf" name="rating" value="half" /><label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>
 </fieldset>
+<br><br>
+<input type="submit" value="Submit">
 </form>
 <br> <br> <br>
+</div>
         {% endfor %}
       </div>
       <hr>
