@@ -20,21 +20,14 @@
         <h2>Searches:</h2>
         <div>
             {% for search in user.searches %}
-                {% if search.id in rated %}
-                    <li><a href="/?s={{ search.id }}"> {{ search }} </a></li>
-                    <p>Rating {{ search.get_rating() }} </p>
-                    <p> YOU CAN'T RATE THIS </p>
-                {% else %}
-                    <li><a href="/?s={{ search.id }}"> {{ search }} </a></li>
-                    <p>Rating {{ search.get_rating() }} </p>
+              <li><a href="/?s={{ search.id }}"> {{ search }} </a></li>
+              <p>Rating: {{ search.get_rating() }} </p>
+                {% if search.id not in rated %}
         <!-- code taken from https://codepen.io/jamesbarnett/pen/vlpkh -->
                     <div class ="searchcontainer">
                         <p>Rate The Search</p>
 
-                        <form action="/rate_search" method="POST"> <!-- action specifies where to send the form data when the form is submitted-->
-        <!-- I think we want to send the form data to the model so that's why I put model.py but I don't really know what I am doing
-
-        Also right now when you try to rate the second thing it only wants to rate the first thing, so that's good (not)-->
+                        <form taget="hidden-iframe" action="/rate_search" method="POST">
                             <fieldset class="rating">
                                 <input type="radio" id="star5-{{ search.id }}" name="rating" value="5" /><label class = "full" for="star5-{{ search.id }}" title="Awesome - 5 stars"></label>
                                 <input type="radio" id="star4half-{{ search.id }}" name="rating" value="4.5" /><label class="half" for="star4half-{{ search.id }}" title="Pretty good - 4.5 stars"></label>

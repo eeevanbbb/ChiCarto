@@ -25,7 +25,7 @@ def me():
             if rating.user_id == user.id:
                 rated.add(search.id)
                 break
-    return render_template('user.html',user=flask_login.current_user, rated=rated)
+    return render_template('user.html',user=user, rated=rated)
 
 
 # Look at file 'sample_json_search_request.json' to see sample json data in post request this function accepts
@@ -90,10 +90,9 @@ def create_search():
 @login_required
 def rate_search():
     if request.method == "POST":
-        try:#what is this doing? Is it displaying the rating if a rating exists?
-# need to put somewhere: rating = form.rating
-#right now not sure if the form data is being sent to model.py?????
-            # data = request.get_json(force=True)
+        try:
+            # FIXME: Verify user has yet to rate the entry
+            # Using back button on front-end gets around front-end validation
             data = request.form
             sid = data['id']
             s = Search.query.get(int(sid))
