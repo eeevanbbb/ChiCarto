@@ -1,11 +1,9 @@
  <!-- code taken from https://codepen.io/jamesbarnett/pen/vlpkh -->
-<!-- Right now this is not used although it is linked to from views.py I think-->
-<!-- possible refactoring issue: same exact code is directly into user.html-->
-<html>
-<head>
+<!-- <head>
 <title>Rate</title>
 <link rel="stylesheet" type="text/css" href="style.css">
-</head> 
+</head> -->
+<p>
 <h1>Rate The Search</h1>
 <fieldset class="rating">
     <input type="radio" id="star5" name="rating" value="5" /><label class = "full" for="star5" title="Awesome - 5 stars"></label>
@@ -23,4 +21,4 @@
     <input type="radio" id="star1" name="rating" value="1" /><label class = "full" for="star1" title="Sucks big time - 1 star"></label>
     <input type="radio" id="starhalf" name="rating" value="half" /><label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>
 </fieldset>
-</html>
+</p>
