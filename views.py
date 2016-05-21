@@ -82,14 +82,16 @@ def create_search():
 @app.route('/rate_search', methods=['POST', 'GET'])
 def rate_search():
     if request.method == "POST":
+        print(request.form)
         try:#what is this doing? Is it displaying the rating if a rating exists?
 # need to put somewhere: rating = form.rating
 #right now not sure if the form data is being sent to model.py?????
-            data = request.get_json(force=True)
+            # data = request.get_json(force=True)
+            data = request.form
             sid = data['id']
             s = Search.query.get(int(sid))
             if s is not None:
-                rating = int(data['rating'])
+                rating = float(data['rating'])
                 if rating >= 0 and rating <= 5:
                     s.rating = rating
                     return search(s.id)
@@ -97,10 +99,11 @@ def rate_search():
                     abort(404)
             else:
                 abort(404)
-        except:
+        except (Exception) as e:
+            print("EXCEPTION: "+str(e))
             abort(422)
     else:
-        render_template('rate.html'); #currently rate.html is not being used...? instead the rating is implemented in user.html. may want to change
+        return render_template('rate.html'); #currently rate.html is not being used...? instead the rating is implemented in user.html. may want to change
 
 @app.route("/search", defaults = {"sid": None})
 @app.route("/search/<sid>")
