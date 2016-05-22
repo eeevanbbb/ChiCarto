@@ -89,10 +89,9 @@ def create_search():
         return render_template('create.html')
 
 
-@app.route('/rate_search', methods=['POST', 'GET'])
+@app.route('/rate_search', methods=['POST'])
 @login_required
 def rate_search():
-    if request.method == "POST":
         try:
             # FIXME: Verify user has yet to rate the entry
             # Using back button on front-end gets around front-end validation
@@ -113,8 +112,6 @@ def rate_search():
         except (Exception) as e:
             print("EXCEPTION: "+str(e))
             abort(422)
-    else:
-        return render_template('rate.html'); #currently rate.html is not being used...? instead the rating is implemented in user.html. may want to change
 
 @app.route('/ratings/<sid>', methods=['GET'])
 def ratings(sid):
