@@ -20,8 +20,15 @@ function initMap() {
                 var mark = new google.maps.Marker({
                     position: myLatLon,
                     map: map,
-                    title: items[i].description
+                    title: items[i].description,
+                    animation: google.maps.Animation.DROP,
+                    chicartoItem: items[i]
                                                     });
+                mark.addListener("click",function() {
+                  var infoWindow = new google.maps.InfoWindow();
+                  infoWindow.setContent(itemToHTML(this.chicartoItem));
+                  infoWindow.open(map,this);
+                });
                 bounds.extend(mark.getPosition());
             }
             if (items.length > 0) {
@@ -29,6 +36,34 @@ function initMap() {
             }
           });
       }
+}
+
+//Takes an item from the search results array and transforms it into HTML for the info box
+function itemToHTML(item) {
+  //FIXME: Better way of detecting which type of search this was
+
+  var theString = ""
+  if (item["description"]) {
+  var date = new Date(item["date"]);
+  theString +=    "<p>" +
+                  item["description"] + "<br/>" +
+                  item["location_description"] + "<br/>" +
+                  dateToString(date) +
+                  "<p>";
+  } else if (item["address"]) {
+    var date = new Date(item["violation_date"]);
+    theString +=    "<p>" +
+                    item["address"] + "<br/>" +
+                    item["inspection_category"] + " (" + item["inspection_status"] + ")<br/>" +
+                    dateToString(date) + "<br/>" +
+                    item["violation_ordinance"]
+  }
+
+  return theString;
+}
+
+function dateToString(aDate) {
+  return aDate.getMonth() + "/" + aDate.getDate() + "/" + aDate.getFullYear();
 }
 
 
