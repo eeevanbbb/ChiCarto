@@ -19,6 +19,7 @@
         <p id="limit-text" style="display: inline; visibility: hidden;">Limit: </p>
         <input id="limit-input" style="visibility: hidden;">
         <button type="button" id="set-limit" onclick="setLimit()" style="visibility: hidden;">Set</button>
+        <input id="limit-slider" type="range" min="0" max="1000" value="10" onchange="limitSliderChanged()" style="visibility: hidden;">
       </div>
       <div id="filter-div" style="visibility: hidden;">
         <h2>Filter</h2>
@@ -41,6 +42,7 @@
         <button type="button" id="set-lon" onclick="setLongitude()">Set</button>
         <br>
         Radius: <input id="radius-input" type="text">
+        <input id="radius-slider" type="range" min="0" max="100000" value="0" onchange="radiusSliderChanged()">
         <button type="button" id="set-radius" onclick="setRadius()">Set</button>
       </div>
       <div id="metadata-div">

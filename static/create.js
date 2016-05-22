@@ -115,6 +115,7 @@ function changedToDataSource() {
   var limitText          = document.getElementById("limit-text");
   var limitInput         = document.getElementById("limit-input");
   var limitButton        = document.getElementById("set-limit");
+  var limitSlider        = document.getElementById("limit-slider");
   var filterDiv          = document.getElementById("filter-div");
   var addFilterButton    = document.getElementById("add-filter");
   var removeFilterButton = document.getElementById("remove-filter");
@@ -128,6 +129,7 @@ function changedToDataSource() {
     limitText.style.visibility = "visible";
     limitInput.style.visibility = "visible";
     limitButton.style.visibility = "visible";
+    limitSlider.style.visibility = "visible";
     limitInput.value = userSourceForSource(source)["limit"];
   } else {
     addButton.style.visibility = "visible";
@@ -136,6 +138,7 @@ function changedToDataSource() {
     limitText.style.visibility = "hidden";
     limitInput.style.visibility = "hidden";
     limitButton.style.visibility = "hidden";
+    limitSlider.style.visibility = "hidden";
     //Don't know why these are necessary...
     addFilterButton.style.visibility = "hidden";
     removeFilterButton.style.visibility = "hidden";
@@ -145,10 +148,21 @@ function changedToDataSource() {
 
 //Set the limit for the current data source
 function setLimit() {
-  var element = document.getElementById("limit-input");
-  var limit = element.value;
+  var textBox = document.getElementById("limit-input");
+  var slider  = document.getElementById("limit-slider");
+  var limit = parseInt(textBox.value);
   //TO-DO: Some validation
-  userSourceForSource(currentDataSource())["limit"] = parseInt(limit);
+  slider.value = limit;
+  userSourceForSource(currentDataSource())["limit"] = limit;
+  updateOutputText();
+}
+
+function limitSliderChanged() {
+  var slider  = document.getElementById("limit-slider");
+  var textBox = document.getElementById("limit-input");
+  var limit = parseInt(slider.value);
+  textBox.value = String(limit)
+  userSourceForSource(currentDataSource())["limit"] = limit;
   updateOutputText();
 }
 
@@ -328,10 +342,21 @@ function updateLocation(position) {
 }
 
 function setRadius() {
-  var element = document.getElementById("radius-input");
-  var radius = element.value;
+  var textBox = document.getElementById("radius-input");
+  var slider  = document.getElementById("radius-slider");
+  var radius = parseFloat(textBox.value);
+  slider.value = radius;
   //TO-DO: Some kind of validation
-  search["radius"] = parseFloat(radius);
+  search["radius"] = radius;
+  updateOutputText();
+}
+
+function radiusSliderChanged() {
+  var slider  = document.getElementById("radius-slider");
+  var textBox = document.getElementById("radius-input");
+  var radius  = parseFloat(slider.value);
+  textBox.value = String(radius);
+  search["radius"] = radius;
   updateOutputText();
 }
 
