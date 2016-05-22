@@ -12,7 +12,10 @@ from models import *
 
 @app.route("/")
 def hello():
-    return render_template('index.html')
+    loggedIn = False
+    if flask_login.current_user.is_authenticated:
+        loggedIn = True
+    return render_template('index.html',loggedIn=loggedIn)
 
 
 @app.route("/me")
@@ -171,3 +174,9 @@ def delete_account():
         db.session.delete(dbu)
         db.session.commit()
         return redirect('/', code=303)
+
+@app.route('/searches')
+def searches():
+    searches = Search.query.all()
+    # searches = [s.dictify() for s in query]
+    return render_template('searches.html',searches=searches)

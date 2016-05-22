@@ -1,0 +1,18 @@
+<html>
+<head>
+</head>
+<body>
+  <h1>All Searches</h1>
+  <hr>
+  <div>
+    {% for search in searches %}
+      <li><a href="/?s={{ search.id }}"> {{ search }} </a></li>
+      <p>Rating: {{ search.get_rating() }} </p>
+    {% endfor %}
+  </div>
+  <hr>
+  <div>
+      <a href="/">Home</a>
+  </div>
+</body>
+</html>

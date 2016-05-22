@@ -9,7 +9,12 @@
       <h1><center>Welcome to ChiCarto!</center></h1>
 
 <div class="header">
+    {% if loggedIn %}
     <center> <p> <a href="/me">My Account</a></p> </center>
+    {% else %}
+    <center> <a href="/login">Log In</a> </center>
+    <center> <a href="/register">Register</a> </center>
+    {% endif %}
     </div>
   <div id="map"></div>
 
