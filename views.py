@@ -110,7 +110,7 @@ def rate_search():
             else:
                 abort(404)
         except (Exception) as e:
-            print("EXCEPTION: "+str(e))
+            #print("EXCEPTION: "+str(e))
             abort(422)
 
 @app.route('/ratings/<sid>', methods=['GET'])

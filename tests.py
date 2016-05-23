@@ -157,25 +157,37 @@ class SearchTestCase(ChiCartoTestCase):
     # JSON
     def test_get_search(self):
         with main.app.test_request_context():
+            # Add sample search, and attempt to get the JSON
+            # representing it
             sid = self.add_sample_search()
             rv = self.app.get("/search/{0}".format(sid))
             d = json.loads(rv.data.decode("utf-8"))
+            # Make sure the search data is still good, and
+            # and only 1 search is returned
             assert len(d['searches']) == 1
             search = d['searches'][0]
             assert search['id'] == sid
             assert len(search['data_searches']) == 2
             print ("test_get_search passed")
 
+    # Make sure that we can get a list of searches from the backend in
+    # JSON
     def test_get_search2(self):
         with main.app.test_request_context():
+            # Add sample search, and attempt to get the JSON
+            # representing it
             sid = self.add_sample_search()
             sid2 = self.add_sample_search()
             rv = self.app.get("/search")
             d = json.loads(rv.data.decode("utf-8"))
+            # Make sure the search data is still good, and
+            # and only 1 search is returned
             assert len(d['searches']) == 2
             assert len(d['searches'][1]["data_searches"]) == 2
             print ("test_get_search2 passed")
 
+    # Make sure that we can get the metadata about available data sources
+    # to enable users to easily create valid searches
     def test_get_sources(self):
         with main.app.test_request_context():
             rv = self.app.get('/sources')
@@ -322,7 +334,7 @@ class SearchTestCase(ChiCartoTestCase):
 
                 assert rating == js['val']
                 assert rv.status == '200 OK'
-                print ('test_rate_search_good passed')
+                print ('test_rate_search_good2 passed')
 
     # Test that malformed or unauthorized requests to rate a search fail properly
     def test_rate_search_bad(self):
