@@ -162,6 +162,23 @@ class Search(db.Model):
             "name": self.name}
         return d
 
+    #Return a string of comma-separated data source names, with filters
+    def data_source_names(self):
+        string = ""
+        for data_search in self.data_searches:
+            string += data_search.data_source.name
+            if len(data_search.filters) > 0:
+                string += " ("
+                for filter in data_search.filters:
+                    string += filter.name
+                    string += " = "
+                    string += filter.value
+                    if filter != data_search.filters[-1]:
+                        string += ", "
+                string += ")"
+            if data_search != self.data_searches[-1]:
+                string += ", "
+        return string
 
 data_search_filters = db.Table('data_search_filters',
         db.Column('data_search_id', db.Integer(), db.ForeignKey('data_search.id')),

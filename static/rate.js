@@ -15,14 +15,10 @@ function httpPostAsync(theUrl, object, callback)
 
 //Thanks to create.js
 //Also thanks to http://stackoverflow.com/questions/1423777/how-can-i-check-whether-a-radio-button-is-selected-with-javascript
-function submitrating() {
+function submitrating(searchID) {
 
     //create a search object
     var search = {};
-
-    //Get id from hidden
-    var idElements = document.getElementsByName('id');
-    var id = idElements[0].value;
 
     //figure out which radio button is selected then pass the value
     var rating = document.getElementsByName('rating');
@@ -34,12 +30,12 @@ function submitrating() {
 	      }
     }
     search.rating = parseFloat(selected_value);
-    search.id = parseInt(id);
+    search.id = parseInt(searchID);
     // console.log(search);
     httpPostAsync("/rate_search",search,function(response) {
       var responseDict = JSON.parse(response);
       if (responseDict["rating"] != null) {
-        var ratingElement = document.getElementById("submit");
+        var ratingElement = document.getElementById("submit-"+searchID);
         ratingElement.remove(); //FIXME: Why doesn't this work completely?
       }
 	  });
