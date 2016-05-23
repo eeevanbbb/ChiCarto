@@ -17,12 +17,12 @@
     <script src="static/table.js"></script>
     </head>
     <body>
-        <h1>Welcome!</h1>
-        <p>You are logged in as {{ user.email }}</p>
+        <h1 id="welcome">Welcome to your account!</h1>
+        <p>You are logged in as: <b>{{ user.email }}</b>.</p>
         <hr>
-        <h2>Searches:</h2>
+        <h2>Your Searches:</h2>
         <div class="table-responsive-vertical shadow-z-1">
-          <table id="table" class="table table-hover table-mc-light-blue">
+          <table id="table" class="table table-hover table-striped table-mc-light-blue">
             <thead>
               <tr>
                 <th>Name</th>
@@ -76,5 +76,7 @@
         <div>
             <a id="delete" href="/delete-account">Delete Account</a>
         </div>
+        <br>
+        <br>
     </body>
 </html>

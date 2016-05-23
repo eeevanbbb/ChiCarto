@@ -56,3 +56,8 @@ h1 { font-size: 1.5em; margin: 10px; }
 .rating {
   width: 150px;
 }
+
+#welcome {
+  margin-left: 0px !important;
+  font-size: 2.8rem;
+}
