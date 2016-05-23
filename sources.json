@@ -41,9 +41,133 @@
           "type": "string"
         }
       ]
+    },
+    {
+      "name": "Libraries",
+      "url": "https://data.cityofchicago.org/resource/psqp-6rmg.json",
+      "title_key": "name_",
+      "filters": []
+    },
+    {
+      "name": "Christmas Tree Recycling Locations",
+      "url": "https://data.cityofchicago.org/resource/sp4r-2mi4.json",
+      "title_key": "community_area_name",
+      "filters": [
+        {
+          "name": "free_mulch",
+          "type": "choice",
+          "choose_from": [
+            "Yes",
+            "No"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "311 Service Requests - Tree Trims",
+      "url": "https://data.cityofchicago.org/resource/yvxb-fxjz.json",
+      "title_key": "type_of_service_request",
+      "filters": [
+        {
+          "name": "status",
+          "type": "choice",
+          "choose_from": [
+            "Completed",
+            "Open"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "311 Service Requests - Tree Debris",
+      "url": "https://data.cityofchicago.org/resource/ee5t-jv3t.json",
+      "title_key": "type_of_service_request",
+      "filters": [
+        {
+          "name": "status",
+          "type": "choice",
+          "choose_from": [
+            "Completed",
+            "Open"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Police Stations",
+      "url": "https://data.cityofchicago.org/resource/9rg7-mz9y.json",
+      "title_key": "district_name",
+      "filters": []
+    },
+    {
+      "name": "Schools",
+      "url": "https://data.cityofchicago.org/resource/5n35-6ttn.json",
+      "title_key": "school_name",
+      "filters": [
+        {
+          "name": "grades",
+          "type": "choice",
+          "choose_from": [
+            "E",
+            "M",
+            "HS"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Parks",
+      "url": "https://data.cityofchicago.org/resource/4xwe-2j3y.json",
+      "title_key": "park_name",
+      "filters": [
+        {
+          "name": "park_class",
+          "type": "choice",
+          "choose_from": [
+            "COMMUNITY PARK",
+            "MINI-PARK",
+            "NEIGHBORHOOD PARK",
+            "PASSIVE PARK",
+            "UNIMPROVED PARK",
+            "REGIONAL PARK",
+            "MAGNET PARK ",
+            "CITYWIDE PARK",
+            "NATURE PRESERVE PARK",
+          ]
+        }
+      ]
+    },
+    {
+      "name": "311 Service Requests - Pot Holes",
+      "url": "https://data.cityofchicago.org/resource/787j-mys9.json",
+      "title_key": "type_of_service_request",
+      "filters": [
+        {
+          "name": "status",
+          "type": "choice",
+          "choose_from": [
+            "Completed",
+            "Open"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "CTA - 'L' Stops",
+      "url": "https://data.cityofchicago.org/resource/8mj8-j3c4.json",
+      "title_key": "stop_name",
+      "filters": [
+        {
+          "name": "direction_id",
+          "type": "choice",
+          "choose_from": [
+            "N",
+            "S",
+            "W",
+            "E"
+          ]
+        }
+      ]
     }
   ]
 }
-      
-            
-    
