@@ -128,7 +128,13 @@ function changedToDataSource() {
     setFiltersForSelectedDataSource();
     addButton.style.visibility = "hidden";
     removeButton.style.visibility = "visible";
-    filterDiv.style.visibility = "visible";
+    if (source["filters_meta"].length > 0) {
+      filterDiv.style.visibility = "visible";
+      addFilterButton.style.visibility = "visible";
+    } else {
+      filterDiv.style.visibility = "hidden";
+      addFilterButton.style.visibility = "hidden";
+    }
     limitText.style.visibility = "visible";
     limitInput.style.visibility = "visible";
     limitButton.style.visibility = "visible";
