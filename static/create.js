@@ -120,6 +120,9 @@ function changedToDataSource() {
   var addFilterButton    = document.getElementById("add-filter");
   var removeFilterButton = document.getElementById("remove-filter");
   var valueDiv           = document.getElementById("value-div");
+  var valueInput         = document.getElementById("value-input");
+  var valueSetButton     = document.getElementById("set-value");
+  var valueChoice        = document.getElementById("value-choice");
   source = currentDataSource();
   if (hasUserAddedSource(source)) {
     setFiltersForSelectedDataSource();
@@ -143,6 +146,9 @@ function changedToDataSource() {
     addFilterButton.style.visibility = "hidden";
     removeFilterButton.style.visibility = "hidden";
     valueDiv.style.visibility  = "hidden";
+    valueInput.style.visibility = "hidden";
+    valueSetButton.style.visibility = "hidden";
+    valueChoice.style.visibility = "hidden";
   }
 }
 
@@ -240,28 +246,120 @@ function changedToFilter() {
   var filter = currentFilter();
   var valueDiv           = document.getElementById("value-div");
   var valueInput         = document.getElementById("value-input");
+  var valueSetButton     = document.getElementById("set-value");
+  var valueChoice        = document.getElementById("value-choice");
   var addFilterButton    = document.getElementById("add-filter");
   var removeFilterButton = document.getElementById("remove-filter");
   if (hasUserAddedFilter(filter)) {
     addFilterButton.style.visibility = "hidden";
     removeFilterButton.style.visibility = "visible";
     valueDiv.style.visibility = "visible";
-    valueInput.value = userFilterForFilter(filter)["value"];
+    if (filter["type"] == "string") {
+      valueInput.style.visibility     = "visible";
+      valueSetButton.style.visibility = "visible";
+      valueChoice.style.visibility    = "hidden";
+      valueInput.value = userFilterForFilter(filter)["value"];
+    } else {
+      //Filter type is choice. FIXME: Assumes these are the only two types.
+      valueInput.style.visibility     = "hidden";
+      valueSetButton.style.visibility = "hidden";
+      valueChoice.style.visibility    = "visible";
+      addValueChoices();
+    }
   } else {
     addFilterButton.style.visibility = "visible";
     removeFilterButton.style.visibility = "hidden";
     valueDiv.style.visibility = "hidden";
+    //Don't know why need to do these:
+    valueInput.style.visibility = "hidden";
+    valueSetButton.style.visibility = "hidden";
+    valueChoice.style.visibility    = "hidden";
   }
+}
+
+//Create a value choice and add it to the dropdown
+function createValueChoice(choice,index) {
+  var choicesSelect = document.getElementById("value-choice");
+  var choiceElement = document.createElement("option");
+  choiceElement.textContent = choice;
+  choiceElement.id = "Value-Choice-" + index;
+  choiceElement.value = index;
+  choicesSelect.appendChild(choiceElement);
+}
+
+//Add value choices to the dropdown
+function addValueChoices() {
+  var choicesSelect = document.getElementById("value-choice");
+
+  //Remove all current values from dropdown
+  while (choicesSelect.firstChild) {
+    choicesSelect.removeChild(choicesSelect.firstChild);
+  }
+
+  //Add new values
+  var choices = currentFilter()["choose_from"];
+  for (var i=0; i<choices.length; i++) {
+    var choice = choices[i];
+    createValueChoice(choice,i);
+  }
+
+  //If the user has already chosen a value, switch to that one
+  var filter = currentFilter();
+  if (hasUserAddedFilter(filter)) {
+    var userFilter = userFilterForFilter(filter);
+    var value = userFilter["value"];
+    var index = filter["choose_from"].indexOf(value);
+    var selectedOption = document.getElementById("Value-Choice-"+String(index));
+    selectedOption.selected = "selected";
+  }
+
+  changedValueChoice();
+}
+
+//Called when the user has changed the value dropdown
+function changedValueChoice() {
+  var choicesSelect = document.getElementById("value-choice");
+  var index = choicesSelect.value;
+  var value = currentFilter()["choose_from"][index];
+
+  var filter = currentFilter();
+  var userSource = userSourceForSource(currentDataSource());
+  if (!hasUserAddedFilter(filter)) {
+    userSource["filters"].push({ "name": filter["name"],"value": value })
+
+    var optionElement = document.getElementById("Filter-Option-" + filter["id"]);
+    optionElement.textContent = filter["name"]+" (ADDED)";
+
+    var removeFilterButton = document.getElementById("remove-filter");
+    removeFilterButton.style.visibility = "visible";
+  } else {
+    var userFilter = userFilterForFilter(filter);
+    userFilter["value"] = value;
+  }
+
+  updateOutputText();
 }
 
 //Show the value div (do not add the filter until a value is provided)
 function addFilter() {
   var valueDiv        = document.getElementById("value-div");
   var valueInput      = document.getElementById("value-input");
+  var valueSetButton  = document.getElementById("set-value");
+  var valueChoice     = document.getElementById("value-choice");
   var addFilterButton = document.getElementById("add-filter");
   addFilterButton.style.visibility = "hidden";
   valueDiv.style.visibility = "visible";
   valueInput.value = "";
+  if (currentFilter()["type"] == "string") {
+    valueInput.style.visibility     = "visible";
+    valueSetButton.style.visibility = "visible";
+    valueChoice.style.visibility    = "hidden";
+  } else {
+    valueInput.style.visibility     = "hidden";
+    valueSetButton.style.visibility = "hidden";
+    valueChoice.style.visibility    = "visible";
+    addValueChoices();
+  }
 }
 
 //Set the value for the current filter
