@@ -146,7 +146,7 @@ def search_results(sid):
     s = Search.query.get(int(sid))
     if s is not None:
         (status, results) = s.execute()
-        json_dict = {'search-results': results, 'id': sid}
+        json_dict = {'search-results': results, 'id': sid, 'name': s.name}
         return flask.jsonify(**json_dict)
     else:
         abort(404)
