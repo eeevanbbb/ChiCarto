@@ -10,10 +10,11 @@
 
 <div class="header">
     {% if loggedIn %}
-    <center> <p> <a href="/me">My Account</a></p> </center>
+    <center> <p> <a href="/me">My Account</a> </p> </center>
+    <center> <p> <a href="/create_search">Create Search</a> </p> </center>
     {% else %}
-    <center> <a href="/login">Log In</a> </center>
-    <center> <a href="/register">Register</a> </center>
+    <center> <p> <a href="/login">Log In</a> </p> </center>
+    <center> <p> <a href="/register">Register</a> </p> </center>
     {% endif %}
     </div>
   <div id="map"></div>

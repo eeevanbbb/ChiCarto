@@ -471,16 +471,77 @@ function setName() {
 //SUBMIT FUNCTIONS
 
 function submit() {
-  //TO-DO: Validation of required fields
-  httpPostAsync("/create_search",search,function(response) {
-    console.log("Response: "+response);
-    response = JSON.parse(response);
-    if (response["id"] != null) {
-      window.location.href = "/?s=" + response["id"];
-    } else {
-      console.log("null search id");
+  if (validateSearch()) {
+    httpPostAsync("/create_search",search,function(response) {
+      console.log("Response: "+response);
+      response = JSON.parse(response);
+      if (response["id"] != null) {
+        window.location.href = "/?s=" + response["id"];
+      } /* else {
+        alert("There was an error creating your search. Sorry!");
+      } */ //This was getting called multiple times
+    });
+  }
+}
+
+//Return true if search is valid, otherwise return false and alert user
+function validateSearch() {
+  var sources = search["sources"];
+  if (sources.length == 0) {
+    alert("You must add at least one data source!");
+    return false;
+  }
+
+  for (var i=0; i<sources.length; i++) {
+    var source = sources[i];
+    var limit = source["limit"];
+    if (limit == null) {
+      alert("The limit for a source must not be null!");
+      return false;
     }
-  });
+    if (limit < 0) {
+      alert("The limit for a source must not be negative!");
+      return false;
+    }
+  }
+
+  var latitude  = search["latitude"];
+  var longitude = search["longitude"];
+  if (latitude == null || longitude == null) {
+    alert("Latitude and Longitude must not be null!");
+    return false;
+  }
+  var floatLat  = parseFloat(latitude);
+  var floatLong = parseFloat(longitude);
+  if (isNaN(floatLat) || isNaN(floatLong)) {
+    alert("Latitude and Longitude must be numbers!");
+    return false;
+  }
+
+  var radius = search["radius"];
+  if (radius == null) {
+    alert("Radius must not be null!");
+    return false;
+  }
+
+  var floatRadius = parseFloat(radius);
+  if (isNaN(floatRadius)) {
+    alert("Radius must be a number!");
+    return false;
+  }
+
+  if (floatRadius <= 0) {
+    alert("Radius must be positive!");
+    return false;
+  }
+
+  var name = search["name"];
+  if (name == null) {
+    alert("Search name must not be null!");
+    return false;
+  }
+
+  return true;
 }
 
 //Thanks to: http://stackoverflow.com/questions/247483/http-get-request-in-javascript
@@ -490,10 +551,12 @@ function httpPostAsync(theUrl, object, callback)
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
             callback(xmlHttp.responseText);
-          }
+        } else if (xmlHttp.status == 422) {
+            callback(JSON.stringify({"Error_Status":xmlHttp.status}));
+        }
     }
     xmlHttp.open("POST", theUrl, true); // true for asynchronous
     xmlHttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    console.log("Request: "+JSON.stringify(object));
+    // console.log("Request: "+JSON.stringify(object));
     xmlHttp.send(JSON.stringify(object));
 }
