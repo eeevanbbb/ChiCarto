@@ -41,6 +41,7 @@ class ChiCartoTestCase(unittest.TestCase):
         return self.app.get('/logout',follow_redirects=True)
 
 class UserAuthTestCase(ChiCartoTestCase):
+    # Test if we can register a user, login, and logout
     def test_login_logout(self):
         with main.app.test_request_context():
             # Test registration and Login
@@ -55,19 +56,25 @@ class UserAuthTestCase(ChiCartoTestCase):
             # Test incorrect password doesn't work
             rv = self.login("a@example.com", "passw")
             assert b'Remember Me' in rv.data
+            print ("test_login_logout passed")
 
+    # Test if a user can successfully delete their account
     def test_delete_account(self):
         with main.app.test_request_context():
             u = self.register('a@example.com', 'password')
             rv = self.login('a@example.com', 'password')
             assert b'You are logged in as' in rv.data
             rv = self.app.get('/delete-account')
+            # Make sure we ask for confirmation
             assert b'Are you sure you want to delete' in rv.data
             rv = self.app.delete('/delete-account', follow_redirects=True)
             assert b'ChiCarto' in rv.data
+            # Assert that the account is gone
             assert User.query.get(u.id) is None
+            print ("test_delete_account passed")
 
 class SearchTestCase(ChiCartoTestCase):
+    # utility function to add a sample search
     def add_sample_search(self):
         uchicago_lat = 41.7886
         uchicago_long = -87.5987
@@ -85,6 +92,8 @@ class SearchTestCase(ChiCartoTestCase):
         main.db.session.flush()
         return search.id
 
+    # Make sure that correctly constructed searches can retrieve the data
+    # from their data sources
     def test_receive_search_data(self):
         with main.app.test_request_context():
             # Create objects
@@ -116,7 +125,10 @@ class SearchTestCase(ChiCartoTestCase):
             assert status2 == 200
             assert status3 == 200
             assert status4 == 200
+            print ("test_receive_search_data passed")
 
+    # Test that we can add searches associated with a specific user
+    # account
     def test_add_search_to_user(self):
         with main.app.test_request_context():
             # Create a search
@@ -139,7 +151,10 @@ class SearchTestCase(ChiCartoTestCase):
             success = user.remove_search(search)
             # Make sure this results in failure
             assert success == False
+            print ("test_add_search_to_user passed")
 
+    # Make sure that we can get a list of searches from the backend in
+    # JSON
     def test_get_search(self):
         with main.app.test_request_context():
             sid = self.add_sample_search()
@@ -149,6 +164,7 @@ class SearchTestCase(ChiCartoTestCase):
             search = d['searches'][0]
             assert search['id'] == sid
             assert len(search['data_searches']) == 2
+            print ("test_get_search passed")
 
     def test_get_search2(self):
         with main.app.test_request_context():
@@ -158,6 +174,7 @@ class SearchTestCase(ChiCartoTestCase):
             d = json.loads(rv.data.decode("utf-8"))
             assert len(d['searches']) == 2
             assert len(d['searches'][1]["data_searches"]) == 2
+            print ("test_get_search2 passed")
 
     def test_get_sources(self):
         with main.app.test_request_context():
@@ -168,7 +185,11 @@ class SearchTestCase(ChiCartoTestCase):
             assert sources[0]['name'] == 'Crimes 2001 - Present'
             assert len(sources[0]['filters_meta']) == 2
             assert sources[0]['filters_meta'][0]['type'] == 'string'
+            print ("test_get_search3 passed")
 
+    # Test that you can successfully create a valid search
+    # We have defined some samples, in JSON in the sources
+    # directory
     def test_create_search_good(self):
         with main.app.test_request_context():
             # register and login a user, checking for success
@@ -186,7 +207,11 @@ class SearchTestCase(ChiCartoTestCase):
                 sz = len(js['search-results'][0]['items'])
                 assert sz > 0 and sz <= 10
                 assert rv.status == '200 OK'
+                print ('test_create_search_good passed')
 
+    # Test that you can successfully create a valid search
+    # We have defined some samples, in JSON in the sources
+    # directory
     def test_create_search_good2(self):
         with main.app.test_request_context():
             # register and login user
@@ -203,7 +228,9 @@ class SearchTestCase(ChiCartoTestCase):
                 sz = len(js['search-results'][0]['items'])
                 assert sz > 0 and sz <= 10
                 assert rv.status == '200 OK'
+                print ('test_create_search_good2 passed')
 
+    # Test that a malformed request to create a search fails properly
     def test_create_search_bad(self):
         with main.app.test_request_context():
             # register and login user
@@ -217,7 +244,9 @@ class SearchTestCase(ChiCartoTestCase):
                 rv = self.app.post('/create_search', data=s,content_type='application/json')
                 # make sure it was not accepted
                 assert rv.status.startswith('422')
+                print ('test_create_search_bad passed')
 
+    # Test that a malformed request to create a search fails properly
     def test_create_search_bad2(self):
         with main.app.test_request_context():
             # register and login user
@@ -231,7 +260,9 @@ class SearchTestCase(ChiCartoTestCase):
                 rv = self.app.post('/create_search', data=s,content_type='application/json')
                 # assert that it was rejected
                 assert rv.status.startswith('422')
+                print ('test_create_search_bad2 passed')
 
+    # Test that rating a search functions properly
     def test_rate_search_good(self):
         # make sure that you get the correct response when you give a valid search a valid rating
         with main.app.test_request_context():
@@ -255,6 +286,7 @@ class SearchTestCase(ChiCartoTestCase):
                 # assert that we get the correct response - meaning that the rating was updated
                 assert rating == js['val']
                 assert rv.status == '200 OK'
+                print ('test_rate_search_good passed')
 
     def test_rate_search_good2(self):
         # make sure that the rating stays with the search, until you change the rating,
@@ -290,7 +322,9 @@ class SearchTestCase(ChiCartoTestCase):
 
                 assert rating == js['val']
                 assert rv.status == '200 OK'
+                print ('test_rate_search_good passed')
 
+    # Test that malformed or unauthorized requests to rate a search fail properly
     def test_rate_search_bad(self):
         # make sure error is returned if you try to rate a non-existent search
         with main.app.test_request_context():
@@ -312,6 +346,7 @@ class SearchTestCase(ChiCartoTestCase):
                 rv = self.app.post('/rate_search', data=json.dumps(data), content_type='application/json')
                 # assert that we get the correct response - meaning that the rating was ignored
                 assert rv.status.startswith('422')
+                print ('test_rate_search_bad passed')
 
     def test_rate_search_bad2(self):
         # make sure error is returned if you try to rate a search with an invalid rating (i.e. >5 or <0)
@@ -334,7 +369,7 @@ class SearchTestCase(ChiCartoTestCase):
                 rv = self.app.post('/rate_search', data=json.dumps(data), content_type='application/json')
                 # assert that we get the correct response - meaning that the rating was ignored
                 assert rv.status.startswith('422')
-
+                print ('test_rate_search_bad2 passed')
 
 if __name__ == '__main__':
     unittest.main()
