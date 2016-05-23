@@ -23,12 +23,14 @@
             {% for search in user.searches %}
               <li><a href="/?s={{ search.id }}"> {{ search }} </a></li>
               <p>Rating: {{ search.get_rating() }} </p>
+<!-- Just delete from below to -->
                 {% if search.id not in rated %}
         <!-- code taken from https://codepen.io/jamesbarnett/pen/vlpkh -->
                     <div class ="searchcontainer">
                         <p>Rate The Search</p>
-
-                        <form taget="hidden-iframe" action="/rate_search" method="POST">
+<script type="text/javascript" src="static/rate.js"></script> <!-- I added this -->
+        <!--div-->                <form taget="hidden-iframe" action="/rate_search" method="POST">
+<!-- delete the above???-->
                             <fieldset class="rating">
                                 <input type="radio" id="star5-{{ search.id }}" name="rating" value="5" /><label class = "full" for="star5-{{ search.id }}" title="Awesome - 5 stars"></label>
                                 <input type="radio" id="star4half-{{ search.id }}" name="rating" value="4.5" /><label class="half" for="star4half-{{ search.id }}" title="Pretty good - 4.5 stars"></label>
@@ -42,11 +44,14 @@
                                 <input type="radio" id="starhalf-{{ search.id }}" name="rating" value="0.5" /><label class="half" for="starhalf-{{ search.id }}" title="Sucks big time - 0.5 stars"></label>
                             </fieldset>
                             <br><br>
+<!-- make sure object you are posting has that id field-->
                             <input type="hidden" name="id" value="{{ search.id }}"/>
-                            <input type="submit" value="Submit">
+                           <!--  <input type="submit" value="Submit"> -->
+<button type="button" id="submit" onclick="submitrating()">Submit</button> <!-- I added this -->
                         </form>
                     </div>
                 {% endif %}
+<!-- To here delete -->
             {% endfor %}
         </div>
         <hr>
