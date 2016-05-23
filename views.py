@@ -95,7 +95,7 @@ def rate_search():
         try:
             # FIXME: Verify user has yet to rate the entry
             # Using back button on front-end gets around front-end validation
-            data = request.form
+            data = request.get_json(force=True) #request.form
             sid = data['id']
             s = Search.query.get(int(sid))
             user = flask_login.current_user
@@ -110,7 +110,7 @@ def rate_search():
             else:
                 abort(404)
         except (Exception) as e:
-            #print("EXCEPTION: "+str(e))
+            print("EXCEPTION: "+str(e))
             abort(422)
 
 @app.route('/ratings/<sid>', methods=['GET'])
