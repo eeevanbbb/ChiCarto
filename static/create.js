@@ -469,8 +469,14 @@ function radiusSliderChanged() {
 function setName() {
   var element = document.getElementById("name-input");
   var name = element.value;
-  //TO-DO: Some kind of validation
   search["name"] = name;
+  updateOutputText();
+}
+
+function setCategory() {
+  var element = document.getElementById("category-input");
+  var category = element.value;
+  search["category"] = category;
   updateOutputText();
 }
 
