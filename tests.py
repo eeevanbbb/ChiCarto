@@ -192,12 +192,15 @@ class SearchTestCase(ChiCartoTestCase):
         with main.app.test_request_context():
             rv = self.app.get('/sources')
             d = json.loads(rv.data.decode('utf-8'))
+            f = open('sources.json','r')
+            canonical = json.load(f)
+            f.close()
             sources = d['sources']
-            assert len(sources) == 2
+            assert len(sources) == len(canonical['sources'])
             assert sources[0]['name'] == 'Crimes 2001 - Present'
             assert len(sources[0]['filters_meta']) == 2
             assert sources[0]['filters_meta'][0]['type'] == 'string'
-            print ("test_get_search3 passed")
+            print ("test_get_sources passed")
 
     # Test that you can successfully create a valid search
     # We have defined some samples, in JSON in the sources
@@ -293,7 +296,7 @@ class SearchTestCase(ChiCartoTestCase):
                 rating = 3
                 data = {'id': sid, 'rating': rating}
                 # send a post message to server to rate the search we just created
-                rv = self.app.post('/rate_search', data=data)
+                rv = self.app.post('/rate_search', data=json.dumps(data), content_type='application/json')
                 js = json.loads(rv.data.decode('utf-8'))['rating']
                 # assert that we get the correct response - meaning that the rating was updated
                 assert rating == js['val']
@@ -317,18 +320,18 @@ class SearchTestCase(ChiCartoTestCase):
                 js = json.loads(rv.data.decode('utf-8'))
                 sid = js['id']
                 rating = 3
-                data = {'id': sid, 'rating': rating}
+                data = json.dumps({'id': sid, 'rating': rating})
                 # send a post message to server to rate the search we just created
-                rv = self.app.post('/rate_search', data=data)
+                rv = self.app.post('/rate_search', data=data, content_type='application/json')
                 js = json.loads(rv.data.decode('utf-8'))['rating']
                 # assert that we get the correct response - meaning that the rating was updated
                 assert rating == js['val']
                 assert rv.status == '200 OK'
 
                 rating = 5
-                data = {'id': sid, 'rating': rating}
+                data = json.dumps({'id': sid, 'rating': rating})
                 # send a post message to server to rate the search with a different rating
-                rv = self.app.post('/rate_search', data=data)
+                rv = self.app.post('/rate_search', data=data, content_type='application/json')
                 js = json.loads(rv.data.decode('utf-8'))['rating']
                 # assert that we get the correct response - meaning that the rating was updated
 
