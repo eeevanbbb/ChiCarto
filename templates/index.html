@@ -9,6 +9,7 @@
       <h1><center>Welcome to ChiCarto!</center></h1>
 
 <div class="header">
+<center> <p> <a href="/searches">Browse All Searches</a> </p> </center>
     {% if loggedIn %}
     <center> <p> <a href="/me">My Account</a> </p> </center>
     <center> <p> <a href="/create_search">Create Search</a> </p> </center>
@@ -17,7 +18,7 @@
     <center> <p> <a href="/register">Register</a> </p> </center>
     {% endif %}
     </div>
-  <p id="searchName"></p>
+<center> <p style="font-size:160%;font-family:verdana;" id="searchName"></p> </center>
   <div id="map"></div>
 
       <script type="text/javascript" src="static/mapping.js"></script>
