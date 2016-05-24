@@ -35,7 +35,7 @@ function submitrating(searchID) {
     httpPostAsync("/rate_search",search,function(response) {
       var responseDict = JSON.parse(response);
       if (responseDict["rating"] != null) {
-        var ratingElement = document.getElementById("submit-"+searchID);
+        var ratingElement = document.getElementById("rate-"+searchID);
         ratingElement.remove(); //FIXME: Why doesn't this work completely?
       }
 	  });

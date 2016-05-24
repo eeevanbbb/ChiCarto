@@ -11,9 +11,16 @@
             margin:20px;
             padding:20px;
         }
+        .masthead {
+          padding-top: 10px !important;
+        }
         </style>
     <link rel="stylesheet" type="text/css" href="static/table.css">
-    <link rel="stylesheet" type="text/css" href="static/style.css">
+  <link rel="stylesheet" type="text/css" href="static/style.css">
+  <link href="../static/bootstrap.css" rel="stylesheet">
+    <link href="../static/main_3.css" rel="stylesheet">
+
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,600' rel='stylesheet' type='text/css'>
     <script src="static/table.js"></script>
     </head>
     <body>
@@ -33,13 +40,13 @@
             <tbody>
               {% for search in user.searches %}
               <tr>
-                <td data-title="Name"><a href="/?s={{ search.id }}"> {{ search.name }} </a></td>
+                <td data-title="Name"><a href="/?s={{ search.id }}#map"> {{ search.name }} </a></td>
                 <td data-title="Sources">{{ search.data_source_names() }}</td>
                 <td data-title="Rating">
                   {{ search.get_rating() }}
                   {% if search.id not in rated %}
           <!-- code taken from https://codepen.io/jamesbarnett/pen/vlpkh -->
-                      <div class ="searchcontainer">
+                      <div class ="searchcontainer" id="rate-{{ search.id }}">
                         <p>Rate The Search</p>
                         <script type="text/javascript" src="static/rate.js"></script>
                         <fieldset class="rating">
@@ -64,19 +71,28 @@
           </table>
         </div>
         <hr>
-        <div>
-            <a href="/">Home</a>
-        </div>
-        <div>
-            <a href="/create_search">Create Search</a>
-        </div>
-        <div>
-            <a href="/logout">Logout</a>
-        </div>
-        <div>
-            <a id="delete" href="/delete-account">Delete Account</a>
-        </div>
-        <br>
-        <br>
+            <a class="btn btn-success btn-lg" href="/">Home</a>
+            <a class="btn btn-success btn-lg" href="/create_search">Create Search</a>
+            <a class="btn btn-success btn-lg" href="/logout">Logout</a>
+            <a class="btn btn-success btn-lg" href="/delete-account">Delete Account</a>
+        <script src="js/jquery.js"></script>
+<script src="js/bootstrap.js"></script>
+<script src="js/easing.js"></script>
+<script src="js/nicescroll.js"></script>
+
+
+<script>
+
+
+ $(function() {
+    $('.scrollto, .gototop').bind('click',function(event){
+         var $anchor = $(this);
+         $('html, body').stop().animate({
+         scrollTop: $($anchor.attr('href')).offset().top
+          }, 1500,'easeInOutExpo');
+     event.preventDefault();
+      });
+  });
+
     </body>
 </html>

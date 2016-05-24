@@ -1,7 +1,14 @@
 <html>
 <head>
-<title>Create Search</title>
-<link rel="stylesheet" type="text/css" href="static/table.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <title>
+    <h2> Create Search </h2>
+    </title>
+  <link href="../static/bootstrap.css" rel="stylesheet">
+  <link href="../static/main.css" rel="stylesheet">
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,600' rel='stylesheet' type='text/css'>
 <style>
 #create-h1 {
   margin-left: 0px !important;
@@ -12,63 +19,89 @@
 <body>
   <script type="text/javascript" src="static/create.js"></script>
   <h1 id="create-h1">Create a Search</h1>
-  <a href="/">Home</a><br>
-  <a href="/me">My Account</a>
+  <a class="btn btn-success" href="/">Home</a>
+  <a class="btn btn-success" href="/me">My Account</a>
   <hr>
   <div id="container-div" style="width: 100%; overflow: hidden;">
     <div id="input-div" style="width: 50%; float: left;">
       <div id="data-source-div">
         <h2>Data Source</h2>
         <select id="data-sources" onchange="changedToDataSource()"></select>
-        <button type="button" id="add-source" onclick="addDataSource()">Add</button>
-        <button type="button" id="remove-source" onclick="removeDataSource()" style="visibility: hidden;">Remove</button>
+        <button type="button" id="add-source" class="btn btn-success" onclick="addDataSource()">Add</button>
+        <button type="button" id="remove-source" class="btn btn-success" onclick="removeDataSource()" style="visibility: hidden;">Remove</button>
+        <br>
         <br>
         <p id="limit-text" style="display: inline; visibility: hidden;">Limit: </p>
         <input id="limit-input" style="visibility: hidden;">
-        <button type="button" id="set-limit" onclick="setLimit()" style="visibility: hidden;">Set</button>
+        <button type="button" id="set-limit" onclick="setLimit()" class="btn btn-success" style="visibility: hidden;">Set</button>
         <input id="limit-slider" type="range" min="0" max="1000" value="10" onchange="limitSliderChanged()" style="visibility: hidden;">
       </div>
       <div id="filter-div" style="visibility: hidden;">
         <h2>Filter</h2>
         <select id="filters" onchange="changedToFilter()"></select>
-        <button type="button" id="add-filter" onclick="addFilter()">Add</button>
-        <button type="button" id="remove-filter" onclick="removeFilter()" style="visibility: hidden;">Remove</button>
+        <button type="button" class="btn btn-success"id="add-filter" onclick="addFilter()">Add</button>
+        <button type="button" class="btn btn-success" id="remove-filter" onclick="removeFilter()" style="visibility: hidden;">Remove</button>
       </div>
       <div id="value-div" style="visibility: hidden;">
         Value: <input id="value-input" type="text">
-        <button type="button" id="set-value" onclick="setValue()">Set</button>
+        <button type="button" class="btn btn-success" id="set-value" onclick="setValue()">Set</button>
         <select id="value-choice" onchange="changedValueChoice()" style="visibility: hidden;"></select>
       </div>
       <div id="location-div">
         <h2>Location</h2>
-        <button type="button" id="get-loc" onclick="getLocation()">Get My Location</button>
+        <button type="button" class="btn btn-success" id="get-loc" onclick="getLocation()">Get My Location</button>
         <br>
-        Latitude: <input id="lat-input" type="text">
-        <button type="button" id="set-lat" onclick="setLatitude()">Set</button>
         <br>
-        Longitude: <input id="lon-input" type="text">
-        <button type="button" id="set-lon" onclick="setLongitude()">Set</button>
+        Latitude: <input id="lat-input" class = "input" type="text">
+        <button type="button" class="btn btn-success" id="set-lat" onclick="setLatitude()">Set</button>
         <br>
-        Radius: <input id="radius-input" type="text">
-        <button type="button" id="set-radius" onclick="setRadius()">Set</button>
+        <br>
+        Longitude: <input id="lon-input" class = "input" type="text">
+        <button type="button" class="btn btn-success" id="set-lon" onclick="setLongitude()">Set</button>
+        <br>
+        <br>
+        Radius: <input id="radius-input" class = "input" type="text">
+        <button type="button" class="btn btn-success" id="set-radius" onclick="setRadius()">Set</button>
+        <br>
+        <br>
         <input id="radius-slider" type="range" min="0" max="100000" value="0" onchange="radiusSliderChanged()">
       </div>
       <div id="metadata-div">
         <h2>Metadata</h2>
-        Search Name: <input id="name-input" type="text">
-        <button type="button" id="set-name" onclick="setName()">Set</button>
+        Search Name: <input id="name-input" class = "input"type="text">
+        <button type="button" class="btn btn-success"  id="set-name" onclick="setName()">Set</button>
         <br>
-        Search Category: <input id="category-input" type="text">
-        <button type="button" id="set-category" onclick="setCategory()">Set</button>
+        <br>
+        Search Category: <input id="category-input" class = "input" type="text">
+        <button type="button" class="btn btn-success" id="set-category" onclick="setCategory()">Set</button>
       </div>
     </div>
     <div id="output-div" style="margin-left: 50%;">
       <h2>Output</h2>
       <div id="submit-div">
-        <button type="button" id="submit" onclick="submit()">Submit</button>
+        <button type="button" class="btn btn-success" id="submit" onclick="submit()">Submit</button>
       </div>
+      <br>
       <pre id="search-object-output">Your search object will go here.</pre>
     </div>
   </div>
+  <script src="js/jquery.js"></script>
+<script src="js/bootstrap.js"></script>
+<script src="js/easing.js"></script>
+<script src="js/nicescroll.js"></script>
+
+
+<script>
+
+
+ $(function() {
+    $('.scrollto, .gototop').bind('click',function(event){
+     var $anchor = $(this);
+     $('html, body').stop().animate({
+         scrollTop: $($anchor.attr('href')).offset().top
+          }, 1500,'easeInOutExpo');
+     event.preventDefault();
+      });
+  });
 </body>
 </html>
