@@ -169,9 +169,6 @@ def delete_account():
 @app.route('/searches')
 def searches():
     searches = Search.query.all()
-    # searches = [s.dictify() for s in query]
-    # return render_template('searches.html',searches=searches)
-
     rated = set()
 
     loggedIn = False
@@ -184,5 +181,6 @@ def searches():
                 if rating.user_id == user.id:
                     rated.add(search.id)
                     break
+
     return render_template('searches.html', searches=searches, loggedIn=loggedIn, rated=rated)
 
