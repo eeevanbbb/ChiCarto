@@ -170,4 +170,19 @@ def delete_account():
 def searches():
     searches = Search.query.all()
     # searches = [s.dictify() for s in query]
-    return render_template('searches.html',searches=searches)
+    # return render_template('searches.html',searches=searches)
+
+    rated = set()
+
+    loggedIn = False
+    if flask_login.current_user.is_authenticated:
+        loggedIn = True
+
+        user = flask_login.current_user
+        for search in user.searches:
+            for rating in search.ratings:
+                if rating.user_id == user.id:
+                    rated.add(search.id)
+                    break
+    return render_template('searches.html', searches=searches, loggedIn=loggedIn, rated=rated)
+

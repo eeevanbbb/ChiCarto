@@ -7,6 +7,7 @@
   <link rel="stylesheet" type="text/css" href="static/table.css">
   <link href="../static/bootstrap.css" rel="stylesheet">
   <link href="../static/main_4.css" rel="stylesheet">
+  <link href="../static/style.css" rel="stylesheet">
   <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,600' rel='stylesheet' type='text/css'>
   <script src="static/table.js"></script>
 </head>
@@ -18,9 +19,9 @@
     <table id="table" class="table table-hover table-striped table-mc-light-blue">
       <thead>
         <tr>
-          <th>Name</th>
-          <th>Sources</th>
-          <th>Rating</th>
+          <th><strong>Name</strong></th>
+          <th><strong>Sources</strong></th>
+          <th><strong>Rating</strong></th>
         </tr>
       </thead>
       <tbody>
@@ -29,7 +30,27 @@
           <td data-title="Name"><a href="/?s={{ search.id }}#map"> {{ search.name }} </a></td>
           <td data-title="Sources">{{ search.data_source_names() }}</td>
           <td data-title="Rating">
-            {{ search.get_rating() }}
+              {{ search.get_rating() }}
+              {% if search.id not in rated and loggedIn %}
+      <!-- code taken from https://codepen.io/jamesbarnett/pen/vlpkh -->
+                  <div class ="searchcontainer">
+                    <p>Rate The Search</p>
+                    <script type="text/javascript" src="static/rate.js"></script>
+                    <fieldset class="rating">
+                        <input type="radio" id="star5-{{ search.id }}" name="rating" value="5" /><label class = "full" for="star5-{{ search.id }}" title="Awesome - 5 stars"></label>
+                        <input type="radio" id="star4half-{{ search.id }}" name="rating" value="4.5" /><label class="half" for="star4half-{{ search.id }}" title="Pretty good - 4.5 stars"></label>
+                        <input type="radio" id="star4-{{ search.id }}" name="rating" value="4" /><label class = "full" for="star4-{{ search.id }}" title="Pretty good - 4 stars"></label>
+                        <input type="radio" id="star3half-{{ search.id }}" name="rating" value="3.5" /><label class="half" for="star3half-{{ search.id }}" title="Meh - 3.5 stars"></label>
+                        <input type="radio" id="star3-{{ search.id }}" name="rating" value="3" /><label class = "full" for="star3-{{ search.id }}" title="Meh - 3 stars"></label>
+                        <input type="radio" id="star2half-{{ search.id }}" name="rating" value="2.5" /><label class="half" for="star2half-{{ search.id }}" title="Not so good - 2.5 stars"></label>
+                        <input type="radio" id="star2-{{ search.id }}" name="rating" value="2" /><label class = "full" for="star2-{{ search.id }}" title="Not so good - 2 stars"></label>
+                        <input type="radio" id="star1half-{{ search.id }}" name="rating" value="1.5" /><label class="half" for="star1half-{{ search.id }}" title="Kinda bad - 1.5 stars"></label>
+                        <input type="radio" id="star1-{{ search.id }}" name="rating" value="1" /><label class = "full" for="star1-{{ search.id }}" title="Real bad - 1 star"></label>
+                        <input type="radio" id="starhalf-{{ search.id }}" name="rating" value="0.5" /><label class="half" for="starhalf-{{ search.id }}" title="Real real bad - 0.5 stars"></label>
+                    </fieldset>
+                    <button type="button" id="submit-{{ search.id }}" onclick="submitrating({{ search.id }})">Submit</button>
+                  </div>
+              {% endif %}
           </td>
         </tr>
         {% endfor %}
