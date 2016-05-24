@@ -26,7 +26,7 @@
       <tbody>
         {% for search in searches %}
         <tr>
-          <td data-title="Name"><a href="/?s={{ search.id }}"> {{ search.name }} </a></td>
+          <td data-title="Name"><a href="/?s={{ search.id }}#map"> {{ search.name }} </a></td>
           <td data-title="Sources">{{ search.data_source_names() }}</td>
           <td data-title="Rating">
             {{ search.get_rating() }}
@@ -47,8 +47,8 @@
 <script src="js/bootstrap.js"></script>
 <script src="js/easing.js"></script>
 <script src="js/nicescroll.js"></script>
- 
- 
+
+
 <script>
 
 

@@ -13,7 +13,7 @@ function initMap() {
           httpGetAsync("http://127.0.0.1:5000/search-results/"+searchID, function(response) {
             var bounds = new google.maps.LatLngBounds();
             response = JSON.parse(response);
-            document.getElementById("searchName").innerHTML = response["name"];
+            document.getElementById("searchName").innerHTML = "<u>"+response["name"]+"</u>";
             var items = response["search-results"][0]["items"];
             for (var i = 0; i < items.length; i++) {
                 var lat1 = items[i].latitude;
