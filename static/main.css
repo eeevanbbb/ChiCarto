@@ -43,42 +43,9 @@ a:hover,a:focus{color:#5173bd;}
 	z-index:9999999;
 	}
 
-	
-.pace .pace-progress{
-	-webkit-box-sizing:border-box;
-	-moz-box-sizing:border-box;
-	-ms-box-sizing:border-box;
-	-o-box-sizing:border-box;
-	box-sizing:border-box;
-	-webkit-transition:width 1s ease-in-out 1s linear;
-	-moz-transition:width 1s ease-in-out 1s linear;
-	-ms-transition:width 1s ease-in-out 1s linear;
-	-o-transition:width 1s ease-in-out 1s linear;
-	transition:width 1s ease-in-out 1s linear;
-	-webkit-transform:translate3d(0,0,0);
-	-moz-transform:translate3d(0,0,0);
-	-ms-transform:translate3d(0,0,0);
-	-o-transform:translate3d(0,0,0);
-	transform:translate3d(0,0,0);
-	max-width:100%;position:fixed;
-	z-index:9999999;display:block;
-	position:absolute;
-	left:0px;
-	top:0px;
-	height:100%;
-	background:#61b5f0;
-	}
-	
-.pace.pace-inactive{display:none;}
 
 .btn,.btn-lg,.input-lg{border-radius:3px;}
 
-.form-control{
-	border-radius:3px;
-	-webkit-box-shadow:none;
-	box-shadow:none;border:0;
-	}
-	
 .input-lg{height:55px;}
 
 .btn-lg,.btn-group-lg>.btn{
@@ -113,62 +80,7 @@ a:hover,a:focus{color:#5173bd;}
 	-o-animation:fadein 2s;
 	}
 
-.loading *{
-	-webkit-animation:none!important;
-	-moz-animation:none!important;
-	-ms-animation:none!important;
-	-o-animation:none!important;
-	}
 
-@keyframes fadein{
-	from{opacity:0;
-	-webkit-transform:translateY(-30px);
-	-moz-transform:translateY(-30px);
-	transform:translateY(-30px);}
-	to{opacity:1;
-	-webkit-transform:translateY(0);
-	-moz-transform:translateY(0);
-	transform:translateY(0);}}
-	
-@-moz-keyframes fadein { /* Firefox */
-	 from {
-	 opacity:0;
-	 -webkit-transform: translateY(-30px);
-	-moz-transform: translateY(-30px);
-	transform: translateY(-30px);
-	}to{opacity:1;-webkit-transform:translateY(0);-moz-transform:translateY(0);transform:translateY(0);}
-	}
-
-@-webkit-keyframes fadein { /* Safari and Chrome */
-	 from {
-	 opacity:0;
-	 -webkit-transform: translateY(-30px);
-	-moz-transform: translateY(-30px);
-	transform: translateY(-30px);
-}
-
-to {
-	opacity:1;
-	-webkit-transform: translateY(0);
-	-moz-transform: translateY(0);
-	transform: translateY(0);
-}
-}
-@-o-keyframes fadein { /* Opera */
- from {
- opacity:0;
- -webkit-transform: translateY(-30px);
--moz-transform: translateY(-30px);
-transform: translateY(-30px);
-}
-to {
-	opacity:1;
-	-webkit-transform: translateY(0);
-	-moz-transform: translateY(0);
-	transform: translateY(0);
-}
-}
-/*animation ends*/
 
 .logo {
 	padding: 45px 0;
@@ -208,67 +120,10 @@ to {
 	color:#FFF!important;
 	display: inline-block;
 }
-.subscribe {
-	padding: 45px 0;
-}
-.alertMsg {
-	float: left;
-	font-size: 14px;
-	display: block;
-	padding: 5px 17px;
-}
 
 
-/* Boucing Arrow Animation */
 
-@keyframes arrowbounce {
-from {
--webkit-transform: translateY(0);
--moz-transform: translateY(0);
-transform: translateY(0);
-}
-to {
-	-webkit-transform: translateY(-20px);
-	-moz-transform: translateY(-20px);
-	transform: translateY(-20px);
-}
-}
-@-moz-keyframes arrowbounce { /* Firefox */
-from {
--webkit-transform: translateY(0);
--moz-transform: translateY(0);
-transform: translateY(0);
-}
-to {
-	-webkit-transform: translateY(-20px);
-	-moz-transform: translateY(-20px);
-	transform: translateY(-20px);
-}
-}
-@-webkit-keyframes arrowbounce { /* Safari and Chrome */
-from {
--webkit-transform: translateY(0);
--moz-transform: translateY(0);
-transform: translateY(0);
-}
-to {
-	-webkit-transform: translateY(-20px);
-	-moz-transform: translateY(-20px);
-	transform: translateY(-20px);
-}
-}
-@-o-keyframes arrowbounce { /* Opera */
-from {
--webkit-transform: translateY(0);
--moz-transform: translateY(0);
-transform: translateY(0);
-}
-to {
-	-webkit-transform: translateY(-20px);
-	-moz-transform: translateY(-20px);
-	transform: translateY(-20px);
-}
-}
+
 .scrollto, .scrollto:hover {
 	margin:30px;
 	display:block;
@@ -286,7 +141,14 @@ to {
 	-webkit-animation: arrowbounce 1s alternate infinite; /* Safari and Chrome */
 	-o-animation: arrowbounce 1s alternate infinite; /* Opera */
 }
-/*========== 3. HERO IMAGE ==============*/
+
+.input /*br input*/{
+	color:#000000 !important;
+}
+
+#lat-input {
+	color: black !important;
+}
 
 .section-title {
 	text-align:center;
@@ -302,7 +164,6 @@ to {
 .heroimg img, .clientlogo img {
 	max-width:100%;
 }
-/*========== 4. FEATURES ==============*/
 
 .features {
 	margin:25px 0;
@@ -331,7 +192,7 @@ to {
 	transform:scale(1.05);
 	z-index:2;
 }
-/*========== 5. TESTIMONIALS ==============*/
+
 
 .testblock {
 	width:100%;
@@ -396,40 +257,7 @@ to {
 	transform:scale(1.05);
 	z-index:2;
 }
-/*========== 6. PLANS AND PRICING ==============*/
 
-.pricing {
-	padding:25px;
-	color:#FFF;
-	text-align:center;
-	-webkit-border-radius:5px;
-	-moz-border-radius:5px;
-	border-radius:5px;
-}
-.pricing .planname {
-	text-transform:uppercase;
-	font-weight:600;
-}
-.pricing .price {
-	font-size:52px;
-	font-weight:300;
-	margin:10px 0;
-}
-.pricing .billing {
-	text-transform:uppercase;
-	color:#FFF;
-	opacity:0.7;
-}
-.pricing .price .curr {
-	display:inline-block;
-	font-size:20px;
-	vertical-align:super;
-}
-.pricing .price .per {
-	display:inline-block;
-	font-size:20px;
-	vertical-align: baseline;
-}
 .color1 {
 	background-color:#2ecc71;
 }
@@ -439,31 +267,6 @@ to {
 .color3 {
 	background-color:#16a085;
 }
-/* Animation */
-
-.pricing {
-	-moz-transition:all 0.6s ease;
-	-webkit-transition:all 0.6s ease;
-	-ms-transition:all 0.6s ease;
-	-o-transition:all 0.6s ease;
-	transition:all 0.6s ease;
-}
-.pricing:hover {
-	-moz-transform:scale(1.05);
-	-webkit-transform:scale(1.05);
-	-o-transform:scale(1.05);
-	-ms-transform:scale(1.05);
-	transform:scale(1.05);
-	z-index:2;
-}
-
-/*========== 7. FAQ ==============*/
-
-.faq p {
-	margin-bottom:25px;
-}
-
-/*==========8. FOOTER ==============*/
 
 
 .footercta {
@@ -493,42 +296,6 @@ to {
 
 
 
-/*==========9. CUSTOM MEDIA QUERIES==============*/
-
-
-/*MEDIA QUERIES*/
-
-@media (max-width: 991px) {
- h1 {
-font-size: 35px;
-line-height: 50px;
-margin: 15px 0;
-}
- h2 {
-font-size: 35px;
-}
- .testimonials [class*="col-"]:not(:first-child) {
- margin-top: 40px;
-}
- .planpricing [class*="col-"]:not(:first-child) {
- margin-top: 30px;
-}
- .breath {
-margin: 30px auto;
-}
-}
- @media (max-width: 767px) {
- h1 {
-font-size: 30px;
-line-height: 40px;
-}
- h2 {
-font-size: 30px;
-line-height: 40px;
-}
- .subscribe [class*="col-"]:not(:first-child) {
- margin-top: 30px;
-}
  .masthead {
 padding: 40px 15px;
 }
