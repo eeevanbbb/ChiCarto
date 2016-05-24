@@ -33,7 +33,7 @@
               {{ search.get_rating() }}
               {% if search.id not in rated and loggedIn %}
       <!-- code taken from https://codepen.io/jamesbarnett/pen/vlpkh -->
-                  <div class ="searchcontainer">
+                  <div class ="searchcontainer" id="rate-{{ search.id }}">
                     <p>Rate The Search</p>
                     <script type="text/javascript" src="static/rate.js"></script>
                     <fieldset class="rating">
