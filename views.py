@@ -44,15 +44,7 @@ def create_search():
             lon = data['longitude']
             radius = data['radius']
             sources = data['sources']
-
-            rating = None
-            name = None
-
-            if "rating" in data:
-                rating = data['rating']
-
-            if "name" in data:
-                name = data['name']
+            name = data['name']
 
             data_searches = []
 
@@ -72,7 +64,7 @@ def create_search():
                 db.session.add(data_search)
                 data_searches.append(data_search)
 
-            search = Search(data_searches, lat, lon, radius, rating, name)
+            search = Search(data_searches, lat, lon, radius, name)
             db.session.add(search)
 
             flask_login.current_user.add_search(search)

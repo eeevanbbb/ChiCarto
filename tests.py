@@ -86,7 +86,7 @@ class SearchTestCase(ChiCartoTestCase):
         data_search1 = DataSearch(data_source1, [])
         data_search2 = DataSearch(data_source1, [filter1])
 
-        search = Search([data_search1, data_search2], uchicago_lat, uchicago_long, radius)
+        search = Search([data_search1, data_search2], uchicago_lat, uchicago_long, radius, "sample")
 
         main.db.session.add(search)
         main.db.session.flush()
@@ -110,10 +110,10 @@ class SearchTestCase(ChiCartoTestCase):
             data_search2 = DataSearch(data_source1, [filter1])
             data_search3 = DataSearch(data_source1, [filter1, filter2])
 
-            search1 = Search([data_search1], uchicago_lat, uchicago_long, radius)
-            search2 = Search([data_search2], uchicago_lat, uchicago_long, radius)
-            search3 = Search([data_search3], uchicago_lat, uchicago_long, radius)
-            search4 = Search([data_search1, data_search2], uchicago_lat, uchicago_long, radius)
+            search1 = Search([data_search1], uchicago_lat, uchicago_long, radius, 'search1')
+            search2 = Search([data_search2], uchicago_lat, uchicago_long, radius, 'search2')
+            search3 = Search([data_search3], uchicago_lat, uchicago_long, radius, 'search3')
+            search4 = Search([data_search1, data_search2], uchicago_lat, uchicago_long, radius, 'search3')
 
             # Execute the searches
             (status1,text1) = search1.execute() #search w/ no filters
@@ -132,7 +132,7 @@ class SearchTestCase(ChiCartoTestCase):
     def test_add_search_to_user(self):
         with main.app.test_request_context():
             # Create a search
-            search = Search([],0,0,0)
+            search = Search([],0,0,0,'name')
             # Create a user
             user = main.user_datastore.create_user(email="b@example.com", password="password2")
 
@@ -212,7 +212,7 @@ class SearchTestCase(ChiCartoTestCase):
             rv = self.login('a@example.com', 'password')
             rv = self.app.get('/me')
             assert (rv.status == '200 OK')
-            with open('samples/source-valid.json','r') as f:
+            with open('samples/search-valid.json','r') as f:
                 # post a valid test search
                 s = f.read()
                 rv = self.app.post('/create_search', data=s,content_type='application/json')
@@ -234,7 +234,7 @@ class SearchTestCase(ChiCartoTestCase):
             rv = self.login('a@example.com', 'password')
             rv = self.app.get('/me')
             assert (rv.status == '200 OK')
-            with open('samples/source-valid2.json','r') as f:
+            with open('samples/search-valid2.json','r') as f:
                 # post valid test search
                 s = f.read()
                 rv = self.app.post('/create_search', data=s,content_type='application/json')
@@ -253,7 +253,7 @@ class SearchTestCase(ChiCartoTestCase):
             rv = self.login('a@example.com', 'password')
             rv = self.app.get('/me')
             assert (rv.status == '200 OK')
-            with open('samples/source-bad.json','r') as f:
+            with open('samples/search-bad.json','r') as f:
                 # post bad test search
                 s = f.read()
                 rv = self.app.post('/create_search', data=s,content_type='application/json')
@@ -269,7 +269,7 @@ class SearchTestCase(ChiCartoTestCase):
             rv = self.login('a@example.com', 'password')
             rv = self.app.get('/me')
             assert (rv.status == '200 OK')
-            with open('samples/source-bad2.json','r') as f:
+            with open('samples/search-bad2.json','r') as f:
                 # post bad search
                 s = f.read()
                 rv = self.app.post('/create_search', data=s,content_type='application/json')
@@ -287,7 +287,7 @@ class SearchTestCase(ChiCartoTestCase):
             rv = self.app.get('/me')
             # check that registration was successful
             assert (rv.status == '200 OK')
-            with open('samples/source-valid.json','r') as f:
+            with open('samples/search-valid.json','r') as f:
                 s = f.read()
                 # send a post message to server to create a search
                 rv = self.app.post('/create_search', data=s,content_type='application/json')
@@ -313,7 +313,7 @@ class SearchTestCase(ChiCartoTestCase):
             rv = self.app.get('/me')
             # check that registration was successful
             assert (rv.status == '200 OK')
-            with open('samples/source-valid.json','r') as f:
+            with open('samples/search-valid.json','r') as f:
                 s = f.read()
                 # send a post message to server to create a search
                 rv = self.app.post('/create_search', data=s,content_type='application/json')
@@ -349,7 +349,7 @@ class SearchTestCase(ChiCartoTestCase):
             rv = self.app.get('/me')
             # check that registration was successful
             assert (rv.status == '200 OK')
-            with open('samples/source-valid.json','r') as f:
+            with open('samples/search-valid.json','r') as f:
                 s = f.read()
                 # send a post message to server to create a search
                 rv = self.app.post('/create_search', data=s,content_type='application/json')
@@ -372,7 +372,7 @@ class SearchTestCase(ChiCartoTestCase):
             rv = self.app.get('/me')
             # check that registration was successful
             assert (rv.status == '200 OK')
-            with open('samples/source-valid.json','r') as f:
+            with open('samples/search-valid.json','r') as f:
                 s = f.read()
                 # send a post message to server to create a search
                 rv = self.app.post('/create_search', data=s,content_type='application/json')

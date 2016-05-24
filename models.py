@@ -87,12 +87,11 @@ class Search(db.Model):
                               backref=db.backref('searches',lazy='dynamic'))
     name = db.Column(db.String(255))
 
-    def __init__(self,data_searches,latitude,longitude,radius,rating=None,name=None):
+    def __init__(self,data_searches,latitude,longitude,radius,name):
         self.data_searches = data_searches
         self.latitude = latitude
         self.longitude = longitude
         self.radius = radius
-        self.rating = rating
         self.name = name
 
     def __repr__(self):
