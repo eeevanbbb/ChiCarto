@@ -1,9 +1,17 @@
 <html>
 <head>
-  <script src="static/table.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <title>Browse All Searches</title>
   <link rel="stylesheet" type="text/css" href="static/table.css">
+  <link href="../static/bootstrap.css" rel="stylesheet">
+  <link href="../static/main_4.css" rel="stylesheet">
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,600' rel='stylesheet' type='text/css'>
+  <script src="static/table.js"></script>
 </head>
 <body>
+  <main id="top" class="masthead" role="main">
   <h1>All Searches</h1>
   <hr>
   <div class="table-responsive-vertical shadow-z-1">
@@ -30,7 +38,28 @@
   </div>
   <hr>
   <div>
-      <a href="/">Home</a>
+      <a class="btn btn-success btn-lg" href="/">Home</a>
   </div>
+  <main class="footercta" role="main">
+
+  </main>
+  <script src="js/jquery.js"></script>
+<script src="js/bootstrap.js"></script>
+<script src="js/easing.js"></script>
+<script src="js/nicescroll.js"></script>
+ 
+ 
+<script>
+
+
+ $(function() {
+    $('.scrollto, .gototop').bind('click',function(event){
+         var $anchor = $(this);
+         $('html, body').stop().animate({
+         scrollTop: $($anchor.attr('href')).offset().top
+          }, 1500,'easeInOutExpo');
+     event.preventDefault();
+      });
+  });
 </body>
 </html>
