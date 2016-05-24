@@ -20,7 +20,7 @@
   <main id="top" class="masthead" role="main">
   <script type="text/javascript" src="static/create.js"></script>
   <h1 id="create-h1">Create a Search</h1>
-  <a class="btn btn-success" href="/">Home</a><br>
+  <a class="btn btn-success" href="/">Home</a>
   <a class="btn btn-success" href="/me">My Account</a>
   <hr>
   <div id="container-div" style="width: 100%; overflow: hidden;">
@@ -30,6 +30,7 @@
         <select id="data-sources" onchange="changedToDataSource()"></select>
         <button type="button" id="add-source" class="btn btn-success" onclick="addDataSource()">Add</button>
         <button type="button" id="remove-source" class="btn btn-success" onclick="removeDataSource()" style="visibility: hidden;">Remove</button>
+        <br>
         <br>
         <p id="limit-text" style="display: inline; visibility: hidden;">Limit: </p>
         <input id="limit-input" style="visibility: hidden;">
@@ -51,20 +52,26 @@
         <h2>Location</h2>
         <button type="button" class="btn btn-success" id="get-loc" onclick="getLocation()">Get My Location</button>
         <br>
+        <br>
         Latitude: <input id="lat-input" class = "input" type="text">
         <button type="button" class="btn btn-success" id="set-lat" onclick="setLatitude()">Set</button>
+        <br>
         <br>
         Longitude: <input id="lon-input" class = "input" type="text">
         <button type="button" class="btn btn-success" id="set-lon" onclick="setLongitude()">Set</button>
         <br>
+        <br>
         Radius: <input id="radius-input" class = "input" type="text">
         <button type="button" class="btn btn-success" id="set-radius" onclick="setRadius()">Set</button>
+        <br>
+        <br>
         <input id="radius-slider" type="range" min="0" max="100000" value="0" onchange="radiusSliderChanged()">
       </div>
       <div id="metadata-div">
         <h2>Metadata</h2>
         Search Name: <input id="name-input" class = "input"type="text">
         <button type="button" class="btn btn-success"  id="set-name" onclick="setName()">Set</button>
+        <br>
         <br>
         Search Category: <input id="category-input" class = "input" type="text">
         <button type="button" class="btn btn-success" id="set-category" onclick="setCategory()">Set</button>
@@ -75,6 +82,7 @@
       <div id="submit-div">
         <button type="button" class="btn btn-success" id="submit" onclick="submit()">Submit</button>
       </div>
+      <br>
       <pre id="search-object-output">Your search object will go here.</pre>
     </div>
   </div>
@@ -82,8 +90,8 @@
 <script src="js/bootstrap.js"></script>
 <script src="js/easing.js"></script>
 <script src="js/nicescroll.js"></script>
- 
- 
+
+
 <script>
 
 
