@@ -1,8 +1,5 @@
 <html>
     <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
         <title>Profile</title>
         <style>
         #delete {
@@ -16,13 +13,10 @@
         }
         </style>
     <link rel="stylesheet" type="text/css" href="static/table.css">
-    <link href="../static/bootstrap.css" rel="stylesheet">
-    <link href="../static/main_3.css" rel="stylesheet">
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,600' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="static/style.css">
     <script src="static/table.js"></script>
     </head>
     <body>
-        <main id="top" class="masthead" role="main">
         <h1 id="welcome">Welcome to your account!</h1>
         <p>You are logged in as: <b>{{ user.email }}</b>.</p>
         <hr>
@@ -71,37 +65,18 @@
         </div>
         <hr>
         <div>
-            <a class="btn btn-success btn-lg" href="/">Home</a>
+            <a href="/">Home</a>
         </div>
         <div>
-            <a class="btn btn-success btn-lg" href="/create_search">Create Search</a>
+            <a href="/create_search">Create Search</a>
         </div>
         <div>
-            <a class="btn btn-success btn-lg" href="/logout">Logout</a>
+            <a href="/logout">Logout</a>
         </div>
         <div>
-            <a class="btn btn-success btn-lg" href="/delete-account">Delete Account</a>
+            <a id="delete" href="/delete-account">Delete Account</a>
         </div>
         <br>
         <br>
-        <script src="js/jquery.js"></script>
-<script src="js/bootstrap.js"></script>
-<script src="js/easing.js"></script>
-<script src="js/nicescroll.js"></script>
- 
- 
-<script>
-
-
- $(function() {
-    $('.scrollto, .gototop').bind('click',function(event){
-         var $anchor = $(this);
-         $('html, body').stop().animate({
-         scrollTop: $($anchor.attr('href')).offset().top
-          }, 1500,'easeInOutExpo');
-     event.preventDefault();
-      });
-  });
-
     </body>
 </html>

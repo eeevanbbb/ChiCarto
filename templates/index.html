@@ -1,87 +1,28 @@
+<html>
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="description" content="">
-	<title>ChiCarto - Your Map to the City of Chicago </title>
-	<link href="../static/bootstrap.css" rel="stylesheet">
-	<link href="../static/main.css" rel="stylesheet">
-	<link href='http://fonts.googleapis.com/css?family=Open+Sans:300,600' rel='stylesheet' type='text/css'>
+<title>ChiCarto</title>
 <style>
 #map { height: 80%; }
 </style>
-
 </head>
-
    <body>
-   	<main id="top" class="masthead" role="main">
-		<div class="container">
-			<div class="logo"> <a href="index.html#"><img src="../static/logo.png" alt="logo"></a>
-		</div>
-
       <h1><center>Welcome to ChiCarto!</center></h1>
-	
-	<div class="row">
-		<div class="col-md-5 col-sm-4">
-			<!--<button type="submit" class="btn btn-success btn-lg">Search</button>-->
-		</div>
 
 <div class="header">
-	<!--<div id="buttons">
-		<center> <button type="submit" class="btn btn-success btn-lg">Browse all Searches </a></button> </center><center>
-    	<center> <button type="submit" class="btn btn-success btn-lg">Login </a></button> </center>-->
-	<p> <a class="btn btn-success btn-lg" href="/searches">Browse All Searches</a> </p>
+<center> <p> <a href="/searches">Browse All Searches</a> </p> </center>
     {% if loggedIn %}
-    	<center> <p> <a class="btn btn-success btn-lg" href="/me">My Account</a> </p> </center>
-    	<center> <p> <a class="btn btn-success btn-lg" href="/create_search">Create Search</a> </p> </center>
+    <center> <p> <a href="/me">My Account</a> </p> </center>
+    <center> <p> <a href="/create_search">Create Search</a> </p> </center>
     {% else %}
-    	<center> <p> <a class="btn btn-success btn-lg" href="/login">Log In</a> </p> </center>
-    	<center> <p> <a class="btn btn-success btn-lg" href="/register">Register</a> </p> </center>
+    <center> <p> <a href="/login">Log In</a> </p> </center>
+    <center> <p> <a href="/register">Register</a> </p> </center>
     {% endif %}
     </div>
 <center> <p style="font-size:160%;font-family:verdana;" id="searchName"></p> </center>
-    </div>
+  <div id="map"></div>
 
-	    <! -- ******************** FOOTER ******************** -->	  
-		<main class="footercta" role="main">
-	
- 
-						<div id="map"></div>
+      <script type="text/javascript" src="static/mapping.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBpx9SqTdBQ_V-vQo0H9RPTgbIn7g3MPso&callback=initMap"></script>
 
-				    <script type="text/javascript" src="static/mapping.js"></script>
-				    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBpx9SqTdBQ_V-vQo0H9RPTgbIn7g3MPso&callback=initMap"></script>
-
-
-		</main><! --/main -->
- 
-		<div class="container">
-			<section class="row breath">
-				<div class="col-md-12 footerlinks">
-					<!-- place any footer text we want -->
-				</div>
-			</section><! --/section -->
-		</div><! --/container -->
- 
- 
- 
- 
-<script src="js/jquery.js"></script>
-<script src="js/bootstrap.js"></script>
-<script src="js/easing.js"></script>
-<script src="js/nicescroll.js"></script>
- 
- 
-<script>
-
-
- $(function() {
-    $('.scrollto, .gototop').bind('click',function(event){
-		 var $anchor = $(this);
-		 $('html, body').stop().animate({
-         scrollTop: $($anchor.attr('href')).offset().top
-          }, 1500,'easeInOutExpo');
-     event.preventDefault();
-      });
-  });
-       
    </body>
 </html>

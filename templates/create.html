@@ -1,12 +1,7 @@
 <html>
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="">
-  <title>Create Search</title>
-  <link href="../static/bootstrap.css" rel="stylesheet">
-  <link href="../static/main_2.css" rel="stylesheet">
-  <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,600' rel='stylesheet' type='text/css'>
+<title>Create Search</title>
+<link rel="stylesheet" type="text/css" href="static/table.css">
 <style>
 #create-h1 {
   margin-left: 0px !important;
@@ -15,11 +10,10 @@
 </style>
 </head>
 <body>
-  <main id="top" class="masthead" role="main">
   <script type="text/javascript" src="static/create.js"></script>
   <h1 id="create-h1">Create a Search</h1>
-  <a class="btn btn-success btn-lg" href="/">Home</a><br>
-  <a class="btn btn-success btn-lg" href="/me">My Account</a>
+  <a href="/">Home</a><br>
+  <a href="/me">My Account</a>
   <hr>
   <div id="container-div" style="width: 100%; overflow: hidden;">
     <div id="input-div" style="width: 50%; float: left;">
@@ -76,23 +70,5 @@
       <pre id="search-object-output">Your search object will go here.</pre>
     </div>
   </div>
-  <script src="js/jquery.js"></script>
-<script src="js/bootstrap.js"></script>
-<script src="js/easing.js"></script>
-<script src="js/nicescroll.js"></script>
- 
- 
-<script>
-
-
- $(function() {
-    $('.scrollto, .gototop').bind('click',function(event){
-     var $anchor = $(this);
-     $('html, body').stop().animate({
-         scrollTop: $($anchor.attr('href')).offset().top
-          }, 1500,'easeInOutExpo');
-     event.preventDefault();
-      });
-  });
 </body>
 </html>
