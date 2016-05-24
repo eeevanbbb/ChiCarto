@@ -1,11 +1,18 @@
 <html>
 <head>
 <title>Create Search</title>
+<link rel="stylesheet" type="text/css" href="static/table.css">
+<style>
+#create-h1 {
+  margin-left: 0px !important;
+  font-size: 3.2rem;
+}
+</style>
 </head>
 <body>
   <script type="text/javascript" src="static/create.js"></script>
-  <h1>Create a Search</h1>
-  <a href="/">Home</a>
+  <h1 id="create-h1">Create a Search</h1>
+  <a href="/">Home</a><br>
   <a href="/me">My Account</a>
   <hr>
   <div id="container-div" style="width: 100%; overflow: hidden;">
@@ -43,8 +50,8 @@
         <button type="button" id="set-lon" onclick="setLongitude()">Set</button>
         <br>
         Radius: <input id="radius-input" type="text">
-        <input id="radius-slider" type="range" min="0" max="100000" value="0" onchange="radiusSliderChanged()">
         <button type="button" id="set-radius" onclick="setRadius()">Set</button>
+        <input id="radius-slider" type="range" min="0" max="100000" value="0" onchange="radiusSliderChanged()">
       </div>
       <div id="metadata-div">
         <h2>Metadata</h2>

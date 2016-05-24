@@ -71,7 +71,9 @@ def create_search():
 
             db.session.commit()
 
-            return search_results(search.id)
+            # return search_results(search.id)
+            json_dict = {"id": search.id}
+            return flask.jsonify(**json_dict) #Save time not fetching results
 
         except (Exception) as e:
             #print("Exception: ")

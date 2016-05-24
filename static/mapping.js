@@ -9,6 +9,7 @@ function initMap() {
         //parse JSON file from search, iterate through and add points
         searchID = QueryString.s;
         if (searchID) {
+          document.getElementById("searchName").innerHTML = "Loading...";
           httpGetAsync("http://127.0.0.1:5000/search-results/"+searchID, function(response) {
             var bounds = new google.maps.LatLngBounds();
             response = JSON.parse(response);

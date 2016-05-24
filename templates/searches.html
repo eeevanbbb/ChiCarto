@@ -1,14 +1,32 @@
 <html>
 <head>
+  <script src="static/table.js"></script>
+  <link rel="stylesheet" type="text/css" href="static/table.css">
 </head>
 <body>
   <h1>All Searches</h1>
   <hr>
-  <div>
-    {% for search in searches %}
-      <li><a href="/?s={{ search.id }}"> {{ search }} </a></li>
-      <p>Rating: {{ search.get_rating() }} </p>
-    {% endfor %}
+  <div class="table-responsive-vertical shadow-z-1">
+    <table id="table" class="table table-hover table-striped table-mc-light-blue">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Sources</th>
+          <th>Rating</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for search in searches %}
+        <tr>
+          <td data-title="Name"><a href="/?s={{ search.id }}"> {{ search.name }} </a></td>
+          <td data-title="Sources">{{ search.data_source_names() }}</td>
+          <td data-title="Rating">
+            {{ search.get_rating() }}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   </div>
   <hr>
   <div>
