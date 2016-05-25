@@ -552,6 +552,10 @@ function validateSearch() {
     alert("Search name must not be null!");
     return false;
   }
+  if (name == "") {
+    alert("Search name must have non-zero length!");
+    return false
+  }
 
   return true;
 }

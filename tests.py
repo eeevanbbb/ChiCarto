@@ -219,8 +219,7 @@ class SearchTestCase(ChiCartoTestCase):
                 # if search was valid we'll get the results of that search
                 # and check if it's good
                 js = json.loads(rv.data.decode('utf-8'))
-                sz = len(js['search-results'][0]['items'])
-                assert sz > 0 and sz <= 10
+                assert js['id'] > 0
                 assert rv.status == '200 OK'
                 print ('test_create_search_good passed')
 
@@ -240,8 +239,7 @@ class SearchTestCase(ChiCartoTestCase):
                 rv = self.app.post('/create_search', data=s,content_type='application/json')
                 # make sure we get results back and they obey the search's params
                 js = json.loads(rv.data.decode('utf-8'))
-                sz = len(js['search-results'][0]['items'])
-                assert sz > 0 and sz <= 10
+                assert js['id'] > 0
                 assert rv.status == '200 OK'
                 print ('test_create_search_good2 passed')
 
