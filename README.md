@@ -47,12 +47,14 @@ ChiCarto is a gateway into geo-specific location data about the city of Chicago.
   1. From main page: Select "Register"
   2. Enter an email address, password of at least 6 characters, and retype the password, then select "Register" 
   3. Expected result: You will be taken to a page that says "Welcome to your account! You are logged in as (your email)", with an empty table entitled "Your Searches"
+
 ### Log out, then log back in
   1. From user page of logged in user: Select "Log out" 
   2. Expected result: You will be taken back to the home page
   3. From the home page: Select "Log In"
   4. Enter your email address and password, then select Login
   5. Expected result: You will be taken to a page that says "Welcome to your account! You are logged in as (your email)", with a table entitled "Your Searches"
+
 ### Create a search
   1. From user page of logged in user: Select "Create Search"
   2. Select data source "Crimes 2001-Present", click "add"
@@ -70,25 +72,31 @@ ChiCarto is a gateway into geo-specific location data about the city of Chicago.
   14. Under "Value", select "OPEN". 
   15. On the right side of the page, under "Output", select "Submit". 
   16. Expected result: CURRENTLY NOT AS IT SHOULD BE: TODO
+
 ### View your searches
   1. Click "My Account"
   2. Expected result: All searches you have created will be displayed in a table
+
 ### Rate a search
   1. Click "My Account"
   2. For an unrated search listed on your table, there should be five empty stars next to it. Choose a search with a current rating of 0.  Select two and a half stars, then click submit.
   3. Refresh the page.
   4. Expected result: The five star widget will disappear. Upon refreshing, the page should show 2.5 in the rating column next to the search you rated.
+
 ### View a search on the map (_i.e. load a search_)
   1. Click "My Account"
   2. If you have previously created a search, it will be in the table. Click the name of a search you previously created.
   3. Expected result: a map will load displaying the search.
+
 ### Get datapoint information while viewing a search
   1. Display a search.
   2. Click on one of the red markers. 
   3. Expected result: A small textbox should appear displaying additional data.
+
 ### View a list of all searches
   1. From the main page: Click "Browse All Searches"
   2. Expected result: You will be taken to a page that says "All Searches" and shows a table displaying all searches created by all users.
+
 ### Delete your account
   1. Log in to your account
   2. Select "Delete Account"
