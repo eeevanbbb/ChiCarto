@@ -1,5 +1,5 @@
 # ChiCarto
-ChiCarto is a gateway into geo-specific location data about the city of Chicago.
+ChiCarto is a gateway into geo-specific location data about the city of Chicago. ChiCarto provides an easy-to-use interface to view, collate, and browse information about the city using a mapping centered interface. For example, a user could view criminal incidents within a specific radius of a possible home, reported tree trims in their neighborhood, and check for building violations, all on one map. The map displays red icons that reveal more information about the specific datapoint when clicked. Additonally, ChiCarto draws from open data about the city that is updated continuously, so ChiCarto is always up-to-date. 
 
 ## Installation
 0. Make sure you have [Python](https://www.python.org/downloads/) installed
