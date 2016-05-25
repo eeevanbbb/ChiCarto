@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html class="masthead">
+    {% from "security/_macros.html" import render_field_with_errors, render_field %}
+    {% include "security/_messages.html" %}
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <title>ChiCarto - Log In</title>
+        <link href="../static/bootstrap.css" rel="stylesheet">
+        <link href="../static/main.css" rel="stylesheet">
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,600' rel='stylesheet' type='text/css'>
+    </head>
+    <style>
+        body {
+            background-color: rgba(0,0,0,0.9);
+        }
+    </style>
+    <body>
+        <h1>Login</h1>
+        <form action="{{ url_for_security('login') }}" method="POST" name="login_user_form">
+            {{ login_user_form.hidden_tag() }}
+            {{ render_field_with_errors(login_user_form.email) }}
+            {{ render_field_with_errors(login_user_form.password) }}
+            {{ render_field_with_errors(login_user_form.remember) }}
+            {{ render_field(login_user_form.next) }}
+            {{ render_field(login_user_form.submit) }}
+        </form>
+        <footer class="footerlinks">
+            {% include "security/_menu.html" %}
+        </footer>
+    </body>
+</html>

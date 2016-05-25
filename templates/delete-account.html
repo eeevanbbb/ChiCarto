@@ -1,30 +1,42 @@
-<html>
-<head>
-<title>Delete Account</title>
-</head>
-   <body>
-      <h1>We're sorry to see you go!</h1>
-      <p>You are logged in as {{ user.email }}</p>
-      <p>Are you sure you want to delete your account?</p>
-      <div>
-        <script>
-        function deleteAccount() {
-            var xmlHttp = new XMLHttpRequest();
-            xmlHttp.open("DELETE", "/delete-account", true);
-            xmlHttp.onreadystatechange = handleReadyStateChange
-            xmlHttp.send(null);
+<!DOCTYPE HTML>
+<html class="masthead">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <title>ChiCarto - Delete Account</title>
+        <link href="../static/bootstrap.css" rel="stylesheet">
+        <link href="../static/main.css" rel="stylesheet">
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,600' rel='stylesheet' type='text/css'>
+    </head>
+    <style>
+        body {
+            background-color: rgba(0,0,0,0.9);
+        }
+    </style>
+    <body>
+        <h1>We're sorry to see you go!</h1>
+        <p>You are logged in as {{ user.email }}</p>
+        <p>Are you sure you want to delete your account?</p>
+        <div>
+            <script>
+            function deleteAccount() {
+                var xmlHttp = new XMLHttpRequest();
+                xmlHttp.open("DELETE", "/delete-account", true);
+                xmlHttp.onreadystatechange = handleReadyStateChange
+                xmlHttp.send(null);
 
-            function handleReadyStateChange() {
-                if (xmlHttp.readyState == 4) {
-                    if (xmlHttp.status == 200) {
-                        window.location.replace("/")
+                function handleReadyStateChange() {
+                    if (xmlHttp.readyState == 4) {
+                        if (xmlHttp.status == 200) {
+                            window.location.replace("/")
+                        }
                     }
                 }
             }
-        }
-        </script>
-        <button id="delButton" onclick="deleteAccount()">DELETE ACCOUNT!</button>
-      </div>
-      <hr>
+            </script>
+            <button id="delButton" onclick="deleteAccount()">DELETE ACCOUNT!</button>
+        </div>
+        <hr>
    </body>
 </html>
