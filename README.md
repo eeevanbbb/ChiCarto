@@ -72,8 +72,8 @@ ChiCarto is a gateway into geo-specific location data about the city of Chicago.
   14. Under "Value", select "OPEN" 
   15. On the right side of the page, under "Output", select "Submit" 
   16. Expected result: Map showing red points should be displayed. It should look something like this:
-![alt text] (https://github.com/eeevanbbb/ChiCarto.git/blob/master/img1ForReadme.png "Create a Search Example")
-
+![alt text] (https://github.com/eeevanbbb/ChiCarto/blob/master/img1ForReadme.png "Create a Search Example")
+  
 #### View your searches
   1. Click "My Account"
   2. Expected result: All searches you have created will be displayed in a table
