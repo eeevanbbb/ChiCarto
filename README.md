@@ -71,7 +71,8 @@ ChiCarto is a gateway into geo-specific location data about the city of Chicago.
   13. Under "Filter", select "violation_status", and click "Add". 
   14. Under "Value", select "OPEN". 
   15. On the right side of the page, under "Output", select "Submit". 
-  16. Expected result: CURRENTLY NOT AS IT SHOULD BE: TODO
+  16. Expected result: Map showing red points should be displayed. It should look something like this:
+![alt text] (https://github.com/eeevanbbb/ChiCarto.git/img1ForReadme.png)
 
 #### View your searches
   1. Click "My Account"
