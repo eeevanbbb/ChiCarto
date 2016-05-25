@@ -77,7 +77,7 @@ ChiCarto is a gateway into geo-specific location data about the city of Chicago.
   1. Click "My Account"
   2. For an unrated search listed on your table, there should be five empty stars next to it. Choose a search with a current rating of 0.  Select two and a half stars, then click submit.
   3. Refresh the page.
-  4. Expected result: The five star widget will disappear. Upon refreshing, the page should show 2.5 in the rating column next to the search you rated. 
+  4. Expected result: The five star widget will disappear. Upon refreshing, the page should show 2.5 in the rating column next to the search you rated.
 ### View a search on the map (_i.e. load a search_)
   1. Click "My Account"
   2. If you have previously created a search, it will be in the table. Click the name of a search you previously created.
