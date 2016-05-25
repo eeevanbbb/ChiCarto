@@ -100,22 +100,6 @@
       "filters": []
     },
     {
-      "name": "Schools",
-      "url": "https://data.cityofchicago.org/resource/5n35-6ttn.json",
-      "title_key": "school_name",
-      "filters": [
-        {
-          "name": "grades",
-          "type": "choice",
-          "choose_from": [
-            "E",
-            "M",
-            "HS"
-          ]
-        }
-      ]
-    },
-    {
       "name": "Parks",
       "url": "https://data.cityofchicago.org/resource/4xwe-2j3y.json",
       "title_key": "park_name",
