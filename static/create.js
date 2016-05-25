@@ -488,7 +488,7 @@ function submit() {
       console.log("Response: "+response);
       response = JSON.parse(response);
       if (response["id"] != null) {
-        window.location.href = "/?s=" + response["id"] + "#map";
+        window.location.href = "/?s=" + response["id"] + "#view";
       } /* else {
         alert("There was an error creating your search. Sorry!");
       } */ //This was getting called multiple times
