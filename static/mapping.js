@@ -14,27 +14,29 @@ function initMap() {
             var bounds = new google.maps.LatLngBounds();
             response = JSON.parse(response);
             document.getElementById("searchName").innerHTML = "<u>"+response["name"]+"</u>";
-            var items = response["search-results"][0]["items"];
-            for (var i = 0; i < items.length; i++) {
-                var lat1 = items[i].latitude;
-                var lon1 = items[i].longitude;
-                var myLatLon = new google.maps.LatLng(lat1,lon1);
-                var mark = new google.maps.Marker({
-                    position: myLatLon,
-                    map: map,
-                    title: items[i].description,
-                    animation: google.maps.Animation.DROP,
-                    chicartoItem: items[i]
-                                                    });
-                mark.addListener("click",function() {
-                  var infoWindow = new google.maps.InfoWindow();
-                  infoWindow.setContent(itemToHTML(this.chicartoItem));
-                  infoWindow.open(map,this);
-                });
-                bounds.extend(mark.getPosition());
-            }
-            if (items.length > 0) {
-              map.fitBounds(bounds);
+            for (var j = 0; j < response["search-results"].length; j++) {
+                var items = response["search-results"][j]["items"];
+                for (var i = 0; i < items.length; i++) {
+                    var lat1 = items[i].latitude;
+                    var lon1 = items[i].longitude;
+                    var myLatLon = new google.maps.LatLng(lat1,lon1);
+                    var mark = new google.maps.Marker({
+                        position: myLatLon,
+                        map: map,
+                        title: items[i].description,
+                        animation: google.maps.Animation.DROP,
+                        chicartoItem: items[i]
+                                                        });
+                    mark.addListener("click",function() {
+                      var infoWindow = new google.maps.InfoWindow();
+                      infoWindow.setContent(itemToHTML(this.chicartoItem));
+                      infoWindow.open(map,this);
+                    });
+                    bounds.extend(mark.getPosition());
+                }
+                if (items.length > 0) {
+                  map.fitBounds(bounds);
+                }
             }
           });
       }
