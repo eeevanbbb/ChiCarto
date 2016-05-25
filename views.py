@@ -183,4 +183,3 @@ def searches():
                     break
 
     return render_template('searches.html', searches=searches, loggedIn=loggedIn, rated=rated)
-

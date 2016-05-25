@@ -4,15 +4,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="">
   <title>
-    <h2> Create Search </h2>
-    </title>
+    Create a Search
+  </title>
   <link href="../static/bootstrap.css" rel="stylesheet">
   <link href="../static/main.css" rel="stylesheet">
   <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,600' rel='stylesheet' type='text/css'>
 <style>
 #create-h1 {
   margin-left: 0px !important;
-  font-size: 3.2rem;
+  font-size: 5.0rem;
 }
 </style>
 </head>
@@ -24,7 +24,7 @@
   <a class="btn btn-success" href="/me">My Account</a>
   <hr>
   <div id="container-div" style="width: 100%; overflow: hidden;">
-    <div id="input-div" style="width: 50%; float: left;">
+    <div id="input-div" align="left" style="width: 50%; float: left;">
       <div id="data-source-div">
         <h2>Data Source</h2>
         <select id="data-sources" onchange="changedToDataSource()"></select>
@@ -33,9 +33,9 @@
         <br>
         <br>
         <p id="limit-text" style="display: inline; visibility: hidden;">Limit: </p>
-        <input id="limit-input" style="visibility: hidden;">
+        <input id="limit-input" class="input" style="visibility: hidden;">
         <button type="button" id="set-limit" onclick="setLimit()" class="btn btn-success" style="visibility: hidden;">Set</button>
-        <input id="limit-slider" type="range" min="0" max="1000" value="10" onchange="limitSliderChanged()" style="visibility: hidden;">
+        <input id="limit-slider" type="range" min="0" max="1000" value="10" onchange="limitSliderChanged()" style="visibility: hidden; width: 80%;">
       </div>
       <div id="filter-div" style="visibility: hidden;">
         <h2>Filter</h2>
@@ -44,7 +44,7 @@
         <button type="button" class="btn btn-success" id="remove-filter" onclick="removeFilter()" style="visibility: hidden;">Remove</button>
       </div>
       <div id="value-div" style="visibility: hidden;">
-        Value: <input id="value-input" type="text">
+        Value: <input id="value-input" class="input" type="text">
         <button type="button" class="btn btn-success" id="set-value" onclick="setValue()">Set</button>
         <select id="value-choice" onchange="changedValueChoice()" style="visibility: hidden;"></select>
       </div>
@@ -65,7 +65,7 @@
         <button type="button" class="btn btn-success" id="set-radius" onclick="setRadius()">Set</button>
         <br>
         <br>
-        <input id="radius-slider" type="range" min="0" max="100000" value="0" onchange="radiusSliderChanged()">
+        <input id="radius-slider" type="range" min="0" max="100000" value="0" onchange="radiusSliderChanged()" style="width: 80%;">
       </div>
       <div id="metadata-div">
         <h2>Metadata</h2>
@@ -77,13 +77,13 @@
         <button type="button" class="btn btn-success" id="set-category" onclick="setCategory()">Set</button>
       </div>
     </div>
-    <div id="output-div" style="margin-left: 50%;">
+    <div id="output-div" align="right" style="margin-left: 50%;">
       <h2>Output</h2>
       <div id="submit-div">
         <button type="button" class="btn btn-success" id="submit" onclick="submit()">Submit</button>
       </div>
       <br>
-      <pre id="search-object-output">Your search object will go here.</pre>
+      <pre id="search-object-output" align="left">Your search object will go here.</pre>
     </div>
   </div>
   <script src="js/jquery.js"></script>
