@@ -25,11 +25,12 @@ function initMap() {
                         map: map,
                         title: items[i].description,
                         animation: google.maps.Animation.DROP,
-                        chicartoItem: items[i]
+                        chicartoItem: items[i],
+                        chicartoItemType: response["search-results"][j]["id"]
                                                         });
                     mark.addListener("click",function() {
                       var infoWindow = new google.maps.InfoWindow();
-                      infoWindow.setContent(itemToHTML(this.chicartoItem));
+                      infoWindow.setContent(itemToHTML(this.chicartoItem,this.chicartoItemType));
                       infoWindow.open(map,this);
                     });
                     bounds.extend(mark.getPosition());
@@ -43,24 +44,72 @@ function initMap() {
 }
 
 //Takes an item from the search results array and transforms it into HTML for the info box
-function itemToHTML(item) {
-  //FIXME: Better way of detecting which type of search this was
+function itemToHTML(item,type) {
 
-  var theString = ""
-  if (item["description"]) {
-  var date = new Date(item["date"]);
-  theString +=    "<p style=\"color: black;\">" +
-                  item["description"] + "<br/>" +
-                  item["location_description"] + "<br/>" +
-                  dateToString(date) +
-                  "<p>";
-  } else if (item["address"]) {
-    var date = new Date(item["violation_date"]);
-    theString +=    "<p style=\"color: black;\">" +
-                    item["address"] + "<br/>" +
-                    item["inspection_category"] + " (" + item["inspection_status"] + ")<br/>" +
-                    dateToString(date) + "<br/>" +
-                    item["violation_ordinance"]
+  console.log(item);
+  console.log(type);
+
+  var theString = "<p style=\"color: black;\">"
+  switch (type) {
+    case 1:
+      var date = new Date(item["date"]);
+      theString +=    item["description"] + "<br/>" +
+                      item["location_description"] + "<br/>" +
+                      dateToString(date) +
+                      "</p>";
+    break;
+    case 2:
+      var date = new Date(item["violation_date"]);
+      theString +=    item["address"] + "<br/>" +
+                      item["inspection_category"] + " (" + item["inspection_status"] + ")<br/>" +
+                      dateToString(date) + "<br/>" +
+                      item["violation_ordinance"] +
+                      "</p>"
+      break;
+    case 4:
+      theString +=    item["address"] + "<br/>" +
+                      "Free mulch: " + item["free_mulch"] + "<br/>" +
+                      "</p>";
+      break;
+    case 5:
+      var creationDate   = new Date(item["creation_date"]);
+      var completionDate = new Date(item["completion_date"]);
+      theString +=    item["location_of_trees"] + "<br/>" +
+                      item["status"] + "<br/>" +
+                      "Creation date: " + dateToString(creationDate) + "<br/>" +
+                      "Completion date: " + dateToString(completionDate) + "<br/>" +
+                      "</p>";
+      break;
+    case 6:
+      var creationDate   = new Date(item["creation_date"]);
+      var completionDate = new Date(item["completion_date"]);
+      theString +=    item["type_of_service_request"] + "<br/>" +
+                      item["most_recent_action"] + "<br/>" +
+                      item["status"] + "<br/>" +
+                      "Creation date: " + dateToString(creationDate) + "<br/>" +
+                      "Completion date: " + dateToString(completionDate) + "<br/>" +
+                      "</p>";
+      break;
+    case 7:
+      theString +=    item["address"] + "<br/>" +
+                      item["phone"] + "<br/>" +
+                      "District: " + item["district_name"] + "<br/>" +
+                      "<a target=\"_blank\" href=\"" + item["website"] + "\">Website</a>" + "<br/>" +
+                      "</p>";
+      break;
+    case 9:
+      var creationDate   = new Date(item["creation_date"]);
+      var completionDate = new Date(item["completion_date"]);
+      theString +=    item["type_of_service_request"] + "<br/>" +
+                      "Potholes Filled on Block: " + item["number_of_potholes_filled_on_block"] + "<br/>" +
+                      item["status"] + "<br/>" +
+                      "Creation date: " + dateToString(creationDate) + "<br/>" +
+                      "Completion date: " + dateToString(completionDate) + "<br/>" +
+                      "</p>";
+      break;
+    default:
+      theString +=    "Sorry, no information available." + "</p>";
+      break;
   }
 
   return theString;
