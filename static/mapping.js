@@ -49,14 +49,14 @@ function itemToHTML(item) {
   var theString = ""
   if (item["description"]) {
   var date = new Date(item["date"]);
-  theString +=    "<p>" +
+  theString +=    "<p style=\"color: black;\">" +
                   item["description"] + "<br/>" +
                   item["location_description"] + "<br/>" +
                   dateToString(date) +
                   "<p>";
   } else if (item["address"]) {
     var date = new Date(item["violation_date"]);
-    theString +=    "<p>" +
+    theString +=    "<p style=\"color: black;\">" +
                     item["address"] + "<br/>" +
                     item["inspection_category"] + " (" + item["inspection_status"] + ")<br/>" +
                     dateToString(date) + "<br/>" +
