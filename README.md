@@ -1,5 +1,5 @@
 # ChiCarto
-ChiCarto is a gateway into geo-specific location data about the city of Chicago. ChiCarto provides an easy-to-use interface to view, collate, and browse information about the city using a mapping centered interface. For example, a user could view criminal incidents within a specific radius of a possible home, reported tree trims in their neighborhood, and check for building violations, all on one map. The map displays red icons that reveal more information about the specific datapoint when clicked. Additonally, ChiCarto draws from open data about the city that is updated continuously, so ChiCarto is always up-to-date. 
+ChiCarto is a gateway into geo-specific location data about the city of Chicago. ChiCarto provides an easy-to-use interface to view, collate, and browse information about the city using a mapping centered interface. For example, a user could view criminal incidents within a specific radius of a possible home, reported tree trims in their neighborhood, and check for building violations, all on one map. The map displays red icons that reveal more information about the specific datapoint when clicked. Additonally, ChiCarto draws from open data about the city that is updated continuously, so ChiCarto is always up-to-date.
 
 ## Installation
 0. Make sure you have [Python](https://www.python.org/downloads/) installed
@@ -13,17 +13,17 @@ ChiCarto is a gateway into geo-specific location data about the city of Chicago.
 ## Testing
 1. From the root folder, run `python tests.py`
 
-## What is Implemented and Roughly in Which Files
-* Display a front page with a map of the city (implemented in python files, templates/index.html)
-* Register an account (implemented in python files)
-* Log in (implemented in python files)
-* Log out (implemented in python files)
-* Delete your account (implemented in python files, templates/delete-account.html)
-* Create a search (implemented in python files, templates/create.html, static/create.js)
-* View your searches by name (implemented in python files, templates/user.html, static/table.css, static/table.js)
-* View each search on a map (implemented in python files, templates/index.html, static/mapping.js)
-* Rate a search and view averaged search rating (implemented in python files, templates/user.html, templates/searches.html, static/rate.js, static/style.css)
-* Browse a list of all searches created by all users (implemented in python files, templates/searches.html, static/table.css, static/table.js)
+## What is Implemented and Where (Roughly)
+* Display a front page with a map of the city (views.py, templates/index.html, mapping.js)
+* Register an account (views.py, models.py)
+* Log in (views.py, models.py)
+* Log out (views.py, models.py)
+* Delete your account (views.py, models.py, templates/delete-account.html)
+* Create a search (views.py, models.py, templates/create.html, static/create.js)
+* View your searches by name (views.py, models.py, templates/user.html)
+* View each search on a map (views.py, models.py, templates/index.html, static/mapping.js)
+* Rate a search and view averaged search rating (views.py, models.py, templates/user.html, templates/searches.html, static/rate.js)
+* Browse a list of all searches created by all users (views.py, models.py, templates/searches.html)
 
 ## Teams
 * Backend models, logic, and tests = Mark, Evan, and Sam
@@ -33,23 +33,23 @@ ChiCarto is a gateway into geo-specific location data about the city of Chicago.
 ## Changes from Proposal
 * The project proposal described the ability for logged-in users to save other users' searches to their own profile. This was not implemented, because we decided it made more sense for users to only have their own searches that they created displayed on their own profile page.
 * Instead of using React.js framework as proposed for the front end, we used a combination of html, css, and javascript.
-* Our Use Case diagram gave unregistered users the ability to create a search. We decided in our actual implementation to only allow registered users to create a search, although unregistered users can still browse all of the searches. 
-* "Create Account" activity diagram is implemented exactly as proposed, except instead of a username, an email is used. 
+* Our Use Case diagram gave unregistered users the ability to create a search. We decided in our actual implementation to only allow registered users to create a search, although unregistered users can still browse all of the searches.
+* "Create Account" activity diagram is implemented exactly as proposed, except instead of a username, an email is used.
 * "Saving a Search" activity diagram was not implemented as proposed. Instead, the user only has the ability to save searches they create to their profile, and this occurs automatically.
 * "Loading A Search" is implemented as proposed in the activity diagram, but with an additional ability for users that are not logged in to load searches.
-* "Delete Account" was implemented more simply than proposed, skipping the proposed steps of seleting "Settings" and "Manage Account."
+* "Delete Account" was implemented more simply than proposed, skipping the proposed steps of selecting "Settings" and "Manage Account."
 * "Rate Saved Search" was implemented as proposed in the activity diagram, except users _are_ allowed to rate their own searches.
-* "Create Search" was implemented as proposed in the activity diagram, but with the ability to name the search and associate a category with a search. Also note that created searches are automatically saved, without the user having to select "save" functionality.
-* "Browse Searches" was not implemented as proposed, due to a lack of time, the ability to "Sort by category," "Sort by rating," and "Search by name" were not implemented.
+* "Create Search" was implemented as proposed in the activity diagram, but with the ability to name the search and associate a category with a search. Also note that created searches are automatically saved.
+* "Browse Searches" was not implemented as proposed. Due to a lack of time, the abilities to "Sort by category," "Sort by rating," and "Search by name" were not implemented.
 
 ## Suggested Acceptance Tests and Expected Results
 #### Register an account
   1. From main page: Select "Register"
-  2. Enter an email address, password of at least 6 characters, and retype the password, then select "Register" 
+  2. Enter an email address, password of at least 6 characters, and retype the password, then select "Register"
   3. Expected result: You will be taken to a page that says "Welcome to your account! You are logged in as (your email)," with an empty table entitled "Your Searches"
 
 #### Log out, then log back in
-  1. From user page of logged in user: Select "Log out" 
+  1. From user page of logged in user: Select "Log out"
   2. Expected result: You will be taken back to the home page
   3. From the home page: Select "Log In"
   4. Enter your email address and password, then select Login
@@ -60,20 +60,20 @@ ChiCarto is a gateway into geo-specific location data about the city of Chicago.
   2. Select data source "Crimes 2001-Present", click "add"
   3. A new box "Limit: 10" should pop up. click "set"
   4. Under "Filter", a box should read "primary_type." Click "Add"
-  5. Type "THEFT" into the text box below that says "Value:". Click "Add" 
-  6. Into Latitude, type "41.78", and click "Set" 
+  5. Type "THEFT" into the text box below that says "Value:". Click "Add"
+  6. Into Latitude, type "41.78", and click "Set"
   7. Into Longitude, type -87.60, and click "Set"  
-  8. Into Radius, type "100000" and click "Set" 
+  8. Into Radius, type "100000" and click "Set"
   9. Under Metadata, find the text box that says "Search Name", and type "MySearch". Click "Set"
-  10. Under Search Category, type "crime", and click "Set" 
+  10. Under Search Category, type "crime", and click "Set"
   11. Go back up to "Data Source". Select data source "Building Violations". Click "Add"
   12. A new box "Limit: 10" should pop up. click "set"
-  13. Under "Filter", select "violation_status", and click "Add" 
-  14. Under "Value", select "OPEN" 
-  15. On the right side of the page, under "Output", select "Submit" 
+  13. Under "Filter", select "violation_status", and click "Add"
+  14. Under "Value", select "OPEN"
+  15. On the right side of the page, under "Output", select "Submit"
   16. Expected result: Map showing red points should be displayed. It should look something like this:
 ![alt text] (https://github.com/eeevanbbb/ChiCarto/blob/master/img1ForReadme.png "Create a Search Example")
-  
+
 #### View your searches
   1. Click "My Account"
   2. Expected result: All searches you have created will be displayed in a table
@@ -91,7 +91,7 @@ ChiCarto is a gateway into geo-specific location data about the city of Chicago.
 
 #### Get datapoint information while viewing a search
   1. Display a search
-  2. Click on one of the red markers 
+  2. Click on one of the red markers
   3. Expected result: A small textbox should appear displaying additional data
 
 #### View a list of all searches
@@ -101,14 +101,14 @@ ChiCarto is a gateway into geo-specific location data about the city of Chicago.
 #### Delete your account
   1. Log in to your account
   2. Select "Delete Account"
-  3. You will be taken to a page that says: "We're sorry to see you go! You are logged in as (your email). Are you sure you want to delete your account?" 
+  3. You will be taken to a page that says: "We're sorry to see you go! You are logged in as (your email). Are you sure you want to delete your account?"
   4. Select "Delete Account"
-  5. Expected result: Your account will be deleted. You will no longer be able to log in using your email and password. However, the searches you have created will still exist and will not be deleted 
+  5. Expected result: Your account will be deleted. You will no longer be able to log in using your email and password. However, the searches you have created will still exist and will not be deleted
 
 ## Miscellaneous
 * The Google Maps API we are using is free until exceeding 25,000 map loads per day for 90 consecutive days.
-* ChiCarto uses open data about the city of Chicago. Although it is possible to create a search centered in areas of the world other than Chicago, there is no data for areas outside of Chicago. 
+* ChiCarto uses open data about the city of Chicago. Although it is possible to create a search centered in areas of the world other than Chicago, there is no data for areas outside of Chicago.
 * It is possible for two searches to have the same name.
 * It is not possible for a person to register two accounts with the same email.
 * Maps may take a while to load, especially when loading a lot of data.
-* Given more time, we would add more searches, and create "delete search" functionality. 
+* Given more time, we would add more searches, and create "delete search" functionality.
