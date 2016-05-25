@@ -17,8 +17,19 @@ function initMap() {
             for (var j = 0; j < response["search-results"].length; j++) {
                 var items = response["search-results"][j]["items"];
                 for (var i = 0; i < items.length; i++) {
-                    var lat1 = items[i].latitude;
-                    var lon1 = items[i].longitude;
+                    var lat1;
+                    var lon1;
+                    if (items[i].hasOwnProperty("location")) {
+                        lat1 = items[i].location.coordinates[1];
+                        lon1 = items[i].location.coordinates[0];
+                    } else if (items[i].hasOwnProperty("latitude")) {
+                        lat1 = items[i].latitude;
+                        lon1 = items[i].longitude;
+                    } else {
+                        console.log("No known location property for data source"
+                                .concat(response["search-results"][j]["id"]).toString());
+                        break;
+                    }
                     var myLatLon = new google.maps.LatLng(lat1,lon1);
                     var mark = new google.maps.Marker({
                         position: myLatLon,
