@@ -1,5 +1,5 @@
 # ChiCarto
-ChiCarto is a gateway into geo-specific location data about the city of Chicago. ChiCarto provides an easy-to-use interface to view, collate, and browse information about the city using a mapping centered interface. For example, a user could view criminal incidents within a specific radius of a possible home, reported tree trims in their neighborhood, and check for building violations, all on one map. The map displays red icons that reveal more information about the specific datapoint when clicked. Additonally, ChiCarto draws from open data about the city that is updated continuously, so ChiCarto is always up-to-date.
+ChiCarto is a gateway into geo-specific location data about the city of Chicago. ChiCarto provides an easy-to-use interface to view, collate, and browse information about the city. Users can create accounts associated with their email to allow them to log into our site. Once logged in, users can create a "Search." "Searches" allow users to map multiple types of open data about the city onto a google maps interface. For example, a user could search criminal incidents within a specific radius of a possible home, reported tree trims in their neighborhood, and building violations, and display the data all on one map. Searches use red pinpoints that reveal more information about the specific datapoint when clicked. Once the search is created, it will automatically be stored in the users' personal list of created searches, as well as on a list of searches created by all users accessing the site. Users can also rate each other's searches out of five stars, as well as delete their account if desired. 
 
 ## Installation
 0. Make sure you have [Python](https://www.python.org/downloads/) installed
@@ -29,18 +29,6 @@ ChiCarto is a gateway into geo-specific location data about the city of Chicago.
 * Backend models, logic, and tests = Mark, Evan, and Sam
 * Frontend html, javascript, google maps = Evan, Michelle, Tyler, and Alex
 * Project Coordinator = Michelle
-
-## Changes from Proposal
-* The project proposal described the ability for logged-in users to save other users' searches to their own profile. This was not implemented, because we decided it made more sense for users to only have their own searches that they created displayed on their own profile page.
-* Instead of using React.js framework as proposed for the front end, we used a combination of html, css, and javascript.
-* Our Use Case diagram gave unregistered users the ability to create a search. We decided in our actual implementation to only allow registered users to create a search, although unregistered users can still browse all of the searches.
-* "Create Account" activity diagram is implemented exactly as proposed, except instead of a username, an email is used.
-* "Saving a Search" activity diagram was not implemented as proposed. Instead, the user only has the ability to save searches they create to their profile, and this occurs automatically.
-* "Loading A Search" is implemented as proposed in the activity diagram, but with an additional ability for users that are not logged in to load searches.
-* "Delete Account" was implemented more simply than proposed, skipping the proposed steps of selecting "Settings" and "Manage Account."
-* "Rate Saved Search" was implemented as proposed in the activity diagram, except users _are_ allowed to rate their own searches.
-* "Create Search" was implemented as proposed in the activity diagram, but with the ability to name the search and associate a category with a search. Also note that created searches are automatically saved.
-* "Browse Searches" was not implemented as proposed. Due to a lack of time, the abilities to "Sort by category," "Sort by rating," and "Search by name" were not implemented.
 
 ## Suggested Acceptance Tests and Expected Results
 #### Register an account
@@ -105,10 +93,12 @@ ChiCarto is a gateway into geo-specific location data about the city of Chicago.
   4. Select "Delete Account"
   5. Expected result: Your account will be deleted. You will no longer be able to log in using your email and password. However, the searches you have created will still exist and will not be deleted
 
+## Inputs that are not handled well by the software
+* TODO (I'm sure these exist lol)
+
 ## Miscellaneous
 * The Google Maps API we are using is free until exceeding 25,000 map loads per day for 90 consecutive days.
 * ChiCarto uses open data about the city of Chicago. Although it is possible to create a search centered in areas of the world other than Chicago, there is no data for areas outside of Chicago.
 * It is possible for two searches to have the same name.
 * It is not possible for a person to register two accounts with the same email.
 * Maps may take a while to load, especially when loading a lot of data.
-* Given more time, we would add more searches, and create "delete search" functionality.
