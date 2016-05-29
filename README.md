@@ -30,7 +30,7 @@ ChiCarto is a gateway into geo-specific location data about the city of Chicago.
 * Frontend html, javascript, google maps = Evan, Michelle, Tyler, and Alex
 * Project Coordinator = Michelle
 
-## Suggested Acceptance Tests and Expected Results
+## Usage Tutorial
 #### Register an account
   1. From main page: Select "Register"
   2. Enter an email address, password of at least 6 characters, and retype the password, then select "Register"
@@ -92,9 +92,6 @@ ChiCarto is a gateway into geo-specific location data about the city of Chicago.
   3. You will be taken to a page that says: "We're sorry to see you go! You are logged in as (your email). Are you sure you want to delete your account?"
   4. Select "Delete Account"
   5. Expected result: Your account will be deleted. You will no longer be able to log in using your email and password. However, the searches you have created will still exist and will not be deleted
-
-## Inputs that are not handled well by the software
-* TODO (I'm sure these exist lol)
 
 ## Miscellaneous
 * The Google Maps API we are using is free until exceeding 25,000 map loads per day for 90 consecutive days.

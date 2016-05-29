@@ -80,7 +80,7 @@ function itemToHTML(item,type) {
                       "</p>"
       break;
     case 3:
-      theString +=    "<u>Library/u>" + "<br/>" +
+      theString +=    "<u>Library</u>" + "<br/>" +
                       item["name_"] + "<br/>" +
                       item["address"] + "<br/>" +
                       "Open: " + item["hours_of_operation"] + "<br/>" +
